@@ -1,0 +1,214 @@
+# This is a demo config to showcase some of the most important commands.
+# It is meant to be changed and configured, as it is intentionally kept sparse.
+# For a (much) more advanced configuration example see my dotfiles:
+# https://github.com/FelixKratz/dotfiles
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+WHITE=0xffffffff
+DOTS=0x30ffffff
+
+##### Bar Appearance #####
+# Configuring the general appearance of the bar.
+# These are only some of the options available. For all options see:
+# https://felixkratz.github.io/SketchyBar/config/bar
+# If you are looking for other colors, see the color picker:
+# https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
+
+sketchybar --bar position=top height=44 color=0xff001010 padding_left=-1 padding_right=-1 topmost=on margin=-1
+
+##### Changing Defaults #####
+# We now change some default values, which are applied to all further items.
+# For a full list of all available item properties see:
+# https://felixkratz.github.io/SketchyBar/config/items
+
+default=(
+  padding_left=0
+  padding_right=0
+  icon.font="FiraCode Nerd Font:Bold:17.0"
+  label.font="FiraCode Nerd Font:Bold:14.0"
+  icon.color=0xffffffff
+  label.color=0xffffffff
+  icon.padding_left=0
+  icon.padding_right=0
+  label.padding_left=0
+  label.padding_right=0
+)
+sketchybar --default "${default[@]}"
+
+##### Adding Mission Control Space Indicators #####
+# Let's add some mission control spaces:
+# https://felixkratz.github.io/SketchyBar/config/components#space----associate-mission-control-spaces-with-an-item
+# to indicate active and available mission control spaces.
+
+##### Adding Left Items #####
+# We add some regular items to the left side of the bar, where
+# only the properties deviating from the current defaults need to be set
+
+sketchybar --add item chevron left \
+  --set chevron icon= label.drawing=off click_script="$PLUGIN_DIR/lock.sh" \
+  icon.padding_left=20 \
+  script="${PLUGIN_DIR}/wallpaper.sh \"$PLUGIN_DIR\"" \
+  --subscribe chevron system_will_sleep \
+  --subscribe chevron system_woke \
+  ;
+
+sketchybar --add item dottwo left \
+  --set dottwo icon= \
+  icon.font="FiraCode Nerd Font:Regular:8.0" \
+  label.drawing=off \
+  associated_display=active \
+  icon.color=$DOTS \
+  padding_left=20 \
+  padding_right=12 \
+  icon.padding_left=2 \
+  icon.padding_right=2 \
+  ;
+
+sketchybar \
+  --add alias "WeatherMenu,Item-0" left \
+  --set "WeatherMenu,Item-0" click_script="$PLUGIN_DIR/click.sh 'WeatherMenu' '[1]' 2" \
+  label.padding_right=0 alias.update_freq=30
+
+sketchybar --add item dotthree left \
+  --set dotthree icon= \
+  icon.font="FiraCode Nerd Font:Regular:8.0" \
+  label.drawing=off \
+  associated_display=active \
+  icon.color=$DOTS \
+  padding_left=8 \
+  padding_right=8 \
+  icon.padding_left=2 \
+  icon.padding_right=2 \
+  ;
+
+##### Adding Right Items #####
+# In the same way as the left items we can add items to the right side.
+# Additional position (e.g. center) are available, see:
+# https://felixkratz.github.io/SketchyBar/config/items#adding-items-to-sketchybar
+
+# Some items refresh on a fixed cycle, e.g. the clock runs its script once
+# every 10s. Other items respond to events they subscribe to, e.g. the
+# volume.sh script is only executed once an actual change in system audio
+# volume is registered. More info about the event system can be found here:
+# https://felixkratz.github.io/SketchyBar/config/events
+
+# sketchybar --add item clock right \
+#   --set clock update_freq=10 icon= script="$PLUGIN_DIR/clock.sh" \
+#   --add item volume right \
+#   --set volume script="$PLUGIN_DIR/volume.sh" \
+#   --subscribe volume volume_change \
+#   --add item battery right \
+#   --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
+#   --subscribe battery system_woke power_source_change
+
+sketchybar \
+  --add alias "Control Center,Clock" right \
+  --set "Control Center,Clock" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Clock'" \
+  padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
+  label.padding_right=8 \
+  --add alias "Control Center,BentoBox" right \
+  --set "Control Center,BentoBox" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Control Center'" \
+  padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
+  alias.update_freq=30 \
+  --add alias "Control Center,Battery" right \
+  --set "Control Center,Battery" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Battery'" \
+  padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
+  alias.update_freq=30 \
+  --add alias "Amphetamine,Amphetamine" right \
+  --set "Amphetamine,Amphetamine" click_script="$PLUGIN_DIR/click.sh 'Amphetamine' '[1]' 2 yes" \
+  padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
+  --add alias "Cloudflare WARP,Item-0" right \
+  --set "Cloudflare WARP,Item-0" click_script="$PLUGIN_DIR/click.sh 'Cloudflare WARP' '[1]'" \
+  padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
+  --add alias "AdGuard,Item-0" right \
+  --set "AdGuard,Item-0" click_script="$PLUGIN_DIR/click.sh 'AdGuard' '[1]' 2" \
+  padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
+  alias.update_freq=30 \
+  --add alias "Raycast,extension_menubar-calendar_index__5be54b64-8da3-4dd2-a2cd-fe53909246a7" right \
+  --set "Raycast,extension_menubar-calendar_index__5be54b64-8da3-4dd2-a2cd-fe53909246a7" click_script="$PLUGIN_DIR/click.sh 'Raycast' '[1]' 2" \
+  --add alias "Tailscale,Item-0" right \
+  --set "Tailscale,Item-0" click_script="$PLUGIN_DIR/click.sh 'Tailscale' '[1]'" \
+  --add alias "Raycast,extension_pomodoro_pomodoro-menu-bar__da2ac998-edd2-49a4-8614-06b57f30f619" right \
+  --set "Raycast,extension_pomodoro_pomodoro-menu-bar__da2ac998-edd2-49a4-8614-06b57f30f619" click_script="$PLUGIN_DIR/click.sh 'Raycast' '[2]' 2" \
+  padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
+  --add alias "Control Center,FocusModes" right \
+  --set "Control Center,FocusModes" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Focus'" \
+  padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
+  --add alias "Control Center,AudioVideoModule" right \
+  --set "Control Center,AudioVideoModule" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Audio and Video Controls'" \
+  padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
+  alias.color=0x60606060 \
+  alias.update_freq=30 \
+  --add alias "Control Center,FaceTime" right \
+  --set "Control Center,FaceTime" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'FaceTime'" \
+  padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
+  alias.color=0x60606060 \
+  alias.update_freq=30 \
+  ;
+# --add alias "Control Center,UserSwitcher" right \
+# --add alias "AeroSpace,Item-0" right \
+# --add alias "Logi Options+,Item-0" right \
+# --add alias "Raycast,raycastIcon" right \
+# --add alias "TextInputMenuAgent,Item-0" right \
+
+sketchybar --add event aerospace_workspace_change
+RED=0xffed8796
+
+# wait while `aerospace list-workspaces --all` is empty
+while [ -z "$(aerospace list-workspaces --all)" ]; do
+  sleep 1
+done
+
+for sid in $(aerospace list-workspaces --all); do
+  sketchybar --add item "space.$sid" left \
+    --subscribe "space.$sid" aerospace_workspace_change \
+    --set "space.$sid" \
+    icon="$sid" \
+    icon.padding_left=12 \
+    icon.padding_right=12 \
+    label.padding_right=12 \
+    icon.highlight_color=$RED \
+    background.color=0x3640ffff \
+    background.corner_radius=5 \
+    background.height=30 \
+    background.drawing=off \
+    label.font="sketchybar-app-font:Regular:16.0" \
+    label.background.height=30 \
+    label.background.drawing=on \
+    label.background.corner_radius=9 \
+    label.drawing=off \
+    click_script="aerospace workspace $sid" \
+    script="$CONFIG_DIR/plugins/aerospacer.sh $sid"
+done
+
+sketchybar --add item dotone left \
+  --set dotone icon= \
+  icon.font="FiraCode Nerd Font:Regular:8.0" \
+  label.drawing=off \
+  associated_display=active \
+  icon.color=$DOTS \
+  padding_left=8 \
+  padding_right=20 \
+  icon.padding_left=2 \
+  icon.padding_right=3 \
+  ;
+
+sketchybar --add item appicon left \
+  --set appicon icon= \
+  icon.font="FiraCode Nerd Font:Regular:16.0" \
+  label.drawing=off \
+  associated_display=active \
+  icon.color=$WHITE \
+  script="$CONFIG_DIR/plugins/aerospace-icon.sh" \
+  --subscribe appicon aerospace_workspace_change \
+  ;
+
+sketchybar --add item front_app left \
+  --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" padding_left=6 \
+  --subscribe front_app front_app_switched \
+  --subscribe front_app aerospace_workspace_change \
+  ;
+
+##### Force all scripts to run the first time (never do this in a script) #####
+sketchybar --update
