@@ -59,6 +59,59 @@
         pkgs.nerd-fonts.fira-code
       ];
 
+      system.defaults = {
+        dock.autohide = true;
+        dock.orientation = "bottom";
+        dock.persistent-apps = [];
+        dock.autohide-time-modifier = 0.15;
+        loginwindow.GuestEnabled = false;
+        NSGlobalDomain.NSWindowResizeTime = 0.001;
+        NSGlobalDomain.AppleICUForce24HourTime = false;
+        NSGlobalDomain.AppleTemperatureUnit = "Fahrenheit";
+        NSGlobalDomain._HIHideMenuBar = false;
+        NSGlobalDomain.AppleInterfaceStyleSwitchesAutomatically = true;
+        NSGlobalDomain.AppleShowScrollBars = "Automatic";
+        controlcenter.BatteryShowPercentage = true;
+      };
+
+      system.defaults.CustomUserPreferences = {
+        # Sets Downloads folder with fan view in Dock
+        "com.apple.dock" = {
+          persistent-others = [
+            {
+              "tile-data" = {
+                "file-data" = {
+                  "_CFURLString" = "/Users/user/Downloads";
+                  "_CFURLStringType" = 0;
+                };
+                "arrangement" = 2;  # sorting order
+                "displayas" = 1;    # 1 for fan display
+                "showas" = 1;       # 1 for stack view
+              };
+              "tile-type" = "directory-tile";
+            }
+            {
+              "tile-data" = {
+                "file-data" = {
+                  "_CFURLString" = "/Users/user/Desktop";
+                  "_CFURLStringType" = 0;
+                };
+                "arrangement" = 2;  # sorting order
+                "displayas" = 1;    # 1 for fan display
+                "showas" = 1;       # 1 for stack view
+              };
+              "tile-type" = "directory-tile";
+            }
+          ];
+        };
+
+        NSGlobalDomain = {
+          NSUserKeyEquivalents = {
+            "Close Other Tabs" = "@~T";  # ⌘⌥T
+          };
+        };
+      };
+
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
 
@@ -75,9 +128,64 @@
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
 
+      environment.launchAgents = {
+        sketchybar = {
+          enable = true;
+          target = "homebrew.mxcl.sketchybar.plist";
+          text = ''
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>LANG</key>
+		<string>en_US.UTF-8</string>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+	<key>KeepAlive</key>
+	<true/>
+	<key>Label</key>
+	<string>homebrew.mxcl.sketchybar</string>
+	<key>LimitLoadToSessionType</key>
+	<array>
+		<string>Aqua</string>
+		<string>Background</string>
+		<string>LoginWindow</string>
+		<string>StandardIO</string>
+		<string>System</string>
+	</array>
+	<key>ProcessType</key>
+	<string>Interactive</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/opt/homebrew/opt/sketchybar/bin/sketchybar</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StandardErrorPath</key>
+	<string>/opt/homebrew/var/log/sketchybar/sketchybar.err.log</string>
+	<key>StandardOutPath</key>
+	<string>/opt/homebrew/var/log/sketchybar/sketchybar.out.log</string>
+</dict>
+</plist>
+          '';
+        };
+      };
+
+
+
+      system.activationScripts.postActivation.text = ''
+        # Load the service
+        sudo -u user /bin/launchctl load -w /Library/LaunchAgents/homebrew.mxcl.sketchybar.plist
+      '';
+
       homebrew = {
         enable = true;
         onActivation.cleanup = "zap";
+        onActivation.autoUpdate = true;
+        onActivation.upgrade = true;
         brews = [
           "bat"
           "awscli"
