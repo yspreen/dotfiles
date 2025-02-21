@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:sketchybar}/plugins/solar",
+      "name": "Debug solar (plugins/solar)",
+      "program": "${workspaceFolder:sketchybar}/plugins/solar/.build/debug/solar",
+      "preLaunchTask": "swift: Build Debug solar (plugins/solar)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:sketchybar}/plugins/solar",
+      "name": "Release solar (plugins/solar)",
+      "program": "${workspaceFolder:sketchybar}/plugins/solar/.build/release/solar",
+      "preLaunchTask": "swift: Build Release solar (plugins/solar)"
+    }
+  ]
+}
