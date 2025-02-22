@@ -346,6 +346,18 @@ rsync() {
     nix-shell -p rsync --run "rsync $(printf '%q ' "$@")"
 }
 
+nginx() {
+    nix-shell -p nginx --run "nginx $(printf '%q ' "$@")"
+}
+
+mosh() {
+    nix-shell -p mosh --run "mosh $(printf '%q ' "$@")"
+}
+
 telnet() {
     nix-shell -p inetutils --run "telnet $(printf '%q ' "$@")"
+}
+
+terraform() {
+    nix-shell -p terraform --run "terraform $(printf '%q ' "$@")"
 }
