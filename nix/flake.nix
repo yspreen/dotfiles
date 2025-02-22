@@ -206,7 +206,6 @@
           # "eksctl"
           "exiftool"
           "fastlane"
-          "flyctl"
           "git-lfs"
           "imagemagick"
           # "go"

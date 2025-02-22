@@ -280,8 +280,9 @@ PROMPT+=' $(git_prompt_info)'
 
 bindkey '^U' backward-kill-line  # Ctrl-U deletes to start of line
 
-# store old `fly` command:
-alias fly_old=`which fly`
+raw_flyctl() {
+    nix-shell -p flyctl --run "fly $(printf '%q ' "$@")"
+}
 
 # find nearest .fly_token in parent directories
 find_fly_token() {
@@ -300,9 +301,9 @@ find_fly_token() {
 fly() {
   if token_file=$(find_fly_token); then
     token=$(cat "$token_file")
-    fly_old --access-token "$token" $@
+    raw_flyctl --access-token "$token" $@
   else
-    fly_old $@
+    raw_flyctl $@
   fi
 }
 
