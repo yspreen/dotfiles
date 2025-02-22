@@ -336,3 +336,15 @@ jn() {
 jc() {
     (cd ~/Documents/proj/journal; gacp .)
 }
+
+neofetch() {
+    nix-shell -p neofetch --run "neofetch $(printf '%q ' "$@")"
+}
+
+rsync() {
+    nix-shell -p rsync --run "rsync $(printf '%q ' "$@")"
+}
+
+telnet() {
+    nix-shell -p inetutils --run "telnet $(printf '%q ' "$@")"
+}
