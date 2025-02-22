@@ -178,7 +178,7 @@
 
       system.activationScripts.postActivation.text = ''
         # Load the service
-        sudo -u user /bin/launchctl load -w /Library/LaunchAgents/homebrew.mxcl.sketchybar.plist
+        sudo -u user /bin/launchctl load -w /Library/LaunchAgents/homebrew.mxcl.sketchybar.plist 2>/dev/null
       '';
 
       homebrew = {
@@ -236,6 +236,7 @@
           # "openscad"
           "cloudflare-warp"
           "adguard"
+          "visual-studio-code"
         ];
         taps = [
           "dopplerhq/cli"
