@@ -243,6 +243,7 @@
           "visual-studio-code"
           "sf-symbols"
           "xcodes"
+          "ukelele"
         ];
         taps = [
           "dopplerhq/cli"
