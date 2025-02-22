@@ -326,3 +326,13 @@ nu() {
 ns() {
     darwin-rebuild switch --flake ~/dotfiles/nix#spreen
 }
+
+# journal new
+jn() {
+    ~/Documents/proj/journal/new.sh
+}
+
+# journal commit
+jc() {
+    (cd ~/Documents/proj/journal; gacp .)
+}
