@@ -244,6 +244,7 @@
           "sf-symbols"
           "xcodes"
           "ukelele"
+          "karabiner-elements"
         ];
         taps = [
           "dopplerhq/cli"
