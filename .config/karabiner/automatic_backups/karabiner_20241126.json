@@ -1,0 +1,88 @@
+{
+  "profiles": [
+    {
+      "complex_modifications": {
+        "rules": [
+          {
+            "description": "Change right_shift to up_arrow on tap",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "right_shift",
+                  "modifiers": {
+                    "optional": ["any"]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "right_shift",
+                    "lazy": true
+                  }
+                ],
+                "to_if_alone": [
+                  {
+                    "key_code": "up_arrow"
+                  }
+                ],
+                "parameters": {
+                  "basic.to_if_alone_timeout_milliseconds": 150
+                }
+              }
+            ]
+          },
+          {
+            "description": "Change right_arrow to fn except on tap",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "right_arrow",
+                  "modifiers": {
+                    "optional": ["any"]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "fn",
+                    "lazy": true
+                  }
+                ],
+                "to_if_alone": [
+                  {
+                    "key_code": "right_arrow"
+                  }
+                ],
+                "parameters": {
+                  "basic.to_if_alone_timeout_milliseconds": 150
+                }
+              }
+            ]
+          },
+          {
+            "description": "Map fn + Escape to ~ (tilde)",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "escape",
+                  "modifiers": {
+                    "mandatory": ["fn"]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "grave_accent_and_tilde"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "name": "Default profile",
+      "selected": true,
+      "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
+    }
+  ]
+}
