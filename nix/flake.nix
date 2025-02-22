@@ -44,7 +44,6 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [
-          pkgs.vim
           pkgs.bun
           pkgs.ffmpeg
           pkgs.git
@@ -217,17 +216,14 @@
           "mint"
           "mkcert"
           # "mosh"
-          "neofetch"
           # "nginx"
           # "node"
           # "pandoc"
           "protobuf"
           "python"
           "redis"
-          "rsync"
           "sketchybar"
           "sqlite"
-          "telnet"
           "terraform"
           "wget"
           "mas"
@@ -290,9 +286,6 @@
 
             # User owning the Homebrew prefix
             user = username;
-
-            # Automatically migrate existing Homebrew installations
-            autoMigrate = true;
           };
         }
 
