@@ -37,7 +37,10 @@
   }:
   let
     username = let val = builtins.getEnv "USER"; in if val == "" then "user" else val;
-    configuration = { pkgs, ... }: {
+    configuration = { pkgs, ... }: let
+      # Get the directory containing this flake
+      flakeDir = builtins.dirOf __curPos.file;
+    in {
       nixpkgs.config.allowUnfree = true;
 
       # List packages installed in system profile. To search by name, run:
@@ -65,6 +68,7 @@
         pkgs.martian-mono
         pkgs.montserrat
         pkgs.geist-font
+        (pkgs.callPackage "/Users/${username}/dotfiles/nix/font/figtree.nix" { }).out
       ];
 
       system.defaults = {
@@ -222,7 +226,6 @@
           "sketchybar"
           "sqlite"
           "wget"
-          "mas"
         ];
         casks = [
           "orbstack"
