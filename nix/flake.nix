@@ -36,6 +36,7 @@
     homebrew-bundle,
   }:
   let
+    username = let val = builtins.getEnv "USER"; in if val == "" then "user" else val;
     configuration = { pkgs, ... }: {
       nixpkgs.config.allowUnfree = true;
 
@@ -89,7 +90,7 @@
             {
               "tile-data" = {
                 "file-data" = {
-                  "_CFURLString" = "/Users/user/Downloads";
+                  "_CFURLString" = "/Users/${username}/Downloads";
                   "_CFURLStringType" = 0;
                 };
                 "arrangement" = 2;  # sorting order
@@ -101,7 +102,7 @@
             {
               "tile-data" = {
                 "file-data" = {
-                  "_CFURLString" = "/Users/user/Desktop";
+                  "_CFURLString" = "/Users/${username}/Desktop";
                   "_CFURLStringType" = 0;
                 };
                 "arrangement" = 2;  # sorting order
@@ -186,8 +187,8 @@
 
       system.activationScripts.postActivation.text = ''
         # Load the service
-        sudo -u user /bin/launchctl load -w /Library/LaunchAgents/homebrew.mxcl.sketchybar.plist 2>/dev/null;
-        sudo -u user bash -c "cd /Users/user/dotfiles; stow --adopt ."
+        sudo -u ${username} /bin/launchctl load -w /Library/LaunchAgents/homebrew.mxcl.sketchybar.plist 2>/dev/null;
+        sudo -u ${username} bash -c "cd /Users/${username}/dotfiles; stow --adopt ."
       '';
 
       homebrew = {
@@ -288,7 +289,7 @@
             enableRosetta = true;
 
             # User owning the Homebrew prefix
-            user = "user";
+            user = username;
 
             # Automatically migrate existing Homebrew installations
             autoMigrate = true;
