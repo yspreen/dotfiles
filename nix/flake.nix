@@ -242,6 +242,7 @@
           "adguard"
           "visual-studio-code"
           "sf-symbols"
+          "xcodes"
         ];
         taps = [
           "dopplerhq/cli"
