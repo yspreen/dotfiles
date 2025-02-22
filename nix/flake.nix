@@ -58,8 +58,13 @@
         ];
 
       fonts.packages = [
-        # pkgs.fira-code
+        pkgs.fira-code
         pkgs.nerd-fonts.fira-code
+        pkgs.inter
+        pkgs.dm-sans
+        pkgs.martian-mono
+        pkgs.montserrat
+        pkgs.geist-font
       ];
 
       system.defaults = {
@@ -248,7 +253,7 @@
         ];
         taps = [
           "dopplerhq/cli"
-          "nikitabobko/tap"
+          "nikitabobko/tap" # aerospace
         ];
         masApps = {
           # AdGuardForSafari = 1440147259; # replaced by adguard brew package
