@@ -1,22 +1,30 @@
 #!/bin/bash
 
-# Usage: ./download-font.sh [font-name] ["variable"]
+# Usage: ./download-font.sh [font-name] (family-name) (variable) (out-dir)
 download_google_font() {
     local font_name=$1
+    local family_name=$1 # Default to font_name
     local font_params=":wght@100;200;300;400;500;600;700;800;900"
-
     local agent="curl/7.68.0"
+    local out_dir="./font_files/"
+    shift
 
-    if [ "$2" = "variable" ]; then
-        font_params=":ital,wght@0,300..900;1,300..900&display=swap"
-        agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.0.0 Safari/537.36"
+    # Handle remaining args in the correct order
+    if [ -n "$1" ] && [ "$1" != "variable" ]; then
+        family_name=$1
         shift
     fi
 
-    local out_dir="./font_files/"
-    if [ -n "$2" ]; then
-        out_dir="$2"
-    fi
+    # Now check for variable flag and output dir
+    while [ -n "$1" ]; do
+        if [ "$1" = "variable" ]; then
+            font_params=":ital,wght@0,300..900;1,300..900&display=swap"
+            agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.0.0 Safari/537.36"
+        else
+            out_dir="$1"
+        fi
+        shift
+    done
 
     local temp_dir=$(mktemp -d)
     local css_url="https://fonts.googleapis.com/css2?family=${font_name}${font_params}"
@@ -76,6 +84,7 @@ download_google_font() {
         fi
     done
 
+    local script_dir=$(pwd)
     cd "$out_dir"
 
     # find woff2 files:
@@ -88,6 +97,14 @@ download_google_font() {
             echo "Converting $woff2_file to $ttf_file..."
             woff2_decompress "$woff2_file"
             rm "$woff2_file"
+        done
+    fi
+
+    # Rename files to family_name
+    if [ -n "$family_name" ]; then
+        echo "Renaming files to $family_name..."
+        for file in $(find . -type f -name "*.ttf"); do
+            python "$script_dir/rename.py" "$file" "$family_name"
         done
     fi
 

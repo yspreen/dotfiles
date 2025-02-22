@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, pkgs, ... }:
+{ lib, stdenvNoCC, pkgs, python313Packages, ... }:
 
 stdenvNoCC.mkDerivation {
   pname = "Figtree";
@@ -14,6 +14,7 @@ stdenvNoCC.mkDerivation {
     pkgs.woff2
     pkgs.bash
     pkgs.cacert
+    python313Packages.fonttools
   ];
 
   SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
@@ -21,11 +22,12 @@ stdenvNoCC.mkDerivation {
   buildPhase = ''
     cp ${./google.sh} ./google.sh
     chmod +x ./google.sh
+    cp ${./rename.py} ./rename.py
   '';
 
   installPhase = ''
     mkdir -p $out/share/fonts/truetype/
-    ./google.sh Figtree variable $out/share/fonts/truetype/
+    ./google.sh Figtree Figtree variable $out/share/fonts/truetype/
   '';
 
   meta = {
