@@ -26,7 +26,9 @@ default=(
   padding_left=0
   padding_right=0
   icon.font="FiraCode Nerd Font:Bold:17.0"
-  label.font="FiraCode Nerd Font:Bold:14.0"
+  label.font="Figtree"
+  label.font.style="Figtree Bold"
+  label.font.size="14"
   icon.color=0xffffffff
   label.color=0xffffffff
   icon.padding_left=0
@@ -173,7 +175,7 @@ for sid in $(aerospace list-workspaces --all); do
     background.corner_radius=5 \
     background.height=30 \
     background.drawing=off \
-    label.font="sketchybar-app-font:Regular:16.0" \
+    label.font.size="16" \
     label.background.height=30 \
     label.background.drawing=on \
     label.background.corner_radius=9 \
@@ -206,6 +208,9 @@ sketchybar --add item appicon left \
 
 sketchybar --add item front_app left \
   --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" padding_left=6 \
+  label.font="Figtree" \
+  label.font.style="Figtree Bold" \
+  label.font.size="14" \
   --subscribe front_app front_app_switched \
   --subscribe front_app aerospace_workspace_change \
   ;
