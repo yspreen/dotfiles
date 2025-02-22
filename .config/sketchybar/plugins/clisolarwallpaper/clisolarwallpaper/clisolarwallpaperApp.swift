@@ -73,7 +73,7 @@ struct clisolarwallpaperApp {
 		if sourcePath == "-NSDocumentRevisionsDebugMode" {
 			// running in xcode
 			sourcePath =
-				"/Users/user/Library/Application Support/com.apple.mobileAssetDesktop/The Desert.heic"
+				"~/Library/Application Support/com.apple.mobileAssetDesktop/The Desert.heic"
 			destinationPath = "/tmp/img.jpg"
 			cacheMinutes = 60
 		}

@@ -26,7 +26,7 @@ fi
         if [ ! -f "${PLUGIN_DIR}/clisolarwallpaper/clisolarwallpaper.app/Contents/MacOS/clisolarwallpaper" ]; then
             "${PLUGIN_DIR}/clisolarwallpaper/build.sh"
         fi
-        ${PLUGIN_DIR}/clisolarwallpaper/clisolarwallpaper.app/Contents/MacOS/clisolarwallpaper "/Users/user/Library/Application Support/com.apple.mobileAssetDesktop/The Desert.heic" "$HOME/.wallpaper.jpg"
+        ${PLUGIN_DIR}/clisolarwallpaper/clisolarwallpaper.app/Contents/MacOS/clisolarwallpaper "$HOME/Library/Application Support/com.apple.mobileAssetDesktop/The Desert.heic" "$HOME/.wallpaper.jpg"
         mint run igorkulman/ChangeMenuBarColor SolidColor "000000" "$HOME/.wallpaper.jpg"
         sleep 450 # 7.5 minutes
     done

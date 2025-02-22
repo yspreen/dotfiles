@@ -1,11 +1,11 @@
 # Add deno completions to search path
-if [[ ":$FPATH:" != *":/Users/user/.zsh/completions:"* ]]; then export FPATH="/Users/user/.zsh/completions:$FPATH"; fi
+if [[ ":$FPATH:" != *":/Users/$USER/.zsh/completions:"* ]]; then export FPATH="/Users/$USER/.zsh/completions:$FPATH"; fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH="/opt/homebrew/bin:$PATH"; export PATH;
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/user/.oh-my-zsh"
+export ZSH="/Users/$USER/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -143,7 +143,7 @@ unlockapp() {
 }
 
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-export PATH="$PATH:/Users/user/Documents/proj/flutter/bin"
+export PATH="$PATH:/Users/$USER/Documents/proj/flutter/bin"
 hlg() { hyperlayout global "$1" ; }
 
 alias archiveall='ls -1 | grep -Ev '.tgz$' | while read f; do sudo tar czf "$f.tgz" "$f" && sudo rm -rf "$f"; done'
@@ -153,14 +153,14 @@ dockerrun () { docker run -it --rm -v "$(pwd):/m" --entrypoint sh "${1:-alpine}"
 
 eval "$(fnm env --use-on-cd --shell zsh)"
 
-PATH="/Users/user/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/Users/user/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/Users/user/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/Users/user/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/Users/user/perl5"; export PERL_MM_OPT;
+PATH="/Users/$USER/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/Users/$USER/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/Users/$USER/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/Users/$USER/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/Users/$USER/perl5"; export PERL_MM_OPT;
 
 # added by travis gem
-[ ! -s /Users/user/.travis/travis.sh ] || source /Users/user/.travis/travis.sh
+[ ! -s /Users/$USER/.travis/travis.sh ] || source /Users/$USER/.travis/travis.sh
 # export PATH="/usr/local/opt/openjdk/bin:$PATH"; export PATH;
 export BAT_THEME="GitHub"
 # alias code=code-insiders
@@ -217,7 +217,7 @@ alias aocs='aoc solve "$(AOC_SOLVE=1 python main.py | tail -1)"'
 # NEXT
 alias aocn='[ -f ../../next.sh ] && source ../../next.sh; [ -f ../next.sh ] && source ../next.sh'
 # ACTIVATE
-alias aoca='export prevpath=$(pwd); cd /Users/user/Documents/proj/advent; cd "$prevpath"'
+alias aoca='export prevpath=$(pwd); cd /Users/$USER/Documents/proj/advent; cd "$prevpath"'
 
 alias uuid='python3 -c "from uuid import *; print(uuid4())"'
 
@@ -276,7 +276,7 @@ PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(g
 PROMPT="%{$fg[cyan]%}%D{%r} %(?:%{$fg_bold[green]%}%1{➜%}:%{$fg_bold[red]%}%1{➜%}) %{$fg[cyan]%}%c%{$reset_color%}"
 PROMPT+=' $(git_prompt_info)'
 # bun completions
-(&>/dev/null [ -s "/Users/user/.bun/_bun" ] && source "/Users/user/.bun/_bun" &)
+(&>/dev/null [ -s "/Users/$USER/.bun/_bun" ] && source "/Users/$USER/.bun/_bun" &)
 
 bindkey '^U' backward-kill-line  # Ctrl-U deletes to start of line
 
@@ -310,7 +310,7 @@ dump() {
     ~/Documents/proj/dump-s3-files/dump.sh
 }
 # # pnpm
-# export PNPM_HOME="/Users/user/Library/pnpm"
+# export PNPM_HOME="/Users/$USER/Library/pnpm"
 # case ":$PATH:" in
 #   *":$PNPM_HOME:"*) ;;
 #   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -324,7 +324,7 @@ nu() {
 
 # nix switch
 ns() {
-    darwin-rebuild switch --flake ~/dotfiles/nix#spreen
+    darwin-rebuild switch --impure --flake ~/dotfiles/nix#spreen 
 }
 
 # journal new
