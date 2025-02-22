@@ -53,6 +53,7 @@
           pkgs.fnm
           pkgs.pnpm
           pkgs.stow
+          pkgs.zed-editor
         ];
 
       fonts.packages = [
