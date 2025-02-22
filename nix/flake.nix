@@ -52,6 +52,7 @@
           pkgs.rustup
           pkgs.fnm
           pkgs.pnpm
+          pkgs.stow
         ];
 
       fonts.packages = [
