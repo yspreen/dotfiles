@@ -214,8 +214,6 @@
           # "helm"
           "mint"
           "mkcert"
-          # "mosh"
-          # "nginx"
           # "node"
           # "pandoc"
           "protobuf"
@@ -223,7 +221,6 @@
           "redis"
           "sketchybar"
           "sqlite"
-          "terraform"
           "wget"
           "mas"
         ];
