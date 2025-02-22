@@ -54,6 +54,7 @@
           pkgs.pnpm
           pkgs.stow
           pkgs.zed-editor
+          pkgs.spotify
         ];
 
       fonts.packages = [
@@ -240,6 +241,7 @@
           "cloudflare-warp"
           "adguard"
           "visual-studio-code"
+          "sf-symbols"
         ];
         taps = [
           "dopplerhq/cli"
