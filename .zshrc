@@ -278,11 +278,6 @@ PROMPT+=' $(git_prompt_info)'
 # bun completions
 (&>/dev/null [ -s "/Users/user/.bun/_bun" ] && source "/Users/user/.bun/_bun" &)
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-. "/Users/user/.deno/env"
-
 bindkey '^U' backward-kill-line  # Ctrl-U deletes to start of line
 
 # store old `fly` command:
