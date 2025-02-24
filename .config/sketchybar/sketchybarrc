@@ -209,7 +209,7 @@ sketchybar --add item appicon left \
 sketchybar --add item front_app left \
   --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" padding_left=6 \
   label.font="Figtree" \
-  label.font.style="Figtree Bold" \
+  label.font.style="Figtree SemiBold" \
   label.font.size="14" \
   --subscribe front_app front_app_switched \
   --subscribe front_app aerospace_workspace_change \
