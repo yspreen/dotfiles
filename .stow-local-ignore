@@ -2,3 +2,5 @@
 ^/nix(/.*)?$
 ^/scripts(/.*)?$
 ^/readme.md$
+^/.ssh_pw$
+^/.ssh_enc$
