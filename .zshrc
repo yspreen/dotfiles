@@ -1,4 +1,4 @@
-# Add deno completions to search path
+# Add completions to search path
 if [[ ":$FPATH:" != *":/Users/$USER/.zsh/completions:"* ]]; then export FPATH="/Users/$USER/.zsh/completions:$FPATH"; fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -364,4 +364,8 @@ terraform() {
 
 mas() {
     nix-shell -p mas --run "mas $(printf '%q ' "$@")"
+}
+
+p() {
+    cd ~/Documents/proj/"$1"
 }
