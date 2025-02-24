@@ -246,6 +246,7 @@
           "xcodes"
           "ukelele"
           "karabiner-elements"
+          "fork"
         ];
         taps = [
           "dopplerhq/cli"
