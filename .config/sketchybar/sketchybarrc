@@ -53,6 +53,7 @@ sketchybar --add item chevron left \
   script="${PLUGIN_DIR}/wallpaper.sh \"$PLUGIN_DIR\"" \
   --subscribe chevron system_will_sleep \
   --subscribe chevron system_woke \
+  --subscribe chevron display_change \
   ;
 
 sketchybar --add item dottwo left \
