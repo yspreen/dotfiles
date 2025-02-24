@@ -28,6 +28,16 @@ fi
         fi
         ${PLUGIN_DIR}/clisolarwallpaper/clisolarwallpaper.app/Contents/MacOS/clisolarwallpaper "$HOME/Library/Application Support/com.apple.mobileAssetDesktop/The Desert.heic" "$HOME/.wallpaper.jpg"
         mint run igorkulman/ChangeMenuBarColor SolidColor "000000" "$HOME/.wallpaper.jpg"
+
+        # Sample color and blend with black
+        COLOR=$(convert "$HOME/.wallpaper.jpg[1x1+3400+1500]" -format '%[hex:p{0,0}]' info:-)
+        # Darken color by 10%
+        R=$(printf "%02x" $((16#${COLOR:0:2} * 50 / 100)))
+        G=$(printf "%02x" $((16#${COLOR:2:2} * 50 / 100)))
+        B=$(printf "%02x" $((16#${COLOR:4:2} * 50 / 100)))
+        DARKENED_COLOR="${R}${G}${B}"
+        sketchybar --bar color="0xff${DARKENED_COLOR}"
+
         sleep 450 # 7.5 minutes
     done
 ) &
