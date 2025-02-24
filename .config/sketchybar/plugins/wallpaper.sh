@@ -32,5 +32,7 @@ fi
     done
 ) &
 
+aerospace list-monitors --json | grep -Ei 'built.?in' && sketchybar --bar height=44 || sketchybar --bar height=28
+
 # Store the PID
 echo $! >"$PID_FILE"
