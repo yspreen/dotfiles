@@ -191,7 +191,7 @@
       system.activationScripts.postActivation.text = ''
         # Load the service
         sudo -u ${username} /bin/launchctl load -w /Library/LaunchAgents/homebrew.mxcl.sketchybar.plist 2>/dev/null;
-        sudo -u ${username} bash -c "cd /Users/${username}/dotfiles; stow --adopt ."
+        sudo -u ${username} bash -c "cd /Users/${username}/dotfiles; ./scripts/decrypt-ssh.sh && stow --adopt ."
       '';
 
       homebrew = {
