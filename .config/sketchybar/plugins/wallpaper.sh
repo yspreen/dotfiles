@@ -19,6 +19,8 @@ if [ "$SENDER" == "system_will_sleep" ]; then
     exit 0
 fi
 
+rm "$HOME/.wallpaper.jpg"
+
 # Start the background process
 (
     while true; do
@@ -26,7 +28,17 @@ fi
         if [ ! -f "${PLUGIN_DIR}/clisolarwallpaper/clisolarwallpaper.app/Contents/MacOS/clisolarwallpaper" ]; then
             "${PLUGIN_DIR}/clisolarwallpaper/build.sh"
         fi
-        ${PLUGIN_DIR}/clisolarwallpaper/clisolarwallpaper.app/Contents/MacOS/clisolarwallpaper "$HOME/Library/Application Support/com.apple.mobileAssetDesktop/The Desert.heic" "$HOME/.wallpaper.jpg"
+        ${PLUGIN_DIR}/clisolarwallpaper/clisolarwallpaper.app/Contents/MacOS/clisolarwallpaper "$HOME/Library/Application Support/com.apple.mobileAssetDesktop/The Desert.heic" "$HOME/.wallpaper.new.jpg"
+
+        if ! diff "$HOME/.wallpaper.new.jpg" "$HOME/.wallpaper.jpg"; then
+            mv "$HOME/.wallpaper.new.jpg" "$HOME/.wallpaper.jpg"
+        else
+            # unchanged
+            rm "$HOME/.wallpaper.new.jpg"
+
+            sleep 450 # 7.5 minutes
+            continue
+        fi
 
         # Sample color and blend with black
         COLOR=$(convert "$HOME/.wallpaper.jpg[1x1+3400+1500]" -format '%[hex:p{0,0}]' info:-)
