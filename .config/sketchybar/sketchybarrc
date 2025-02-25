@@ -176,7 +176,9 @@ for sid in $(aerospace list-workspaces --all); do
     background.corner_radius=5 \
     background.height=30 \
     background.drawing=off \
-    label.font.size="16" \
+    icon.font="Figtree" \
+    icon.font.size="18" \
+    icon.font.style="Figtree ExtraBold" \
     label.background.height=30 \
     label.background.drawing=on \
     label.background.corner_radius=9 \
