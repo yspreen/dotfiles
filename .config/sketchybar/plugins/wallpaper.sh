@@ -27,12 +27,6 @@ rm "$HOME/.wallpaper.jpg"
     MY_PID=$$
 
     while true; do
-        # Check if we're still the active process
-        if [ -f "$PID_FILE" ] && [ "$(cat "$PID_FILE")" != "$MY_PID" ]; then
-            # Another instance has taken over, exit this one
-            exit 0
-        fi
-
         # If the binary is missing, build it
         if [ ! -f "${PLUGIN_DIR}/clisolarwallpaper/clisolarwallpaper.app/Contents/MacOS/clisolarwallpaper" ]; then
             "${PLUGIN_DIR}/clisolarwallpaper/build.sh"
@@ -60,6 +54,12 @@ rm "$HOME/.wallpaper.jpg"
         sketchybar --bar color="0xff${DARKENED_COLOR}"
 
         sleep 450 # 7.5 minutes
+
+        # Check if we're still the active process
+        if [ -f "$PID_FILE" ] && [ "$(cat "$PID_FILE")" != "$MY_PID" ]; then
+            # Another instance has taken over, exit this one
+            exit 0
+        fi
     done
 ) &
 
