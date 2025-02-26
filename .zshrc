@@ -325,6 +325,7 @@ nu() {
 
 # nix switch
 ns() {
+    sudo whoami >/dev/null
     darwin-rebuild switch --impure --flake ~/dotfiles/nix#spreen 
 }
 
@@ -365,6 +366,8 @@ terraform() {
 mas() {
     nix-shell -p mas --run "mas $(printf '%q ' "$@")"
 }
+
+alias lg='lazygit'
 
 p() {
     cd ~/Documents/proj/"$1"

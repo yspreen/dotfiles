@@ -7,7 +7,7 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
-  "theme": "Atelier Lakeside Light",
+  "theme": "Atelier Cave Dark",
   "telemetry": {
     "diagnostics": false,
     "metrics": false
