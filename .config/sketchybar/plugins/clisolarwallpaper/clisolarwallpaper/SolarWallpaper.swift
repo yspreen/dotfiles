@@ -55,7 +55,7 @@ struct Wallpaper: Codable {
 		case images = "si"
 	}
 
-	func findImage(for position: SolarPosition, isNorthernHemisphere: Bool) -> NSImage? {
+	func findBestImageIndex(for position: SolarPosition, isNorthernHemisphere: Bool) -> Int {
 		// Sort images by altitude
 		let sortedImages = images.sorted { $0.altitude < $1.altitude }
 		// Determine if sun is rising
@@ -70,11 +70,18 @@ struct Wallpaper: Codable {
 					< abs(Double($1.altitude) - position.elevation)
 			})
 		else {
-			return nil
+			return 0
 		}
+		return bestItem.index
+	}
+
+	func findImage(for position: SolarPosition, isNorthernHemisphere: Bool) -> NSImage? {
+		// Find the best image index using the existing method
+		let index = findBestImageIndex(for: position, isNorthernHemisphere: isNorthernHemisphere)
+
 		// Create an image source from the heic container at self.url
 		guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil),
-			let cgimg = CGImageSourceCreateImageAtIndex(imageSource, bestItem.index, nil)
+			let cgimg = CGImageSourceCreateImageAtIndex(imageSource, index, nil)
 		else {
 			return nil
 		}
