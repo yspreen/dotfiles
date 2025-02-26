@@ -134,8 +134,8 @@ alt-a = ['workspace A', 'exec-and-forget open -a Safari']
 alt-c = 'exec-and-forget bash -c "[ \"\$(aerospace list-workspaces --focused)\" == \"C\" ] && open -a \"Visual Studio Code\" || aerospace workspace C"'
 alt-d = ['workspace D', 'exec-and-forget open -a Notion']
 alt-e = ['workspace E', 'exec-and-forget open -a Messages']
-alt-f = 'exec-and-forget bash -c "[ \"\$(aerospace list-workspaces --focused)\" == \"F\" ] && open -a Fork && aerospace fullscreen || aerospace workspace F && open -a Fork"'
-alt-g = 'exec-and-forget bash -c "[ \"\$(aerospace list-workspaces --focused)\" == \"G\" ] && open -a Ghostty && aerospace fullscreen || aerospace workspace G && open -a Ghostty"'
+alt-f = ['workspace F', 'exec-and-forget open -a Fork']
+alt-g = ['workspace G', 'exec-and-forget open -a Ghostty']
 # alt-i = 'workspace I'
 # alt-m = 'workspace M'
 # alt-n = 'workspace N'
