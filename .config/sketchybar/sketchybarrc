@@ -51,8 +51,6 @@ sketchybar --add item chevron left \
   --set chevron icon= label.drawing=off click_script="$PLUGIN_DIR/lock.sh" \
   icon.padding_left=20 \
   script="${PLUGIN_DIR}/wallpaper.sh \"$PLUGIN_DIR\"" \
-  --subscribe chevron system_will_sleep \
-  --subscribe chevron system_woke \
   --subscribe chevron display_change \
   ;
 
