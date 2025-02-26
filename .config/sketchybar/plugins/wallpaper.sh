@@ -23,12 +23,21 @@ rm "$HOME/.wallpaper.jpg"
 
 # Start the background process
 (
+    # Store this process's PID
+    MY_PID=$$
+
     while true; do
+        # Check if we're still the active process
+        if [ -f "$PID_FILE" ] && [ "$(cat "$PID_FILE")" != "$MY_PID" ]; then
+            # Another instance has taken over, exit this one
+            exit 0
+        fi
+
         # If the binary is missing, build it
         if [ ! -f "${PLUGIN_DIR}/clisolarwallpaper/clisolarwallpaper.app/Contents/MacOS/clisolarwallpaper" ]; then
             "${PLUGIN_DIR}/clisolarwallpaper/build.sh"
         fi
-        ${PLUGIN_DIR}/clisolarwallpaper/clisolarwallpaper.app/Contents/MacOS/clisolarwallpaper "$HOME/Library/Application Support/com.apple.mobileAssetDesktop/The Desert.heic" "$HOME/.wallpaper.new.jpg"
+        ${PLUGIN_DIR}/clisolarwallpaper/clisolarwallpaper.app/Contents/MacOS/clisolarwallpaper "$HOME/Library/Application Support/com.apple.mobileAssetDesktop/Solar Gradients.heic" "$HOME/.wallpaper.new.jpg"
 
         if ! diff "$HOME/.wallpaper.new.jpg" "$HOME/.wallpaper.jpg"; then
             mv "$HOME/.wallpaper.new.jpg" "$HOME/.wallpaper.jpg"
@@ -54,7 +63,7 @@ rm "$HOME/.wallpaper.jpg"
     done
 ) &
 
-aerospace list-monitors --json | grep -Ei 'built.?in' && sketchybar --bar height=44 || sketchybar --bar height=28
-
 # Store the PID
 echo $! >"$PID_FILE"
+
+aerospace list-monitors --json | grep -Ei 'built.?in' && sketchybar --bar height=44 || sketchybar --bar height=28

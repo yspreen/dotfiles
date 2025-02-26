@@ -25,9 +25,9 @@ extension NSImage {
 
 struct Wallpaper: Codable {
 	struct Image: Codable {
-		let altitude: Int
+		let altitude: Double
 		let index: Int
-		let azimuth: Int
+		let azimuth: Double
 
 		private enum CodingKeys: String, CodingKey {
 			case altitude = "a"
@@ -46,7 +46,7 @@ struct Wallpaper: Codable {
 		}
 	}
 
-	let lightDark: LightDark
+	let lightDark: LightDark?
 	let images: [Image]
 	var url: URL!
 

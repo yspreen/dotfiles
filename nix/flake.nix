@@ -58,6 +58,7 @@
           pkgs.stow
           pkgs.zed-editor
           pkgs.spotify
+          pkgs.lazygit
         ];
 
       fonts.packages = [
