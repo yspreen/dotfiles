@@ -227,6 +227,7 @@
           "sketchybar"
           "sqlite"
           "wget"
+          "cargo-lambda"
         ];
         casks = [
           "orbstack"
@@ -252,6 +253,7 @@
         taps = [
           "dopplerhq/cli"
           "nikitabobko/tap" # aerospace
+          "cargo-lambda/cargo-lambda"
         ];
         masApps = {
           # AdGuardForSafari = 1440147259; # replaced by adguard brew package
