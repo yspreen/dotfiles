@@ -329,6 +329,12 @@ ns() {
     darwin-rebuild switch --impure --flake ~/dotfiles/nix#spreen 
 }
 
+# nix clean
+nc() {
+    sudo nix-collect-garbage -d
+    nix-store --optimise
+}
+
 # journal new
 jn() {
     ~/Documents/proj/journal/new.sh
