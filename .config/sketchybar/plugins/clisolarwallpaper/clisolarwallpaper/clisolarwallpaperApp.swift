@@ -62,92 +62,18 @@ func getLatLon(cacheMinutes: Int = 0) -> (Double, Double) {
 	return (lat, lon)
 }
 
-func findNextChangeTimestamp(wallpaper: Wallpaper, lat: Double, lon: Double, currentTime: Date)
+func findNextChangeTimestamp(wallpaper: Wallpaper, index: Int, lat: Double, lon: Double)
 	-> Int
 {
-	let location = CLLocation(latitude: lat, longitude: lon)
-	let isNorthernHemisphere = lat >= 0
-
-	// Get current image index
-	let currentPosition = solarPosition(for: location, at: currentTime)
-	let currentImage = wallpaper.findBestImageIndex(
-		for: currentPosition, isNorthernHemisphere: isNorthernHemisphere)
-
-	// Step 1: Find the hour when change occurs (using 30 minute steps)
-	var checkTime = currentTime
-	let thirtyMinutes: TimeInterval = 30 * 60
-	var lastImage = currentImage
-	var changeHourTime: Date?
-
-	// Look up to 24 hours ahead with 30-minute intervals
-	for _ in 0..<48 {
-		checkTime = checkTime.addingTimeInterval(thirtyMinutes)
-		let checkPosition = solarPosition(for: location, at: checkTime)
-		let nextImage = wallpaper.findBestImageIndex(
-			for: checkPosition, isNorthernHemisphere: isNorthernHemisphere)
-
-		if nextImage != lastImage {
-			changeHourTime = checkTime.addingTimeInterval(-thirtyMinutes)  // Go back to the previous 30-min mark
-			break
-		}
-
-		lastImage = nextImage
-	}
-
-	// If no change detected in 24 hours, return tomorrow at this time as a fallback
-	guard let hourChangeTime = changeHourTime else {
-		return Int(currentTime.timeIntervalSince1970) + (24 * 60 * 60)
-	}
-
-	// Step 2: Find the minute when change occurs (using 1 minute steps)
-	checkTime = hourChangeTime
-	lastImage = currentImage
-	var changeMinuteTime: Date?
-	let oneMinute: TimeInterval = 60
-
-	// Search within a one-hour window with 1-minute intervals
-	for _ in 0..<60 {
-		checkTime = checkTime.addingTimeInterval(oneMinute)
-		let checkPosition = solarPosition(for: location, at: checkTime)
-		let nextImage = wallpaper.findBestImageIndex(
-			for: checkPosition, isNorthernHemisphere: isNorthernHemisphere)
-
-		if nextImage != lastImage {
-			changeMinuteTime = checkTime.addingTimeInterval(-oneMinute)  // Go back to the previous minute
-			break
-		}
-
-		lastImage = nextImage
-	}
-
-	guard let minuteChangeTime = changeMinuteTime else {
-		// If no change found at the minute level, use the hour we found + 60 min
-		return Int(ceil(hourChangeTime.timeIntervalSince1970 + 60 * 60))
-	}
-
-	// Step 3: Find the exact second when change occurs
-	checkTime = minuteChangeTime
-	lastImage = currentImage
-	let oneSecond: TimeInterval = 1
-
-	// Search within a one-minute window with 1-second intervals
-	for _ in 0..<60 {
-		checkTime = checkTime.addingTimeInterval(oneSecond)
-		let checkPosition = solarPosition(for: location, at: checkTime)
-		let nextImage = wallpaper.findBestImageIndex(
-			for: checkPosition, isNorthernHemisphere: isNorthernHemisphere)
-
-		if nextImage != lastImage {
-			log("Found the exact second")
-			// Found the exact second of change, return the timestamp
-			return Int(ceil(checkTime.timeIntervalSince1970))
-		}
-
-		lastImage = nextImage
-	}
-
-	// If we couldn't find the exact second, use the minute we found + 60 sec
-	return Int(ceil(minuteChangeTime.timeIntervalSince1970 + 60))
+    var time = Date.now.addingTimeInterval(60)
+    let isNorthernHemisphere = lat >= 0
+    while
+        wallpaper.findBestImageIndex(for: solarPosition(for: .init(latitude: lat, longitude: lon), at: time), isNorthernHemisphere: isNorthernHemisphere) == index,
+        -time.timeIntervalSinceNow < 60 * 60 * 24
+    {
+        time = time.addingTimeInterval(60)
+    }
+    return Int(time.timeIntervalSince1970)
 }
 
 @main
@@ -182,7 +108,7 @@ struct clisolarwallpaperApp {
 		let wallpaper = readPlist(path: sourcePath)
 		let solarPosition = solarPosition(for: .init(latitude: lat, longitude: lon), at: .now)
 
-		if let image = wallpaper.findImage(
+		if let (image, idx) = wallpaper.findImage(
 			for: solarPosition, isNorthernHemisphere: isNorthernHemisphere)
 		{
 			// For demonstration, write image to destinationPath
@@ -196,9 +122,9 @@ struct clisolarwallpaperApp {
 				// Calculate the next change time
 				let nextChangeTimestamp = findNextChangeTimestamp(
 					wallpaper: wallpaper,
+                    index: idx,
 					lat: lat,
-					lon: lon,
-					currentTime: .now
+					lon: lon
 				)
 
 				// Print only the timestamp to stdout

@@ -75,7 +75,7 @@ struct Wallpaper: Codable {
 		return bestItem.index
 	}
 
-	func findImage(for position: SolarPosition, isNorthernHemisphere: Bool) -> NSImage? {
+	func findImage(for position: SolarPosition, isNorthernHemisphere: Bool) -> (NSImage, Int)? {
 		// Find the best image index using the existing method
 		let index = findBestImageIndex(for: position, isNorthernHemisphere: isNorthernHemisphere)
 
@@ -85,7 +85,7 @@ struct Wallpaper: Codable {
 		else {
 			return nil
 		}
-		return NSImage(cgImage: cgimg, size: NSZeroSize)
+		return (NSImage(cgImage: cgimg, size: NSZeroSize), index)
 	}
 
 	func with(url: URL) -> Self {
