@@ -8,7 +8,7 @@ _p() {
     input=$words[CURRENT]
 
     if [[ "$input" == *"/"* ]]; then
-        # If there’s at least one slash, separate the prefix (everything before the last slash)
+        # If there's at least one slash, separate the prefix (everything before the last slash)
         # from the current partial directory name.
         prefix="${input%/*}/"
         cur="${input##*/}"
@@ -26,14 +26,15 @@ _p() {
     local -a completions
     for d in $dirs; do
         local dname=${d:t}
-        if [[ "$dname" == "$cur"* ]]; then
-            completions+=("${prefix}${dname}")
+        # Make case-insensitive comparison - convert both to lowercase
+        if [[ "${(L)dname}" == "${(L)cur}"* ]]; then
+            completions+=("${prefix}${dname}/")
         fi
     done
 
-    # Use compadd with a trailing slash (-S "/") so that the completed directory gets a slash
+    # Use standard compadd without special options
     if ((${#completions})); then
-        compadd -S "/" -- $completions
+        compadd -S '' -U -- $completions
     fi
 }
 
