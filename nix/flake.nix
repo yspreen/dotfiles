@@ -118,9 +118,29 @@
           ];
         };
 
+        "com.apple.QuickTimePlayerX" = {
+          NSUserKeyEquivalents = {
+            "New Audio Recording" = "@N";  # ⌘N
+          };
+        };
+
         NSGlobalDomain = {
           NSUserKeyEquivalents = {
             "Close Other Tabs" = "@~T";  # ⌘⌥T
+          };
+        };
+
+
+        "com.apple.symbolichotkeys" = {
+          AppleSymbolicHotKeys = {
+            # Disable 'Cmd + Space' for Spotlight Search
+            "64" = {
+              enabled = false;
+            };
+            # Disable 'Cmd + Alt + Space' for Finder search window
+            "65" = {
+              enabled = true;
+            };
           };
         };
       };
@@ -228,6 +248,7 @@
           "sqlite"
           "wget"
           "cargo-lambda"
+          "zig" # for cargo lambda
         ];
         casks = [
           "orbstack"
