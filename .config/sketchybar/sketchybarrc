@@ -119,6 +119,9 @@ sketchybar \
   --add alias "Amphetamine,Amphetamine" right \
   --set "Amphetamine,Amphetamine" click_script="$PLUGIN_DIR/click.sh 'Amphetamine' '[1]' 2 yes" \
   padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
+  --add alias "Backtrack,Item-0" right \
+  --set "Backtrack,Item-0" click_script="$PLUGIN_DIR/click.sh 'Backtrack' '[1]' 2" \
+  padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
   --add alias "Cloudflare WARP,Item-0" right \
   --set "Cloudflare WARP,Item-0" click_script="$PLUGIN_DIR/click.sh 'Cloudflare WARP' '[1]'" \
   padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \

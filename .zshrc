@@ -345,6 +345,11 @@ jc() {
     (cd ~/Documents/proj/journal; gacp .)
 }
 
+# kill sketchybar
+ks() {
+    killall sketchybar
+}
+
 neofetch() {
     nix-shell -p neofetch --run "neofetch $(printf '%q ' "$@")"
 }
