@@ -131,9 +131,9 @@ alt-shift-l = 'move right'
 # alt-9 = 'workspace 9'
 alt-a = ['workspace A', 'exec-and-forget open -a Safari']
 # alt-b = 'workspace B'
-alt-c = 'exec-and-forget bash -c "[ \"\$(aerospace list-workspaces --focused)\" == \"C\" ] && open -a \"Visual Studio Code\" || aerospace workspace C"'
+alt-c = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-code.sh'
 alt-d = ['workspace D', 'exec-and-forget open -a Notion']
-alt-e = ['workspace E', 'exec-and-forget open -a Messages']
+alt-e = ['exec-and-forget ~/dotfiles/.config/aerospace/launch-messages.sh']
 alt-f = ['workspace F', 'exec-and-forget open -a Fork']
 alt-g = ['workspace G', 'exec-and-forget open -a Ghostty']
 # alt-i = 'workspace I'
@@ -300,6 +300,14 @@ run = ['move-node-to-workspace A']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.MobileSMS'
+run = ['move-node-to-workspace E']
+
+[[on-window-detected]]
+if.app-id = 'net.whatsapp.WhatsApp'
+run = ['move-node-to-workspace E']
+
+[[on-window-detected]]
+if.app-id = 'ru.keepcoder.Telegram'
 run = ['move-node-to-workspace E']
 
 [[on-window-detected]]

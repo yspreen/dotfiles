@@ -43,3 +43,4 @@ if [ "$funcstack[1]" = "_p" ]; then
 else
     compdef _p p
 fi
+_p somestringtoinit >/dev/null
