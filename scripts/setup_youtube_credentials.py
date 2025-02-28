@@ -42,6 +42,9 @@ def setup_youtube_credentials():
             with open(downloaded_file, "r") as f:
                 credentials_data = json.load(f)
 
+            # remove downloaded file:
+            os.remove(downloaded_file)
+
             # Ensure this is the right type of file
             if "installed" not in credentials_data:
                 print(
