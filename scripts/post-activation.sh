@@ -1,15 +1,17 @@
 #!/bin/bash
+set -e
+
+username=$(whoami)
+export HOME=/Users/${username}
 
 /bin/launchctl load -w /Library/LaunchAgents/homebrew.mxcl.sketchybar.plist 2>/dev/null
 
-./scripts/decrypt-ssh.sh && stow --adopt .
+./decrypt-ssh.sh && cd .. && stow --adopt .
 
 install_oh_my_zsh() {
-    cp ../.zshrc my.zshrc
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    mv my.zshrc ../.zshrc
+    git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh ~/.oh-my-zsh
 }
 
-[ -d /Users/${username}/.oh-my-zsh ] || install_oh_my_zsh
+[ -d ~/.oh-my-zsh ] || install_oh_my_zsh
 
-[ -d /Users/${username}/.oh-my-zsh/themes/powerlevel10k ] || git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /Users/${username}/.oh-my-zsh/themes/powerlevel10k
+[ -d ~/.oh-my-zsh/themes/powerlevel10k ] || git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/themes/powerlevel10k

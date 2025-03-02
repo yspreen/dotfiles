@@ -210,7 +210,7 @@
 
 
       system.activationScripts.postActivation.text = ''
-        sudo -u ${username} bash -c "cd /Users/${username}/dotfiles; ./post-activation.sh"
+        sudo -u ${username} bash -c "cd /Users/${username}/dotfiles/scripts; ./post-activation.sh"
       '';
 
       homebrew = {
