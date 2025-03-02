@@ -381,10 +381,6 @@ terraform() {
     nix-shell -p terraform --run "terraform $(printf '%q ' "$@")"
 }
 
-mas() {
-    nix-shell -p mas --run "mas $(printf '%q ' "$@")"
-}
-
 alias lg='lazygit'
 
 p() {

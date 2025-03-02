@@ -247,6 +247,7 @@
           "wget"
           "cargo-lambda"
           "zig" # for cargo lambda
+          "mas"
         ];
         casks = [
           "orbstack"
