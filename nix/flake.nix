@@ -213,6 +213,7 @@
         # Load the service
         sudo -u ${username} /bin/launchctl load -w /Library/LaunchAgents/homebrew.mxcl.sketchybar.plist 2>/dev/null;
         sudo -u ${username} bash -c "cd /Users/${username}/dotfiles; ./scripts/decrypt-ssh.sh && stow --adopt ."
+        sudo -u ${username} bash -c '[ -d ~/.oh-my-zsh ] || sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
       '';
 
       homebrew = {
