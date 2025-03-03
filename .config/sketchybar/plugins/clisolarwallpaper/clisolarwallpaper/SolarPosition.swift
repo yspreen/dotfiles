@@ -19,95 +19,79 @@ func degrees(radians: Double) -> CLLocationDegrees {
 
 public typealias SolarPosition = (elevation: CLLocationDegrees, azimuth: CLLocationDegrees)
 
+// New precise solar position calculation using improved astronomical algorithms
 public func solarPosition(
-	for location: CLLocation,
-	at time: Date,
-	with calendar: Calendar = .current
+	for location: CLLocation, at time: Date, with calendar: Calendar = .current
 ) -> SolarPosition {
-	let elapsedJulianDays = time.timeIntervalSince(.J2000) / numberOfSecondsPerDay
+	// Calculate Julian Day
+	let jd = time.timeIntervalSince1970 / 86400.0 + 2440587.5
+	let T = (jd - 2451545.0) / 36525.0
 
-	let ω = 2.1429 - 0.0010394594 * elapsedJulianDays
-	let meanLongitude = 4.8950630 + 0.017202791698 * elapsedJulianDays
-	let meanAnomaly = 6.2400600 + 0.0172019699 * elapsedJulianDays
+	// Geometric Mean Longitude of the Sun
+	let L0 = fmod(280.46646 + T * (36000.76983 + T * 0.0003032), 360.0)
+	// Geometric Mean Anomaly
+	let M = 357.52911 + T * (35999.05029 - 0.0001537 * T)
 
-	let eclipticLongitude =
-		meanLongitude + 0.03341607 * sin(meanAnomaly) + 0.00034894 * sin(2 * meanAnomaly)
-		- 0.0001134 - 0.0000203 * sin(ω)
+	let M_rad = radians(degrees: M)
+	// Sun's equation of center
+	let C =
+		sin(M_rad) * (1.914602 - T * (0.004817 + 0.000014 * T))
+		+ sin(2 * M_rad) * (0.019993 - 0.000101 * T)
+		+ sin(3 * M_rad) * 0.000289
+	// Sun True Longitude
+	let trueLong = L0 + C
 
-	let eclipticObliquity = 0.4090928 - 6.2140e-9 * elapsedJulianDays + 0.0000396 * cos(ω)
+	// Sun Apparent Longitude
+	let Omega = 125.04 - 1934.136 * T
+	let lambda = trueLong - 0.00569 - 0.00478 * sin(radians(degrees: Omega))
 
-	var rightAscension = atan2(
-		cos(eclipticObliquity) * sin(eclipticLongitude), cos(eclipticLongitude))
-	if rightAscension < 0 {
-		rightAscension += (2.0 * .pi)
+	// Mean Obliquity of the Ecliptic and true obliquity
+	var epsilon0 = 23.0 + (26.0 / 60.0) + (21.448 / 3600.0)
+	epsilon0 -= T * (46.8150 + T * (0.00059 - T * 0.001813)) / 3600.0
+	let epsilon = epsilon0 + 0.00256 * cos(radians(degrees: Omega))
+
+	let lambda_rad = radians(degrees: lambda)
+	let epsilon_rad = radians(degrees: epsilon)
+	// Right Ascension
+	var RA = degrees(radians: atan2(cos(epsilon_rad) * sin(lambda_rad), cos(lambda_rad)))
+	RA = fmod(RA + 360.0, 360.0)
+	// Declination
+	let decl = degrees(radians: asin(sin(epsilon_rad) * sin(lambda_rad)))
+
+	// Local Sidereal Time
+	let longitude = location.coordinate.longitude
+	let D = jd - 2451545.0
+	let GMST = fmod(
+		280.46061837 + 360.98564736629 * D + 0.000387933 * T * T - T * T * T / 38710000.0, 360.0)
+	let LST = GMST + longitude
+	// Hour angle in radians
+	let HA = radians(degrees: fmod(LST - RA + 360.0, 360.0))
+
+	// Convert latitude to radians
+	let lat_rad = radians(degrees: location.coordinate.latitude)
+	let decl_rad = radians(degrees: decl)
+
+	// Elevation calculation
+	let elevation_rad = asin(sin(lat_rad) * sin(decl_rad) + cos(lat_rad) * cos(decl_rad) * cos(HA))
+	let elevation = degrees(radians: elevation_rad)
+
+	// Apply atmospheric refraction correction (approximate)
+	let refractionCorrection: Double
+	if elevation > 85 {
+		refractionCorrection = 0
+	} else {
+		refractionCorrection =
+			1.02 / tan(radians(degrees: elevation + 10.3 / (elevation + 5))) / 60.0
+	}
+	let correctedElevation = elevation + refractionCorrection
+
+	// Azimuth calculation (adjusted for quadrant)
+	let azimuth_rad = acos(
+		(sin(decl_rad) - sin(elevation_rad) * sin(lat_rad)) / (cos(elevation_rad) * cos(lat_rad)))
+	var azimuth = degrees(radians: azimuth_rad)
+	if sin(HA) > 0 {
+		azimuth = 360 - azimuth
 	}
 
-	let declination = asin(sin(eclipticObliquity) * sin(eclipticLongitude))
-
-	let latitude = radians(degrees: location.coordinate.latitude)
-	let longitude = radians(degrees: location.coordinate.longitude)
-
-	let greenwichMeanSiderealTime =
-		6.6974243242 + 0.0657098283 * elapsedJulianDays + calendar.fractionalHours(for: time)
-	let localMeanSiderealTime = (greenwichMeanSiderealTime * 15 + longitude) * (.pi / 180.0)
-	let hourAngle = localMeanSiderealTime - rightAscension
-
-	let elevation = asin(
-		cos(latitude) * cos(hourAngle) * cos(declination) + sin(declination) * sin(latitude))
-
-	var azimuth = atan2(
-		-sin(hourAngle), tan(declination) * cos(latitude) - sin(latitude) * cos(hourAngle))
-	if azimuth < 0 {
-		azimuth += (.pi * 2.0)
-	}
-
-	return (degrees(radians: elevation), degrees(radians: azimuth))
-}
-
-@available(macOS 13, *)
-extension DateInterval {
-	public func striding(by timeInterval: TimeInterval) -> StrideTo<Date> {
-		return stride(from: self.start, to: self.end, by: timeInterval)
-	}
-}
-
-// Equal to January 1, 2000, 11:58:55.816 UTC
-let _J2000: Date = {
-	let gregorian = Calendar(identifier: .gregorian)
-	let utc = TimeZone(secondsFromGMT: 0)
-	let dateComponents = DateComponents(
-		calendar: gregorian,
-		timeZone: utc,
-		year: 2000,
-		month: 1,
-		day: 1,
-		hour: 11,
-		minute: 58,
-		second: 55,
-		nanosecond: 816_000_000)
-	return gregorian.date(from: dateComponents)!
-}()
-
-extension Date {
-	/// The J2000.0 epoch, 2000-01-01T12:00:00Z
-	/// https://en.wikipedia.org/wiki/Epoch_(astronomy)#Julian_years_and_J2000
-	public static var J2000: Date {
-		return _J2000
-	}
-}
-
-public let numberOfSecondsPerDay: TimeInterval = 60 * 60 * 24
-let numberOfSecondsPerMinute: TimeInterval = 60
-let numberOfSecondsPerHour: TimeInterval = numberOfSecondsPerMinute * 60
-
-extension Calendar {
-	public func fractionalHours(for date: Date) -> Double {
-		let dateComponents = self.dateComponents([.hour, .minute, .second], from: date)
-
-		let hours = dateComponents.hour ?? 0
-		let minutes = dateComponents.minute ?? 0
-		let seconds = dateComponents.second ?? 0
-		return Double(hours) + Double(minutes) / numberOfSecondsPerMinute + Double(seconds)
-			/ numberOfSecondsPerHour
-	}
+	return (correctedElevation, azimuth)
 }
