@@ -20,8 +20,9 @@ cd copy
 find . -type f | while read file; do
     target_dir="$HOME/$(dirname "$file")"
     mkdir -p "$target_dir"
-    cp -f "$file" "$HOME/$file"
-    echo "$file -> $HOME/$file"
+    diff "$file" "$HOME/$file" >/dev/null 2>&1 ||
+        (cp -f "$file" "$HOME/$file" &&
+            echo "$file -> $HOME/$file")
 done
 echo "Finished copying files to home directory."
 cd ..
