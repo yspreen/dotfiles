@@ -1,6 +1,7 @@
 \.git
 ^/nix(/.*)?$
 ^/scripts(/.*)?$
+^/copy(/.*)?$
 ^/readme.md$
 ^/.ssh_pw$
 ^/.ssh_enc$
