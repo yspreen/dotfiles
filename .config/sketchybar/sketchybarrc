@@ -116,7 +116,7 @@ sketchybar \
   label.padding_right=8 \
   --add item "battery" right \
   --set "battery" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Control Center'" \
-  padding_left=8 padding_right=6 \
+  padding_left=8 padding_right=8 y_offset=2 \
   update_freq=120 \
   icon.drawing=off \
   script="$PLUGIN_DIR/battery.sh" \
@@ -134,11 +134,11 @@ sketchybar \
   padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
   alias.update_freq=30 \
   --add alias "Raycast,extension_menubar-calendar_index__5be54b64-8da3-4dd2-a2cd-fe53909246a7" right \
-  --set "Raycast,extension_menubar-calendar_index__5be54b64-8da3-4dd2-a2cd-fe53909246a7" click_script="$PLUGIN_DIR/click.sh 'Raycast' '[1]' 2" \
+  --set "Raycast,extension_menubar-calendar_index__5be54b64-8da3-4dd2-a2cd-fe53909246a7" click_script="$PLUGIN_DIR/click.sh 'Raycast' '[2]' 2" \
   --add alias "Tailscale,Item-0" right \
   --set "Tailscale,Item-0" click_script="$PLUGIN_DIR/click.sh 'Tailscale' '[1]'" \
   --add alias "Raycast,extension_pomodoro_pomodoro-menu-bar__da2ac998-edd2-49a4-8614-06b57f30f619" right \
-  --set "Raycast,extension_pomodoro_pomodoro-menu-bar__da2ac998-edd2-49a4-8614-06b57f30f619" click_script="$PLUGIN_DIR/click.sh 'Raycast' '[2]' 2" \
+  --set "Raycast,extension_pomodoro_pomodoro-menu-bar__da2ac998-edd2-49a4-8614-06b57f30f619" click_script="$PLUGIN_DIR/click.sh 'Raycast' '[1]' 2" \
   padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
   --add alias "Control Center,FocusModes" right \
   --set "Control Center,FocusModes" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Focus'" \
