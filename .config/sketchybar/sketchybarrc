@@ -103,19 +103,23 @@ sketchybar --add item dotthree left \
 #   --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
 #   --subscribe battery system_woke power_source_change
 
+  # --add alias "Control Center,BentoBox" right \
+  # --set "Control Center,BentoBox" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Control Center'" \
+  # padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
+  # alias.update_freq=30 \
+
+
 sketchybar \
   --add alias "Control Center,Clock" right \
   --set "Control Center,Clock" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Clock'" \
   padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
   label.padding_right=8 \
-  --add alias "Control Center,BentoBox" right \
-  --set "Control Center,BentoBox" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Control Center'" \
-  padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
-  alias.update_freq=30 \
-  --add alias "Control Center,Battery" right \
-  --set "Control Center,Battery" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Battery'" \
-  padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
-  alias.update_freq=30 \
+  --add item "battery" right \
+  --set "battery" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Control Center'" \
+  padding_left=8 padding_right=6 \
+  update_freq=120 \
+  icon.drawing=off \
+  script="$PLUGIN_DIR/battery.sh" \
   --add alias "Amphetamine,Amphetamine" right \
   --set "Amphetamine,Amphetamine" click_script="$PLUGIN_DIR/click.sh 'Amphetamine' '[1]' 2 yes" \
   padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
