@@ -1,5 +1,6 @@
 \.git
 ^/nix(/.*)?$
+^/raycast(/.*)?$
 ^/scripts(/.*)?$
 ^/copy(/.*)?$
 ^/readme.md$
