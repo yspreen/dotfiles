@@ -269,6 +269,7 @@
           "ukelele"
           "karabiner-elements"
           "fork"
+          "raycast"
         ];
         taps = [
           "dopplerhq/cli"
