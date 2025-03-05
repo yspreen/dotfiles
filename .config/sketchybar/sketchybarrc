@@ -110,12 +110,30 @@ sketchybar --add item dotthree left \
 
 
 sketchybar \
+  --add item clockam right \
+  --set clockam click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Clock'" \
+  label.padding_right=24 \
+  label.font.size="14.5" \
+  label.font.style="Figtree Bold" \
+  y_offset=1 \
+  update_freq=1 \
+  script="$PLUGIN_DIR/clockam.sh" \
   --add item clock right \
   --set clock click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Clock'" \
-  label.padding_right=24 \
-  width=180 \
+  label.font="Roboto Mono:Bold:14.5" \
+  width=66 \
+  align=left \
   update_freq=1 \
   script="$PLUGIN_DIR/clock.sh" \
+  --add item clockdate right \
+  --set clockdate click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Clock'" \
+  label.padding_right=6 \
+  label.padding_left=6 \
+  label.font.size="14.5" \
+  label.font.style="Figtree Bold" \
+  y_offset=1 \
+  update_freq=1 \
+  script="$PLUGIN_DIR/clockdate.sh" \
   --add item "battery" right \
   --set "battery" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Control Center'" \
   padding_left=8 padding_right=8 y_offset=2 \

@@ -69,6 +69,7 @@
         pkgs.martian-mono
         pkgs.montserrat
         pkgs.geist-font
+        pkgs.roboto-mono
         (pkgs.callPackage "/Users/${username}/dotfiles/nix/font/figtree.nix" { }).out
       ];
 
