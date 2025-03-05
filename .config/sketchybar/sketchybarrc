@@ -110,10 +110,12 @@ sketchybar --add item dotthree left \
 
 
 sketchybar \
-  --add alias "Control Center,Clock" right \
-  --set "Control Center,Clock" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Clock'" \
-  padding_left=-1 padding_right=-1 icon.padding_left=-1 icon.padding_right=-1 label.padding_left=-1 label.padding_right=-1 \
-  label.padding_right=8 \
+  --add item clock right \
+  --set clock click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Clock'" \
+  label.padding_right=24 \
+  width=180 \
+  update_freq=1 \
+  script="$PLUGIN_DIR/clock.sh" \
   --add item "battery" right \
   --set "battery" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Control Center'" \
   padding_left=8 padding_right=8 y_offset=2 \
