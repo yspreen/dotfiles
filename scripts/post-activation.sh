@@ -27,82 +27,84 @@ done
 echo "Finished copying files to home directory."
 cd ..
 
-# Create temporary plist files for each setting
-cat >/tmp/AppleCurrentKeyboardLayoutInputSourceID.txt <<EOF
-"org.sil.ukelele.keyboardlayout..u.s.qwerty+umlaut"
-EOF
+defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string "org.sil.ukelele.keyboardlayout..u.s.qwerty+umlaut"
 
-cat >/tmp/AppleDictationAutoEnable.txt <<EOF
-1
-EOF
+defaults write com.apple.HIToolbox AppleEnabledInputSources -array \
+    '<dict>
+        <key>Bundle ID</key>
+        <string>com.apple.CharacterPaletteIM</string>
+        <key>InputSourceKind</key>
+        <string>Non Keyboard Input Method</string>
+    </dict>' \
+    '<dict>
+        <key>Bundle ID</key>
+        <string>com.apple.inputmethod.ironwood</string>
+        <key>InputSourceKind</key>
+        <string>Non Keyboard Input Method</string>
+    </dict>' \
+    '<dict>
+        <key>Bundle ID</key>
+        <string>com.apple.PressAndHold</string>
+        <key>InputSourceKind</key>
+        <string>Non Keyboard Input Method</string>
+    </dict>'
+# Original U.S. layout commented out
+# '<dict>
+#     <key>InputSourceKind</key>
+#     <string>Keyboard Layout</string>
+#     <key>KeyboardLayout ID</key>
+#     <integer>0</integer>
+#     <key>KeyboardLayout Name</key>
+#     <string>U.S.</string>
+# </dict>'
 
-cat >/tmp/AppleEnabledInputSources.plist <<EOF
-(
-    {
-        "Bundle ID" = "com.apple.CharacterPaletteIM";
-        "InputSourceKind" = "Non Keyboard Input Method";
-    },
-    {
-        "Bundle ID" = "com.apple.inputmethod.ironwood";
-        "InputSourceKind" = "Non Keyboard Input Method";
-    },
-    {
-        "Bundle ID" = "com.apple.PressAndHold";
-        "InputSourceKind" = "Non Keyboard Input Method";
-    },
-    {
-        "InputSourceKind" = "Keyboard Layout";
-        "KeyboardLayout ID" = 0;
-        "KeyboardLayout Name" = "U.S.";
-    }
-)
-EOF
+defaults write com.apple.HIToolbox AppleInputSourceHistory -array \
+    '<dict>
+        <key>InputSourceKind</key>
+        <string>Keyboard Layout</string>
+        <key>KeyboardLayout ID</key>
+        <integer>-26430</integer>
+        <key>KeyboardLayout Name</key>
+        <string>U.S. qwerty + umlaut</string>
+    </dict>'
+# Original U.S. layout commented out
+# '<dict>
+#     <key>InputSourceKind</key>
+#     <string>Keyboard Layout</string>
+#     <key>KeyboardLayout ID</key>
+#     <integer>0</integer>
+#     <key>KeyboardLayout Name</key>
+#     <string>U.S.</string>
+# </dict>'
 
-cat >/tmp/AppleFnUsageType.txt <<EOF
-2
-EOF
+defaults write com.apple.HIToolbox AppleSelectedInputSources -array \
+    '<dict>
+        <key>InputSourceKind</key>
+        <string>Keyboard Layout</string>
+        <key>KeyboardLayout ID</key>
+        <integer>-26430</integer>
+        <key>KeyboardLayout Name</key>
+        <string>U.S. qwerty + umlaut</string>
+    </dict>'
 
-cat >/tmp/AppleInputSourceHistory.plist <<EOF
-(
-    {
-        "InputSourceKind" = "Keyboard Layout";
-        "KeyboardLayout ID" = -26430;
-        "KeyboardLayout Name" = "U.S. qwerty + umlaut";
-    },
-    {
-        "InputSourceKind" = "Keyboard Layout";
-        "KeyboardLayout ID" = 0;
-        "KeyboardLayout Name" = "U.S.";
-    }
-)
-EOF
+# Add AppleFnUsageType setting
+defaults write com.apple.HIToolbox AppleFnUsageType -int 2
+defaults write com.apple.HIToolbox AppleDictationAutoEnable -int 1
 
-cat >/tmp/AppleSelectedInputSources.plist <<EOF
-(
-    {
-        "Bundle ID" = "com.apple.PressAndHold";
-        "InputSourceKind" = "Non Keyboard Input Method";
-    },
-    {
-        "InputSourceKind" = "Keyboard Layout";
-        "KeyboardLayout ID" = -26430;
-        "KeyboardLayout Name" = "U.S. qwerty + umlaut";
-    }
-)
-EOF
+# Add com.apple.inputsources configuration
+defaults write com.apple.inputsources AppleEnabledThirdPartyInputSources -array \
+    '<dict>
+        <key>InputSourceKind</key>
+        <string>Keyboard Layout</string>
+        <key>KeyboardLayout ID</key>
+        <integer>-26430</integer>
+        <key>KeyboardLayout Name</key>
+        <string>U.S. qwerty + umlaut</string>
+    </dict>'
 
-# Apply all settings
-defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID "$(cat /tmp/AppleCurrentKeyboardLayoutInputSourceID.txt)"
-defaults write com.apple.HIToolbox AppleDictationAutoEnable "$(cat /tmp/AppleDictationAutoEnable.txt)"
-defaults write com.apple.HIToolbox AppleEnabledInputSources -array "$(cat /tmp/AppleEnabledInputSources.plist)"
-defaults write com.apple.HIToolbox AppleFnUsageType "$(cat /tmp/AppleFnUsageType.txt)"
-defaults write com.apple.HIToolbox AppleInputSourceHistory -array "$(cat /tmp/AppleInputSourceHistory.plist)"
-defaults write com.apple.HIToolbox AppleSelectedInputSources -array "$(cat /tmp/AppleSelectedInputSources.plist)"
+# Step 2. Restart SystemUIServer so the changes are picked up.
+killall SystemUIServer
 
-# Clean up temporary files
-rm /tmp/AppleCurrentKeyboardLayoutInputSourceID.txt
-rm /tmp/AppleDictationAutoEnable.txt
-rm /tmp/AppleEnabledInputSources.plist
-rm /tmp/AppleFnUsageType.txt
-rm /tmp/AppleInputSourceHistory.plist
-rm /tmp/AppleSelectedInputSources.plist
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+killall SystemUIServer
+killall -HUP cfprefsd
