@@ -121,7 +121,7 @@ sketchybar \
   --add item clock right \
   --set clock click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Clock'" \
   label.font="Roboto Mono:Bold:14.5" \
-  width=66 \
+  width=74 \
   align=left \
   update_freq=1 \
   script="$PLUGIN_DIR/clock.sh" \
