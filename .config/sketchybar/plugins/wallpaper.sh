@@ -41,7 +41,9 @@ rm "$HOME/.wallpaper.jpg"
         G=$(printf "%02x" $((16#${COLOR:2:2} * 50 / 100)))
         B=$(printf "%02x" $((16#${COLOR:4:2} * 50 / 100)))
         DARKENED_COLOR="${R}${G}${B}"
-        mint run yspreen/ChangeMenuBarColor SolidColor "$DARKENED_COLOR" "$HOME/.wallpaper.jpg"
+        while ! mint run yspreen/ChangeMenuBarColor SolidColor "$DARKENED_COLOR" "$HOME/.wallpaper.jpg"; do
+            sleep 1
+        done
         sketchybar --bar color="0xff${DARKENED_COLOR}"
 
         while [ "$(date +%s)" -lt "$ts" ]; do
