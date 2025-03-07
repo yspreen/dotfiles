@@ -59,6 +59,7 @@
           pkgs.zed-editor
           pkgs.spotify
           pkgs.lazygit
+          pkgs.zoom-us
         ];
 
       fonts.packages = [

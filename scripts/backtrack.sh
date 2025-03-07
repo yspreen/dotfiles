@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Find all files in the current directory containing 'backtrack'
+# Find all files in the current directory containing 'meeting'
 find_backtrack_files() {
-    find . -type f -iname "*backtrack*" | sort
+    find . -type f -iname "*meeting*" | sort
 }
 
 create_black() {
@@ -72,7 +72,7 @@ main() {
     done < <(find_backtrack_files)
 
     if [[ ${#all_files[@]} -eq 0 ]]; then
-        echo "No files containing 'backtrack' found."
+        echo "No files containing 'meeting' found."
         exit 0
     fi
 
