@@ -3,6 +3,7 @@
 import os
 import sys
 import re
+import datetime
 from youtube_upload.client import YoutubeUploader
 
 
@@ -14,13 +15,21 @@ def upload_video(video_file):
     filename = os.path.basename(video_file)
     # Remove .black.mp4 or similar extensions for cleaner title
     title = re.sub(r"\.black\.mp4$", "", filename)
-    title = f"Backtrack {title}"
+    title = re.sub(r"\..{3,4}$", "", title)
+
+    # Get file creation date
+    creation_time = os.path.getctime(video_file)
+    creation_date = datetime.datetime.fromtimestamp(creation_time)
+    date_str = creation_date.strftime("%Y-%m-%d")
+
+    # Add date to the title
+    title = f"{date_str}: {title}"
 
     # Default options
     options = {
         "title": title,
-        "description": "Automatically uploaded backtrack video",
-        "tags": ["backtrack", "audio"],
+        "description": "Automatically uploaded meeting video",
+        "tags": ["backtrack", "audio", "meeting"],
         "privacyStatus": "unlisted",  # Can be "private", "public", or "unlisted"
         "kids": False,
     }
