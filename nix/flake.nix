@@ -267,7 +267,6 @@
           "adguard"
           "visual-studio-code"
           "sf-symbols"
-          "xcodes"
           "ukelele"
           "karabiner-elements"
           "fork"

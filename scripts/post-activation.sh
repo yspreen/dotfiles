@@ -4,6 +4,14 @@ set -e
 username=$(whoami)
 export HOME=/Users/${username}
 
+install_xcode() {
+    latest="$(nix-shell -p xcodes --run "xcodes list" | grep -iv beta | grep -Eo '^[^ ]+' | tail -1)"
+    nix-shell -p xcodes --run "xcodes install $latest"
+}
+
+find /Applications -maxdepth 1 -iname 'xcode*' >/dev/null || install_xcode
+which xcodebuild || xcode-select --install
+
 /bin/launchctl load -w /Library/LaunchAgents/homebrew.mxcl.sketchybar.plist 2>/dev/null
 
 ./decrypt-ssh.sh && cd .. && stow --adopt .
