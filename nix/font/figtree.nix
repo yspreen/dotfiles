@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, pkgs, python313Packages, ... }:
+{ lib, stdenvNoCC, pkgs, ... }:
 
 stdenvNoCC.mkDerivation {
   pname = "Figtree";
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation {
     pkgs.woff2
     pkgs.bash
     pkgs.cacert
-    python313Packages.fonttools
+    (pkgs.python3.withPackages (ps: with ps; [ fonttools ]))
   ];
 
   SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
