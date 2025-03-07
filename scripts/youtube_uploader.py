@@ -50,6 +50,15 @@ def upload_video(video_file):
         print(f"Authenticating with YouTube...")
         oauth_path = os.path.expanduser("~/.youtube-upload-oauth.json")
 
+        # Function to handle authentication
+        def authenticate_user():
+            uploader.authenticate()
+            # Save oauth tokens for future use
+            if os.path.exists("./oauth.json"):
+                with open("./oauth.json", "r") as f:
+                    with open(oauth_path, "w") as f2:
+                        f2.write(f.read())
+
         # Try to use existing oauth tokens if available
         if os.path.exists(oauth_path):
             # copy oauth_path to ./oauth.json:
@@ -60,30 +69,54 @@ def upload_video(video_file):
             try:
                 uploader.authenticate()
                 print("Authentication successful using saved tokens")
-            except Exception:
-                print(
-                    "Saved authentication expired. Opening browser for new authentication..."
-                )
-                uploader.authenticate()
-                # Save oauth tokens for future use
-                if hasattr(uploader, "oauth") and uploader.oauth:
-                    with open(oauth_path, "w") as f:
-                        f.write(uploader.oauth)
+            except Exception as e:
+                print(f"Saved authentication expired: {str(e)}")
+                print("Opening browser for new authentication...")
+                authenticate_user()
         else:
             print("First-time authentication. Opening browser for authorization...")
-            uploader.authenticate()
-            with open("./oauth.json", "r") as f:
-                with open(oauth_path, "w") as f2:
-                    f2.write(f.read())
+            authenticate_user()
 
-        # Upload video
-        print(f"Uploading {video_file} to YouTube with title: {title}")
-        video_id = uploader.upload(video_file, options)
+        # Upload video with retry for authentication failures
+        try:
+            print(f"Uploading {video_file} to YouTube with title: {title}")
+            video_id = uploader.upload(video_file, options)
 
-        print(f"Upload complete for {video_file}")
-        print(f"Video ID: {video_id}")
-        print(f"Video URL: https://youtu.be/{video_id}")
-        return 0
+            print(f"Upload complete for {video_file}")
+            print(f"Video ID: {video_id}")
+            print(f"Video URL: https://youtu.be/{video_id}")
+            return 0
+
+        except Exception as e:
+            # Check if it's an authentication error
+            error_msg = str(e).lower()
+            if "token" in error_msg and (
+                "expired" in error_msg
+                or "revoked" in error_msg
+                or "invalid" in error_msg
+            ):
+                print(f"Authentication token error: {str(e)}")
+                print("Attempting to re-authenticate...")
+
+                # Force re-authentication by removing the oauth.json file
+                if os.path.exists("./oauth.json"):
+                    os.remove("./oauth.json")
+                if os.path.exists(oauth_path):
+                    os.remove(oauth_path)
+
+                authenticate_user()
+
+                # Try upload again after re-authentication
+                print(f"Retrying upload for {video_file}...")
+                video_id = uploader.upload(video_file, options)
+
+                print(f"Upload complete for {video_file}")
+                print(f"Video ID: {video_id}")
+                print(f"Video URL: https://youtu.be/{video_id}")
+                return 0
+            else:
+                # Not an authentication error, re-raise
+                raise
 
     except Exception as e:
         print(f"Failed to upload {video_file}: {str(e)}")
