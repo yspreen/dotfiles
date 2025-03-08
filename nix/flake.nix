@@ -143,6 +143,17 @@
             "65" = {
               enabled = true;
             };
+            "175" = {
+              enabled = true;
+              value = {
+                parameters = [
+                  65535
+                  79
+                  8388608
+                ];
+                type = "standard";
+              };
+            };
           };
         };
       };
