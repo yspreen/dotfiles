@@ -22,7 +22,7 @@ fi
 rm "$HOME/.wallpaper.jpg"
 
 # Start the background process
-(
+bg() {
     # Store this process's PID
     MY_PID=$$
 
@@ -56,7 +56,14 @@ rm "$HOME/.wallpaper.jpg"
             exit 0
         fi
     done
-) &
+}
+
+if [ "$SENDER" = "display_change" ]; then
+    bg &
+    sleep 4
+fi
+
+bg &
 
 # Store the PID
 echo $! >"$PID_FILE"
