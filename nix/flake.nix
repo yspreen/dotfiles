@@ -139,7 +139,10 @@
             "64" = {
               enabled = false;
             };
-            # Disable 'Cmd + Alt + Space' for Finder search window
+            # Disable 'Ctrl + Space'
+            "60" = {
+              enabled = false;
+            };
             "65" = {
               enabled = true;
             };
