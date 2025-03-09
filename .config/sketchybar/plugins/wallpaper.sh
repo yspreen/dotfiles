@@ -61,6 +61,8 @@ bg() {
 if [ "$SENDER" = "display_change" ]; then
     bg &
     sleep 4
+    bg &
+    sleep 4
 fi
 
 bg &
