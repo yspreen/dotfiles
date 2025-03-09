@@ -6,7 +6,13 @@ find_backtrack_files() {
 }
 
 create_black() {
+    if [[ -f "$1".black.mp4 ]]; then
+        echo "$1.black.mp4 already exists."
+        return
+    fi
     ffmpeg -f lavfi -i color=c=black:s=640x360 -i "$1" -c:v libx264 -tune stillimage -c:a copy -shortest "$1".black.mp4 # backtrack
+    # Set the modification time of the new file to match the source file
+    touch -r "$1" "$1".black.mp4
 }
 
 setup_nix() {
@@ -109,10 +115,10 @@ main() {
         name_without_ext="${base_name%.*}"
 
         # Check for potential suffix files
-        possible_black_1="$dir_name/${name_without_ext}_black.$extension"
-        possible_black_2="$dir_name/${name_without_ext}.black.$extension"
-        possible_black_3="$dir_name/${name_without_ext}.mp4.black.mp4"
-        possible_black_4="$dir_name/${name_without_ext}.m4a.black.mp4"
+        possible_black_1="$dir_name/${name_without_ext}_black.mp4"
+        possible_black_2="$dir_name/${name_without_ext}.black.mp4"
+        possible_black_3="$dir_name/${base_name}.black.mp4"
+        possible_black_4="$dir_name/${base_name}_black.mp4"
 
         count=0
         matched=""
@@ -145,10 +151,15 @@ main() {
             [ "$mode" == "delete" ] && rm "$base"
         elif [[ $count -gt 1 ]]; then
             echo "Error: $base has more than one suffix counterpart."
+            echo "  $possible_black_1"
+            echo "  $possible_black_2"
+            echo "  $possible_black_3"
+            echo "  $possible_black_4"
+
             exit 1
         else
             if [ "$mode" == "delete" ]; then
-                echo "Error: No suffix file found for $base."
+                echo "Error: No suffix file found for $base"
                 echo "This should've been created in the previous step."
                 exit 1
             fi
