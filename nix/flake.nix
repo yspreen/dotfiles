@@ -61,6 +61,7 @@
           pkgs.lazygit
           pkgs.zoom-us
           pkgs.slack
+          pkgs.cocoapods
         ];
 
       fonts.packages = [
