@@ -21,9 +21,10 @@ def upload_video(video_file):
     creation_time = os.path.getctime(video_file)
     creation_date = datetime.datetime.fromtimestamp(creation_time)
     date_str = creation_date.strftime("%Y-%m-%d")
+    time_str = creation_date.strftime("%H:%M:%S")
 
-    # Add date to the title
-    title = f"{date_str}: {title}"
+    # Add date and time to the title
+    title = f"{date_str} {time_str}: {title}"
 
     # Default options
     options = {
