@@ -381,6 +381,10 @@ terraform() {
     nix-shell -p terraform --run "terraform $(printf '%q ' "$@")"
 }
 
+eas() {
+    npx eas-cli $@
+}
+
 alias lg='lazygit'
 
 p() {
