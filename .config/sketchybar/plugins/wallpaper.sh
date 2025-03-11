@@ -31,7 +31,10 @@ bg() {
         if [ ! -f "${PLUGIN_DIR}/clisolarwallpaper/clisolarwallpaper.app/Contents/MacOS/clisolarwallpaper" ]; then
             "${PLUGIN_DIR}/clisolarwallpaper/build.sh"
         fi
-        ts=$(${PLUGIN_DIR}/clisolarwallpaper/clisolarwallpaper.app/Contents/MacOS/clisolarwallpaper "$HOME/Library/Application Support/com.apple.mobileAssetDesktop/Solar Gradients.heic" "$HOME/.wallpaper.jpg")
+        while [ ! -f "$HOME/.wallpaper.jpg" ]; do
+            ts=$(${PLUGIN_DIR}/clisolarwallpaper/clisolarwallpaper.app/Contents/MacOS/clisolarwallpaper "$HOME/Library/Application Support/com.apple.mobileAssetDesktop/Solar Gradients.heic" "$HOME/.wallpaper.jpg")
+            sleep 1
+        done
         echo "Next change at $ts"
 
         # Sample color and blend with black

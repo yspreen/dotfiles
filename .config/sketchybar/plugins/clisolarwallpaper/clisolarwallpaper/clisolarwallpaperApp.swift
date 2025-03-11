@@ -102,6 +102,7 @@ struct clisolarwallpaperApp {
 		log("Cache Minutes: \(cacheMinutes)")
 
 		let (lat, lon) = getLatLon(cacheMinutes: cacheMinutes)
+		log("lat lon: \(lat), \(lon)")
 		let isNorthernHemisphere = lat >= 0
 
 		// Read wallpaper plist from sourcePath
