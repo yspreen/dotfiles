@@ -60,6 +60,7 @@
           pkgs.spotify
           pkgs.lazygit
           pkgs.zoom-us
+          pkgs.slack
         ];
 
       fonts.packages = [
