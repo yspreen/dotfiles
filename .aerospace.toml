@@ -283,6 +283,10 @@ if.app-id = 'com.apple.iphonesimulator'
 run = ['move-node-to-workspace X']
 
 [[on-window-detected]]
+if.app-id = 'com.github.CopilotForXcode.ExtensionService'
+run = ['move-node-to-workspace X']
+
+[[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
 run = ['layout floating', 'move-node-to-workspace G']
 

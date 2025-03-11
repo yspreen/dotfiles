@@ -287,6 +287,7 @@
           "karabiner-elements"
           "fork"
           "raycast"
+          "github-copilot-for-xcode"
         ];
         taps = [
           "dopplerhq/cli"
