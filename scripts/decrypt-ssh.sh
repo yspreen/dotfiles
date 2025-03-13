@@ -1,5 +1,9 @@
 #!/bin/bash
 
+gpg() {
+    nix-shell -p gnupg --run "gpg $(printf '%q ' "$@")"
+}
+
 # Get script directory
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 cd "$SCRIPT_DIR/.." || exit 1

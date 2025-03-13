@@ -62,6 +62,7 @@
           pkgs.zoom-us
           pkgs.slack
           pkgs.cocoapods
+          pkgs.fastlane
         ];
 
       fonts.packages = [
@@ -246,7 +247,6 @@
           # "cmake"
           # "eksctl"
           "exiftool"
-          "fastlane"
           "git-lfs"
           "imagemagick"
           # "go"
