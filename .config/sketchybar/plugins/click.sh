@@ -23,6 +23,12 @@ AMPHETAMINE="${4:-no}" # Default to no if not provided
 if [ "$AMPHETAMINE" = "yes" ] && [ "$BUTTON" = "right" ]; then
   # press ctrl alt cmd shift J:
   osascript -e 'tell application "System Events" to key code 38 using {control down, option down, command down, shift down}'
+
+  sketchybar --set "Amphetamine,Amphetamine" update
+  sleep 0.2
+  sketchybar --set "Amphetamine,Amphetamine" update
+  sleep 0.2
+  sketchybar --set "Amphetamine,Amphetamine" update
   exit 0
 fi
 

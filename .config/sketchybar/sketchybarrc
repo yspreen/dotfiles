@@ -136,7 +136,7 @@ sketchybar \
   --add item "battery" right \
   --set "battery" click_script="$PLUGIN_DIR/click.sh 'Control Center' 'Control Center'" \
   padding_left=8 padding_right=8 \
-  update_freq=120 \
+  update_freq=600 \
   icon.drawing=off \
   script="$PLUGIN_DIR/battery.sh" \
   --add alias "Amphetamine,Amphetamine" right \
