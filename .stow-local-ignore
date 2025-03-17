@@ -6,3 +6,4 @@
 ^/readme.md$
 ^/.ssh_pw$
 ^/.ssh_enc$
+^/Library/Developer/Xcode/UserData/(?!IDETemplateMacros\.plist$).+$

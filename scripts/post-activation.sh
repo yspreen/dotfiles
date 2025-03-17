@@ -7,6 +7,11 @@ export HOME=/Users/${username}
 install_xcode() {
     latest="$(nix-shell -p xcodes --run "xcodes list" | grep -iv beta | grep -Eo '^[^ ]+' | tail -1)"
     nix-shell -p xcodes --run "xcodes install $latest"
+    # for each Xcode.app in /Applications, like Xcode.app, Xcode-beta.app, etc.:
+    while read -r xcode; do
+        echo "Updating file header for $xcode"
+        sudo find "$xcode" -type f -exec sed -i '' 's|^//___FILEHEADER___$|___FILEHEADER___|' {} + 2>/dev/null
+    done < <(find /Applications -maxdepth 1 -iname 'xcode*' | grep -iv xcodes | sort)
 }
 
 find /Applications -maxdepth 1 -iname 'xcode*' >/dev/null || install_xcode
