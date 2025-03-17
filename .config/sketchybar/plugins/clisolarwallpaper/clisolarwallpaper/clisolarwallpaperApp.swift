@@ -52,6 +52,14 @@ func getLatLon(cacheMinutes: Int = 0) -> (Double, Double) {
 			break
 		}
 	}
+
+	if cacheMinutes != -1,
+		LocationDelegate.shared.lat == nil || LocationDelegate.shared.lon == nil
+	{
+		// live get failed, use cache, ignore stale cache data
+		return getLatLon(cacheMinutes: -1)
+	}
+
 	// default to san fran
 	let lat = LocationDelegate.shared.lat ?? 37.77472222222222
 	let lon = LocationDelegate.shared.lon ?? -122.41822222222222
