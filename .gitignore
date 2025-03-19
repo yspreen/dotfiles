@@ -2,4 +2,5 @@
 /.ssh_pw
 /.ssh/
 /.doppler/
+/.npmrc
 /.aws/
