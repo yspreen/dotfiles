@@ -2,9 +2,7 @@
 
 source ~/.zshrc
 
-# Get script directory
-SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
-cd "$SCRIPT_DIR/.." || exit 1
+cd ~/dotfiles
 
 # Check if password file exists, create if not
 if [ ! -f .ssh_pw ]; then
