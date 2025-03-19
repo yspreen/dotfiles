@@ -158,7 +158,7 @@ alias unarchiveall='ls -1 | grep -E '.tgz$' | while read f; do sudo tar xzf "$f"
 alias rooktools='kubectl -n rook-ceph exec -it $(kubectl -n rook-ceph get pod -l "app=rook-ceph-tools" -o jsonpath='\''{.items[0].metadata.name}'\'') bash'
 dockerrun () { docker run -it --rm -v "$(pwd):/m" --entrypoint sh "${1:-alpine}" -c "cd /m && sh" }
 
-eval "$(fnm env --use-on-cd --shell zsh)"
+eval "$(fnm env --use-on-cd --shell zsh)" >/dev/null 2>&1
 
 PATH="/Users/$USER/perl5/bin${PATH:+:${PATH}}"; export PATH;
 PERL5LIB="/Users/$USER/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
@@ -389,6 +389,18 @@ alias lg='lazygit'
 
 p() {
     cd ~/Documents/proj/"$1"
+}
+
+ghostty() {
+    wd="${1:-$(pwd)}"
+    # Replace pattern replacements with sed
+    if [[ "$wd" == "^$" ]]; then
+        wd="$(pwd)"
+    elif [[ "$wd" =~ "^\.(.*)" ]]; then
+        wd="$(pwd)$(echo "$wd" | sed 's/^\.//')"
+    fi
+
+    open -na ghostty --args --title=ghostty-from-vscode --working-directory="$wd"
 }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
