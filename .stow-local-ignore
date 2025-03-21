@@ -3,6 +3,7 @@
 ^/raycast(/.*)?$
 ^/scripts(/.*)?$
 ^/copy(/.*)?$
+^/other(/.*)?$
 ^/readme.md$
 ^/.ssh_pw$
 ^/.ssh_enc$
