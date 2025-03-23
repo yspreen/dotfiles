@@ -26,15 +26,16 @@ _p() {
     local -a completions
     for d in $dirs; do
         local dname=${d:t}
-        # Make case-insensitive comparison - convert both to lowercase
-        if [[ "${(L)dname}" == "${(L)cur}"* ]]; then
-            completions+=("${prefix}${dname}/")
+        # Make case-insensitive comparison - check if cur is a substring of dname
+        if [[ "${(L)dname}" == *"${(L)cur}"* ]]; then
+            completions+=("${dname}")
         fi
     done
 
-    # Use standard compadd without special options
+    # Use compadd with proper options that won't erase input
     if ((${#completions})); then
-        compadd -S '' -U -- $completions
+        # Remove -U and use standard completion
+        _wanted dirs expl 'project directory' compadd -S '/' -p "$prefix" -- $completions
     fi
 }
 
