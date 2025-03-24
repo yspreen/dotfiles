@@ -70,6 +70,15 @@ sketchybar \
   --add alias "WeatherMenu,Item-0" left \
   --set "WeatherMenu,Item-0" click_script="$PLUGIN_DIR/click.sh 'WeatherMenu' '[1]' 2" \
   label.padding_right=0 alias.update_freq=30
+sketchybar \
+  --add item "spotify" left \
+  --set "spotify" click_script="open -a Spotify; sleep 1; open -a Spotify" \
+  script="${PLUGIN_DIR}/spotify.sh \"$PLUGIN_DIR\"" \
+  label.padding_right=0 \
+  icon.background.drawing=on \
+  icon.background.image.scale=0.22 \
+  icon.background.image.corner_radius=5
+
 
 sketchybar --add item dotthree left \
   --set dotthree icon= \

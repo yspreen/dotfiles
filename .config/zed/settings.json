@@ -7,6 +7,10 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "features": {
+    "edit_prediction_provider": "none"
+  },
+  "show_edit_predictions": false,
   "theme": "Atelier Lakeside Light",
   "telemetry": {
     "diagnostics": false,
