@@ -135,11 +135,6 @@ randomstring()
 }
 export LC_MESSAGES=en_US.UTF-8
 
-sudotouchid() {
-    n="$(cat /etc/pam.d/sudo | wc -l)"
-    t="$(cat /etc/pam.d/sudo | head -1; echo 'auth sufficient pam_tid.so'; cat /etc/pam.d/sudo | tail "-$((n-1))")"
-    echo $t | sudo tee /etc/pam.d/sudo
-}
 
 dockspeedup() {
     defaults write com.apple.dock autohide-delay -int 0; defaults write com.apple.dock autohide-time-modifier -float 0.15; killall Dock

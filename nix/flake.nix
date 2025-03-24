@@ -56,7 +56,6 @@
           pkgs.fnm
           pkgs.pnpm
           pkgs.stow
-          pkgs.zed-editor
           pkgs.spotify
           pkgs.lazygit
           pkgs.zoom-us
@@ -288,6 +287,7 @@
           "fork"
           "raycast"
           "github-copilot-for-xcode"
+          "zed"
         ];
         taps = [
           "dopplerhq/cli"

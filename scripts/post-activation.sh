@@ -17,6 +17,20 @@ install_xcode() {
 find /Applications -maxdepth 1 -iname 'xcode*' >/dev/null || install_xcode
 which xcodebuild || xcode-select --install
 
+sudotouchid() {
+    # check if already added:
+    sudo grep -q "pam_tid.so" /etc/pam.d/sudo && return
+
+    c="$(cat /etc/pam.d/sudo)"
+    n="$(echo "$c" | wc -l)"
+    echo "$c" | head -1 >.sudo.tmp
+    echo 'auth sufficient pam_tid.so' >>.sudo.tmp
+    echo "$c" | tail "-$((n - 1))" >>.sudo.tmp
+    sudo mv .sudo.tmp /etc/pam.d/sudo
+}
+
+sudotouchid
+
 /bin/launchctl load -w /Library/LaunchAgents/homebrew.mxcl.sketchybar.plist 2>/dev/null
 
 ./decrypt-ssh.sh && cd .. && stow --adopt .
