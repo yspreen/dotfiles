@@ -238,7 +238,6 @@
         onActivation.upgrade = true;
         brews = [
           "bat"
-          "awscli"
           "carthage"
           # "fontconfig"
           # "freetype"

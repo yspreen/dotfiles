@@ -135,3 +135,8 @@ killall SystemUIServer
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 killall SystemUIServer
 killall -HUP cfprefsd
+
+echo "#!/bin/bash" >/usr/local/bin/aws
+echo "" >/usr/local/bin/aws
+echo 'nix-shell -p awscli --run "aws $(printf '\''%q '\'' "$@")"' >/usr/local/bin/aws
+chmod +x /usr/local/bin/aws
