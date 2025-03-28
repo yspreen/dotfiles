@@ -17,6 +17,11 @@ install_xcode() {
 find /Applications -maxdepth 1 -iname 'xcode*' >/dev/null || install_xcode
 which xcodebuild || xcode-select --install
 
+echo "#!/bin/bash" >/opt/homebrew/bin/aws
+echo "" >/opt/homebrew/bin/aws
+echo 'nix-shell -p awscli --run "aws $(printf '\''%q '\'' "$@")"' >/opt/homebrew/bin/aws
+chmod +x /opt/homebrew/bin/aws
+
 sudotouchid() {
     # check if already added:
     sudo grep -q "pam_tid.so" /etc/pam.d/sudo && return
@@ -135,8 +140,3 @@ killall SystemUIServer
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 killall SystemUIServer
 killall -HUP cfprefsd
-
-echo "#!/bin/bash" >/usr/local/bin/aws
-echo "" >/usr/local/bin/aws
-echo 'nix-shell -p awscli --run "aws $(printf '\''%q '\'' "$@")"' >/usr/local/bin/aws
-chmod +x /usr/local/bin/aws
