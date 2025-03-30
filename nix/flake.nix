@@ -59,7 +59,6 @@
           pkgs.spotify
           pkgs.lazygit
           pkgs.zoom-us
-          pkgs.slack
           pkgs.cocoapods
           pkgs.fastlane
         ];
@@ -287,6 +286,7 @@
           "raycast"
           "github-copilot-for-xcode"
           "zed"
+          "slack"
         ];
         taps = [
           "dopplerhq/cli"
