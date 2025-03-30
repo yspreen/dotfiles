@@ -44,19 +44,19 @@ generate_pkce_codes() {
 # Authenticate Spotify with PKCE
 authenticate_spotify() {
     generate_pkce_codes
-    echo "DEBUG: Generated PKCE codes" >/tmp/spotify.log
-    echo "Open the following URL in your browser to authorize access:" >/tmp/spotify.log
-    echo "${SPOTIFY_AUTH_URL}?client_id=${SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${SPOTIFY_REDIRECT_URI}&code_challenge=${CODE_CHALLENGE}&code_challenge_method=S256&scope=$(echo ${SPOTIFY_SCOPES} | sed 's/ /%20/g')" >/tmp/spotify.log
+    echo "DEBUG: Generated PKCE codes" >>/tmp/spotify.log
+    echo "Open the following URL in your browser to authorize access:" >>/tmp/spotify.log
+    echo "${SPOTIFY_AUTH_URL}?client_id=${SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${SPOTIFY_REDIRECT_URI}&code_challenge=${CODE_CHALLENGE}&code_challenge_method=S256&scope=$(echo ${SPOTIFY_SCOPES} | sed 's/ /%20/g')" >>/tmp/spotify.log
     echo "${SPOTIFY_AUTH_URL}?client_id=${SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${SPOTIFY_REDIRECT_URI}&code_challenge=${CODE_CHALLENGE}&code_challenge_method=S256&scope=$(echo ${SPOTIFY_SCOPES} | sed 's/ /%20/g')" | pbcopy
 
-    echo "We copied the URL to your clipboard. Please copy the code after signing in." >/tmp/spotify.log
+    echo "We copied the URL to your clipboard. Please copy the code after signing in." >>/tmp/spotify.log
     sleep 1
 
     # Added timeout to avoid infinite loop waiting for the auth code.
     timeout=30
     elapsed=0
     while [ "$(pbpaste | grep -c '^https://')" -eq 1 ]; do
-        echo "DEBUG: Waiting for auth code. Elapsed: $elapsed seconds" >/tmp/spotify.log
+        echo "DEBUG: Waiting for auth code. Elapsed: $elapsed seconds" >>/tmp/spotify.log
         sleep 1
         elapsed=$((elapsed + 1))
         if [ "$elapsed" -ge "$timeout" ]; then
@@ -74,7 +74,7 @@ authenticate_spotify() {
         -d "code=${SPOTIFY_AUTH_CODE}" \
         -d "redirect_uri=${SPOTIFY_REDIRECT_URI}" \
         -d "code_verifier=${CODE_VERIFIER}")
-    echo "DEBUG: Auth response: $AUTH_RESPONSE" >/tmp/spotify.log
+    echo "DEBUG: Auth response: $AUTH_RESPONSE" >>/tmp/spotify.log
 
     SPOTIFY_TOKEN=$(echo "$AUTH_RESPONSE" | jq -r '.access_token')
     SPOTIFY_REFRESH_TOKEN=$(echo "$AUTH_RESPONSE" | jq -r '.refresh_token')
@@ -87,29 +87,29 @@ authenticate_spotify() {
         current_time=$(date +%s)
         token_expiry=$((current_time + expires_in - 60))
         echo "$token_expiry" >"$TOKEN_EXPIRY_FILE"
-        echo "Spotify token obtained." >/tmp/spotify.log
+        echo "Spotify token obtained." >>/tmp/spotify.log
     else
-        echo "Failed to authenticate with Spotify." >/tmp/spotify.log
-        echo $AUTH_RESPONSE >/tmp/spotify.log
+        echo "Failed to authenticate with Spotify." >>/tmp/spotify.log
+        echo $AUTH_RESPONSE >>/tmp/spotify.log
         exit 1
     fi
 }
 
 # Refresh Spotify Token
 refresh_spotify_token() {
-    echo "DEBUG: Starting token refresh." >/tmp/spotify.log
+    echo "DEBUG: Starting token refresh." >>/tmp/spotify.log
     SPOTIFY_REFRESH_TOKEN=$(cat "$REFRESH_TOKEN_FILE")
     REFRESH_RESPONSE=$(curl -s -X POST "$SPOTIFY_TOKEN_URL" \
         -d "client_id=${SPOTIFY_CLIENT_ID}" \
         -d "grant_type=refresh_token" \
         -d "refresh_token=${SPOTIFY_REFRESH_TOKEN}")
-    echo "DEBUG: Refresh response: $REFRESH_RESPONSE" >/tmp/spotify.log
+    echo "DEBUG: Refresh response: $REFRESH_RESPONSE" >>/tmp/spotify.log
 
     error=$(echo "$REFRESH_RESPONSE" | jq -r '.error')
     if [ "$error" != "null" ]; then
-        echo "DEBUG: Refresh error detected: $error" >/tmp/spotify.log
-        echo "DEBUG: Error description: $(echo "$REFRESH_RESPONSE" | jq -r '.error_description')" >/tmp/spotify.log
-        echo "Failed to refresh Spotify token due to error: $error. Re-authentication required." >/tmp/spotify.log
+        echo "DEBUG: Refresh error detected: $error" >>/tmp/spotify.log
+        echo "DEBUG: Error description: $(echo "$REFRESH_RESPONSE" | jq -r '.error_description')" >>/tmp/spotify.log
+        echo "Failed to refresh Spotify token due to error: $error. Re-authentication required." >>/tmp/spotify.log
         authenticate_spotify
         return
     fi
@@ -127,15 +127,15 @@ refresh_spotify_token() {
         current_time=$(date +%s)
         token_expiry=$((current_time + expires_in - 60))
         echo "$token_expiry" >"$TOKEN_EXPIRY_FILE"
-        echo "DEBUG: Token refresh successful." >/tmp/spotify.log
-        echo "Spotify token refreshed." >/tmp/spotify.log
+        echo "DEBUG: Token refresh successful." >>/tmp/spotify.log
+        echo "Spotify token refreshed." >>/tmp/spotify.log
         # Added extra logging to inspect new tokens.
-        echo "DEBUG: New Access Token: $SPOTIFY_TOKEN" >/tmp/spotify.log
-        echo "DEBUG: New Refresh Token: $(cat "$REFRESH_TOKEN_FILE")" >/tmp/spotify.log
+        echo "DEBUG: New Access Token: $SPOTIFY_TOKEN" >>/tmp/spotify.log
+        echo "DEBUG: New Refresh Token: $(cat "$REFRESH_TOKEN_FILE")" >>/tmp/spotify.log
     else
-        echo "DEBUG: Token refresh failed, re-authentication required." >/tmp/spotify.log
-        echo "DEBUG: Refresh response did not include access_token." >/tmp/spotify.log
-        echo "Failed to refresh Spotify token. Re-authentication required." >/tmp/spotify.log
+        echo "DEBUG: Token refresh failed, re-authentication required." >>/tmp/spotify.log
+        echo "DEBUG: Refresh response did not include access_token." >>/tmp/spotify.log
+        echo "Failed to refresh Spotify token. Re-authentication required." >>/tmp/spotify.log
         authenticate_spotify
     fi
 }
@@ -149,7 +149,7 @@ run_loop() {
         current_time=$(date +%s)
         expiry=$(cat "$TOKEN_EXPIRY_FILE")
         if [ "$current_time" -ge "$expiry" ]; then
-            echo "DEBUG: Token expired proactively, refreshing token." >/tmp/spotify.log
+            echo "DEBUG: Token expired proactively, refreshing token." >>/tmp/spotify.log
             refresh_spotify_token
         fi
     fi
@@ -161,12 +161,12 @@ run_loop() {
     response_with_code=$(curl -s -w "\n%{http_code}" -H "Authorization: Bearer $SPOTIFY_TOKEN" "$SPOTIFY_API_URL")
     http_code=$(echo "$response_with_code" | tail -n1)
     response=$(echo "$response_with_code" | sed '$d')
-    echo $response_with_code >/tmp/spotify.log
-    echo "DEBUG: API call returned http_code: $http_code" >/tmp/spotify.log
+    echo $response_with_code >>/tmp/spotify.log
+    echo "DEBUG: API call returned http_code: $http_code" >>/tmp/spotify.log
 
     if [ "$http_code" -eq 401 ]; then
-        echo "DEBUG: 401 Unauthorized response details: $response" >/tmp/spotify.log
-        echo "DEBUG: 401 Unauthorized response received. Refreshing token." >/tmp/spotify.log
+        echo "DEBUG: 401 Unauthorized response details: $response" >>/tmp/spotify.log
+        echo "DEBUG: 401 Unauthorized response received. Refreshing token." >>/tmp/spotify.log
         refresh_spotify_token
         # Immediately reload token and retry API call
         SPOTIFY_TOKEN=$(cat "$TOKEN_FILE")
@@ -174,20 +174,20 @@ run_loop() {
         http_code=$(echo "$response_with_code" | tail -n1)
         response=$(echo "$response_with_code" | sed '$d')
         if [ "$http_code" -eq 401 ]; then
-            echo "DEBUG: Still received 401 after token refresh, details: $response" >/tmp/spotify.log
+            echo "DEBUG: Still received 401 after token refresh, details: $response" >>/tmp/spotify.log
             sleep 5
             return
         fi
     fi
 
     if [ "$http_code" -eq 204 ]; then
-        echo "No song playing. Waiting..." >/tmp/spotify.log
+        echo "No song playing. Waiting..." >>/tmp/spotify.log
         sleep 30
         return
     fi
 
     if [ "$http_code" -ne 200 ]; then
-        echo "Failed to fetch Spotify data. Retrying" >/tmp/spotify.log
+        echo "Failed to fetch Spotify data. Retrying" >>/tmp/spotify.log
         sleep 30
         return
     fi
