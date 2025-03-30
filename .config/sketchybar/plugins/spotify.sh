@@ -13,6 +13,16 @@ SPOTIFY_TOKEN_URL="https://accounts.spotify.com/api/token"
 SPOTIFY_API_URL="https://api.spotify.com/v1/me/player/currently-playing"
 SPOTIFY_SCOPES="user-read-playback-state user-read-currently-playing"
 
+# Function to check internet connectivity
+check_internet_connectivity() {
+    # Try to reach a reliable DNS server
+    if ping -c 1 -W 3 1.1.1.1 &>/dev/null; then
+        return 0 # Internet is available
+    else
+        return 1 # Internet is not available
+    fi
+}
+
 if ! command -v magick &>/dev/null; then
     brew install magick
 fi
@@ -98,6 +108,13 @@ authenticate_spotify() {
 # Refresh Spotify Token
 refresh_spotify_token() {
     echo "DEBUG: Starting token refresh." >>/tmp/spotify.log
+
+    # Check for internet connectivity before attempting to refresh
+    if ! check_internet_connectivity; then
+        echo "DEBUG: No internet connection available. Skipping token refresh." >>/tmp/spotify.log
+        return 1 # Return error code to indicate refresh was skipped
+    fi
+
     SPOTIFY_REFRESH_TOKEN=$(cat "$REFRESH_TOKEN_FILE")
     REFRESH_RESPONSE=$(curl -s -X POST "$SPOTIFY_TOKEN_URL" \
         -d "client_id=${SPOTIFY_CLIENT_ID}" \
@@ -110,8 +127,14 @@ refresh_spotify_token() {
         echo "DEBUG: Refresh error detected: $error" >>/tmp/spotify.log
         echo "DEBUG: Error description: $(echo "$REFRESH_RESPONSE" | jq -r '.error_description')" >>/tmp/spotify.log
         echo "Failed to refresh Spotify token due to error: $error. Re-authentication required." >>/tmp/spotify.log
-        authenticate_spotify
-        return
+
+        # Only re-authenticate if we have internet connectivity
+        if check_internet_connectivity; then
+            authenticate_spotify
+        else
+            echo "DEBUG: No internet connection available. Skipping re-authentication." >>/tmp/spotify.log
+        fi
+        return 1
     fi
 
     SPOTIFY_TOKEN=$(echo "$REFRESH_RESPONSE" | jq -r '.access_token')
@@ -154,7 +177,14 @@ run_loop() {
         fi
     fi
     if [ ! -f "$TOKEN_FILE" ]; then
-        authenticate_spotify
+        # Check for internet connectivity before attempting authentication
+        if check_internet_connectivity; then
+            authenticate_spotify
+        else
+            echo "DEBUG: No internet connection available. Skipping authentication." >>/tmp/spotify.log
+            sleep 30
+            return
+        fi
     fi
     SPOTIFY_TOKEN=$(cat "$TOKEN_FILE")
 
@@ -166,7 +196,15 @@ run_loop() {
 
     if [ "$http_code" -eq 401 ]; then
         echo "DEBUG: 401 Unauthorized response details: $response" >>/tmp/spotify.log
-        echo "DEBUG: 401 Unauthorized response received. Refreshing token." >>/tmp/spotify.log
+
+        # Check for internet connectivity before assuming auth failure
+        if ! check_internet_connectivity; then
+            echo "DEBUG: No internet connection available. Ignoring 401 error." >>/tmp/spotify.log
+            sleep 30
+            return
+        fi
+
+        echo "DEBUG: Internet is available. 401 Unauthorized response received. Refreshing token." >>/tmp/spotify.log
         refresh_spotify_token
         # Immediately reload token and retry API call
         SPOTIFY_TOKEN=$(cat "$TOKEN_FILE")
@@ -187,7 +225,12 @@ run_loop() {
     fi
 
     if [ "$http_code" -ne 200 ]; then
-        echo "Failed to fetch Spotify data. Retrying" >>/tmp/spotify.log
+        # Check if we have internet connectivity before retrying
+        if ! check_internet_connectivity; then
+            echo "DEBUG: No internet connection available. Waiting before retry." >>/tmp/spotify.log
+        else
+            echo "Failed to fetch Spotify data. Retrying" >>/tmp/spotify.log
+        fi
         sleep 30
         return
     fi
