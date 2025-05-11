@@ -73,15 +73,16 @@ func getLatLon(cacheMinutes: Int = 0) -> (Double, Double) {
 func findNextChangeTimestamp(wallpaper: Wallpaper, index: Int, lat: Double, lon: Double)
 	-> Int
 {
-    var time = Date.now.addingTimeInterval(60)
-    let isNorthernHemisphere = lat >= 0
-    while
-        wallpaper.findBestImageIndex(for: solarPosition(for: .init(latitude: lat, longitude: lon), at: time), isNorthernHemisphere: isNorthernHemisphere) == index,
-        -time.timeIntervalSinceNow < 60 * 60 * 24
-    {
-        time = time.addingTimeInterval(60)
-    }
-    return Int(time.timeIntervalSince1970)
+	var time = Date.now.addingTimeInterval(60)
+	let isNorthernHemisphere = lat >= 0
+	while wallpaper.findBestImageIndex(
+		for: solarPosition(for: .init(latitude: lat, longitude: lon), at: time),
+		isNorthernHemisphere: isNorthernHemisphere) == index,
+		-time.timeIntervalSinceNow < 60 * 60 * 24
+	{
+		time = time.addingTimeInterval(60)
+	}
+	return Int(time.timeIntervalSince1970)
 }
 
 @main
@@ -131,7 +132,7 @@ struct clisolarwallpaperApp {
 				// Calculate the next change time
 				let nextChangeTimestamp = findNextChangeTimestamp(
 					wallpaper: wallpaper,
-                    index: idx,
+					index: idx,
 					lat: lat,
 					lon: lon
 				)
