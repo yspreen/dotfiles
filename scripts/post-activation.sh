@@ -4,14 +4,32 @@ set -e
 username=$(whoami)
 export HOME=/Users/${username}
 
+fix_xcode_headers() {
+    # for each Xcode.app in /Applications, like Xcode.app, Xcode-beta.app, etc.:
+    while read -r xcode; do
+        echo "Updating file header for $xcode (this will take a while)"
+
+        # find all files that have the header:
+        grep -rl '//___FILEHEADER___' "$xcode" | while read -r file; do
+            # if the file is a symlink, skip it:
+            if [ -L "$file" ]; then
+                continue
+            fi
+
+            # if the file is a directory, skip it:
+            if [ -d "$file" ]; then
+                continue
+            fi
+
+            sudo sed -i '' 's|//___FILEHEADER___|___FILEHEADER___|' "$file"
+        done
+    done < <(find /Applications -maxdepth 1 -iname 'xcode*' | grep -iv xcodes | sort)
+}
+
 install_xcode() {
     latest="$(nix-shell -p xcodes --run "xcodes list" | grep -iv beta | grep -Eo '^[^ ]+' | tail -1)"
     nix-shell -p xcodes --run "xcodes install $latest"
-    # for each Xcode.app in /Applications, like Xcode.app, Xcode-beta.app, etc.:
-    while read -r xcode; do
-        echo "Updating file header for $xcode"
-        sudo find "$xcode" -type f -exec sed -i '' 's|^//___FILEHEADER___$|___FILEHEADER___|' {} + 2>/dev/null
-    done < <(find /Applications -maxdepth 1 -iname 'xcode*' | grep -iv xcodes | sort)
+    fix_xcode_headers
 }
 
 find /Applications -maxdepth 1 -iname 'xcode*' >/dev/null || install_xcode

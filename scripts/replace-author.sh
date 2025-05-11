@@ -93,14 +93,16 @@ set -e
 
 export FILTER_BRANCH_SQUELCH_WARNING=1
 
-# Check if a file with repo names was provided
-if [ $# -ne 1 ]; then
-    echo "Usage: $0 <file-with-repo-list>"
+# Check if required parameters are provided
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 <file-with-repo-list> <email-to-replace>"
     echo "The file should contain repository names in the format 'username/repo', one per line"
+    echo "The email-to-replace parameter specifies which commits to update (only those with this author email)"
     exit 1
 fi
 
 REPO_LIST=$1
+EMAIL_TO_REPLACE=$2
 
 # Get user details from ~/.gitconfig
 GIT_NAME=$(git config --get user.name)
@@ -113,14 +115,12 @@ fi
 
 # Prepare the environment file for rewriting commits
 cat >/tmp/author-rewrite.env <<EOF
-GIT_COMMITTER_NAME="$GIT_NAME"
-GIT_COMMITTER_EMAIL="$GIT_EMAIL"
-GIT_AUTHOR_NAME="$GIT_NAME"
-GIT_AUTHOR_EMAIL="$GIT_EMAIL"
-export GIT_COMMITTER_NAME
-export GIT_COMMITTER_EMAIL
-export GIT_AUTHOR_NAME
-export GIT_AUTHOR_EMAIL
+if [ "\$GIT_AUTHOR_EMAIL" = "$EMAIL_TO_REPLACE" ]; then
+    GIT_AUTHOR_NAME="$GIT_NAME"
+    GIT_AUTHOR_EMAIL="$GIT_EMAIL"
+    GIT_COMMITTER_NAME="$GIT_NAME"
+    GIT_COMMITTER_EMAIL="$GIT_EMAIL"
+fi
 EOF
 
 # Process each repository
@@ -186,7 +186,7 @@ echo "$REPO_LIST" | while IFS= read -r REPO_PATH || [ -n "$REPO_PATH" ]; do
     if [ -n "$TAGS" ]; then
         # Force push all tags
         echo "Force pushing all tags..."
-        git push --force --tags origin || echo "Failed to push $BRANCH, probably permission error."
+        git push --force --tags origin || echo "Failed to push tags, probably permission error."
     fi
 
     # Clean up this repository
@@ -200,4 +200,4 @@ done
 # Final cleanup
 rm -f /tmp/author-rewrite.env
 
-echo "All done! Author information has been replaced in all repositories."
+echo "All done! Author information has been replaced in all repositories for commits with email: $EMAIL_TO_REPLACE"
