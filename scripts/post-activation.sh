@@ -158,3 +158,5 @@ killall SystemUIServer
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 killall SystemUIServer
 killall -HUP cfprefsd
+
+sudo ln -sfn /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-17.jdk

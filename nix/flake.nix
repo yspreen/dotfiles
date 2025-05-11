@@ -61,6 +61,7 @@
           pkgs.zoom-us
           pkgs.cocoapods
           pkgs.fastlane
+          pkgs.uv
         ];
 
       fonts.packages = [
@@ -263,10 +264,11 @@
           "cargo-lambda"
           "zig" # for cargo lambda
           "mas"
+          "openjdk@17"
         ];
         casks = [
           "orbstack"
-          "aerospace"
+          "aerospace@0.17.1"
           "hammerspoon"
           # "firefox"
           "iina"
