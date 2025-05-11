@@ -3,7 +3,8 @@
 <plist version="1.0">
 <dict>
     <key>FILEHEADER</key>
-	<string>/**
+	<string>
+/**
  * ___FILENAME___
  * ___PRODUCTNAME___
  *
