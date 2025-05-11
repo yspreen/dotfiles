@@ -381,6 +381,14 @@ terraform() {
     nix-shell -p terraform --run "terraform $(printf '%q ' "$@")"
 }
 
+tree() {
+    nix-shell -p tree --run "tree $(printf '%q ' "$@")"
+}
+
+gh() {
+    nix-shell -p gh --run "gh $(printf '%q ' "$@")"
+}
+
 eas() {
     npx eas-cli $@
 }
