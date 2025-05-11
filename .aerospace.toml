@@ -136,6 +136,7 @@ alt-d = ['workspace D', 'exec-and-forget open -a Notion']
 alt-e = ['exec-and-forget ~/dotfiles/.config/aerospace/launch-messages.sh']
 alt-f = ['workspace F', 'exec-and-forget open -a Fork']
 alt-g = ['workspace G', 'exec-and-forget open -a Ghostty']
+alt-q = ['workspace Q', 'exec-and-forget open -a Figma']
 # alt-i = 'workspace I'
 # alt-m = 'workspace M'
 # alt-n = 'workspace N'
@@ -321,6 +322,18 @@ run = ['move-node-to-workspace W']
 [[on-window-detected]]
 if.app-id = 'notion.id'
 run = ['move-node-to-workspace D']
+
+[[on-window-detected]]
+if.app-id = 'com.figma.Desktop'
+run = ['move-node-to-workspace Q']
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = ['move-node-to-workspace E']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.SecurityAgent'
+run = []
 
 [[on-window-detected]]
 run = ['move-node-to-workspace Z']
