@@ -236,6 +236,11 @@ ensuredocker() {
     done
 }
 
+cleardocker() {
+    yes | orb delete docker
+    ensuredocker
+}
+
 fixxcodetemplate() {
     # Find all Xcode applications
     xcode_apps=$(find /Applications -maxdepth 1 -name "Xcode*" -type d)
@@ -398,5 +403,17 @@ ghostty() {
     open -na ghostty --args --title=ghostty-from-vscode --working-directory="$wd"
 }
 
+dotenv() {
+    # tell Bash to export all vars that get defined
+    set -o allexport
+
+    # source your .env (only if it exists)
+    [ -f .env ] && source .env
+
+    # turn off automatic exporting
+    set +o allexport
+}
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export NODE_COMPILE_CACHE=~/.cache/nodejs-compile-cache
