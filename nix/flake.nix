@@ -241,7 +241,6 @@
           "carthage"
           # "fontconfig"
           # "freetype"
-          "doppler"
           # "cmake"
           # "eksctl"
           "exiftool"
@@ -291,7 +290,6 @@
           "slack"
         ];
         taps = [
-          "dopplerhq/cli"
           "nikitabobko/tap" # aerospace
           "cargo-lambda/cargo-lambda"
         ];

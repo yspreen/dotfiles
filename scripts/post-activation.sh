@@ -160,3 +160,9 @@ killall SystemUIServer
 killall -HUP cfprefsd
 
 sudo ln -sfn /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-17.jdk
+
+echo 'nix-shell -p gh --run "gh $(printf "%q " "$@")"' >/opt/homebrew/bin/gh
+echo 'nix-shell -p doppler --run "doppler $(printf "%q " "$@")"' >/opt/homebrew/bin/doppler
+echo 'nix-shell -p flyctl --run "flyctl $(printf "%q " "$@")"' >/opt/homebrew/bin/flyctl
+echo 'nix-shell -p flyctl --run "flyctl $(printf "%q " "$@")"' >/opt/homebrew/bin/fly
+chmod +x /opt/homebrew/bin/*

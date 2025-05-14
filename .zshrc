@@ -287,9 +287,7 @@ PROMPT+=' $(git_prompt_info)'
 
 bindkey '^U' backward-kill-line  # Ctrl-U deletes to start of line
 
-raw_flyctl() {
-    nix-shell -p flyctl --run "fly $(printf '%q ' "$@")"
-}
+raw_flyctl=$(which flyctl)
 
 # find nearest .fly_token in parent directories
 find_fly_token() {
@@ -383,10 +381,6 @@ terraform() {
 
 tree() {
     nix-shell -p tree --run "tree $(printf '%q ' "$@")"
-}
-
-gh() {
-    nix-shell -p gh --run "gh $(printf '%q ' "$@")"
 }
 
 eas() {
