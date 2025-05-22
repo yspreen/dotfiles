@@ -287,31 +287,6 @@ PROMPT+=' $(git_prompt_info)'
 
 bindkey '^U' backward-kill-line  # Ctrl-U deletes to start of line
 
-raw_flyctl=$(which flyctl)
-
-# find nearest .fly_token in parent directories
-find_fly_token() {
-    local dir="$PWD"
-    while [[ "$dir" != "/" ]]; do
-        if [[ -f "$dir/.fly_token" ]]; then
-            echo "$dir/.fly_token"
-            return 0
-        fi
-        dir="$(dirname "$dir")"
-    done
-    return 1
-}
-
-# override `fly` command to use contents of nearest .fly_token with -k $token if present:
-fly() {
-  if token_file=$(find_fly_token); then
-    token=$(cat "$token_file")
-    raw_flyctl --access-token "$token" $@
-  else
-    raw_flyctl $@
-  fi
-}
-
 dump() {
     ~/Documents/proj/dump-s3-files/dump.sh
 }

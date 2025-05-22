@@ -27,12 +27,12 @@ fix_xcode_headers() {
 }
 
 install_xcode() {
-    latest="$(nix-shell -p xcodes --run "xcodes list" | grep -iv beta | grep -Eo '^[^ ]+' | tail -1)"
+    latest="$(nix-shell -p xcodes --run "xcodes list" | grep -iv beta | grep -iv candidate | grep -Eo '^[^ ]+' | tail -1)"
     nix-shell -p xcodes --run "xcodes install $latest"
     fix_xcode_headers
 }
 
-find /Applications -maxdepth 1 -iname 'xcode*' >/dev/null || install_xcode
+[$(find /Applications -maxdepth 1 -iname 'xcode*' >/dev/null | wc -l) -gt 0 ] || install_xcode
 which xcodebuild || xcode-select --install
 
 echo "#!/bin/bash" >/opt/homebrew/bin/aws
@@ -163,6 +163,29 @@ sudo ln -sfn /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/Java
 
 echo 'nix-shell -p gh --run "gh $(printf "%q " "$@")"' >/opt/homebrew/bin/gh
 echo 'nix-shell -p doppler --run "doppler $(printf "%q " "$@")"' >/opt/homebrew/bin/doppler
-echo 'nix-shell -p flyctl --run "flyctl $(printf "%q " "$@")"' >/opt/homebrew/bin/flyctl
-echo 'nix-shell -p flyctl --run "flyctl $(printf "%q " "$@")"' >/opt/homebrew/bin/fly
-chmod +x /opt/homebrew/bin/*
+echo 'raw_flyctl() {
+  nix-shell -p flyctl --run "flyctl $(printf "%q " "$@")"
+}
+
+# find nearest .fly_token in parent directories
+find_fly_token() {
+    local dir="$PWD"
+    while [[ "$dir" != "/" ]]; do
+        if [[ -f "$dir/.fly_token" ]]; then
+            echo "$dir/.fly_token"
+            return 0
+        fi
+        dir="$(dirname "$dir")"
+    done
+    return 1
+}
+
+if token_file=$(find_fly_token); then
+  token=$(cat "$token_file")
+  raw_flyctl --access-token "$token" "$@"
+else
+  raw_flyctl "$@"
+fi
+' >/opt/homebrew/bin/flyctl
+echo 'flyctl "$@"' >/opt/homebrew/bin/fly
+chmod +x /opt/homebrew/bin/* 2>/dev/null || true
