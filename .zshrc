@@ -1,8 +1,11 @@
+
+if ! [[ -n $NO_P10K ]]; then
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 fi
 
 # Add completions to search path
@@ -19,6 +22,12 @@ export ZSH="/Users/$USER/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="powerlevel10k/powerlevel10k"
+
+if [[ -n $NO_P10K ]]; then
+ZSH_THEME="robbyrussell"
+else
+ZSH_THEME="powerlevel10k/powerlevel10k"
+fi
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -330,32 +339,8 @@ ks() {
     killall sketchybar
 }
 
-neofetch() {
-    nix-shell -p neofetch --run "neofetch $(printf '%q ' "$@")"
-}
-
-rsync() {
-    nix-shell -p rsync --run "rsync $(printf '%q ' "$@")"
-}
-
-nginx() {
-    nix-shell -p nginx --run "nginx $(printf '%q ' "$@")"
-}
-
-mosh() {
-    nix-shell -p mosh --run "mosh $(printf '%q ' "$@")"
-}
-
 telnet() {
     nix-shell -p inetutils --run "telnet $(printf '%q ' "$@")"
-}
-
-terraform() {
-    nix-shell -p terraform --run "terraform $(printf '%q ' "$@")"
-}
-
-tree() {
-    nix-shell -p tree --run "tree $(printf '%q ' "$@")"
 }
 
 eas() {
@@ -391,6 +376,85 @@ dotenv() {
     set +o allexport
 }
 
+if ! [[ -n $NO_P10K ]]; then
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 export NODE_COMPILE_CACHE=~/.cache/nodejs-compile-cache
+fi
+
+cleancaches() {
+    # Xcode caches
+    rm -rf ~/Library/Developer/Xcode/DerivedData
+    rm -rf ~/Library/Developer/Xcode/Archives
+    rm -rf ~/Library/Developer/Xcode/DocumentationCache
+    rm -rf ~/Library/Developer/Xcode/Products
+    rm -rf ~/Library/Developer/Xcode/UserData/Previews
+    rm -rf ~/Library/Developer/CoreSimulator/Caches
+
+    # Node.js caches
+    rm -rf ~/.npm/_cacache
+    rm -rf ~/.cache/nodejs-compile-cache
+    rm -rf ~/.yarn/cache
+    rm -rf ~/.pnpm-store
+    rm -rf node_modules/.cache
+
+    # Development tool caches
+    rm -rf ~/.cache/pip
+    rm -rf ~/.gradle/caches
+    rm -rf ~/.m2/repository/.cache
+    rm -rf ~/.docker/desktop/vms/*/log.log
+    rm -rf ~/.cache/composer
+    rm -rf ~/.cache/go-build
+    rm -rf ~/.cache/deno
+    rm -rf ~/.cargo/registry/cache
+    rm -rf ~/.cargo/git/db
+
+    # Android Studio caches
+    rm -rf ~/Library/Caches/Google/AndroidStudio*
+    rm -rf ~/Library/Application\ Support/Google/AndroidStudio*/caches
+    rm -rf ~/Library/Logs/Google/AndroidStudio*
+    rm -rf ~/.android/cache
+    rm -rf ~/.android/avd/*.avd/cache
+    rm -rf ~/.gradle/daemon
+
+    # VS Code caches
+    rm -rf ~/Library/Application\ Support/Code/CachedExtensions
+    rm -rf ~/Library/Application\ Support/Code/logs
+
+    # System and general caches
+    sudo rm -rf /tmp/*
+    rm -rf ~/Library/Caches/*
+    rm -rf ~/Library/Logs/*
+    sudo rm -rf /Library/Caches/*
+    sudo rm -rf /Library/Logs/*
+    rm -rf ~/.Trash/*
+    
+    # macOS system caches
+    sudo rm -rf /private/var/folders/*/C/com.apple.DeveloperTools
+    sudo rm -rf /System/Library/Caches/*
+    sudo rm -rf /var/db/diagnostics
+    sudo rm -rf /var/db/uuidtext
+
+    rm -rf ~/Library/Developer/Xcode/iOS\ DeviceSupport/
+    rm -rf ~/Library/Developer/CoreSimulator/
+
+    # Chrome caches (but not cookies)
+    rm -rf ~/Library/Application\ Support/Google/Chrome/Default/Cache
+    rm -rf ~/Library/Application\ Support/Google/Chrome/Default/Cache\ Storage
+    rm -rf ~/Library/Application\ Support/Google/Chrome/Default/IndexedDB
+    rm -rf ~/Library/Application\ Support/Google/Chrome/Default/Service\ Worker
+}
+
+androidemulator() {
+    "$HOME/Library/Android/sdk/emulator/emulator" -list-avds \
+  | head -n 1 \
+  | xargs -I{} "$HOME/Library/Android/sdk/emulator/emulator" -avd "{}"
+
+}
+
+uuidgen20() {
+    # 20 uuids in a loop:
+    for i in {1..20}; do
+        uuidgen
+    done
+}

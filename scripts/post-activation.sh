@@ -27,13 +27,10 @@ fix_xcode_headers() {
 }
 
 install_xcode() {
-    latest="$(nix-shell -p xcodes --run "xcodes list" | grep -iv beta | grep -iv candidate | grep -Eo '^[^ ]+' | tail -1)"
-    nix-shell -p xcodes --run "xcodes install $latest"
+    latest="$(/opt/homebrew/bin/xcodes list | grep -iv beta | grep -iv candidate | grep -Eo '^[^ ]+' | tail -1)"
+    /opt/homebrew/bin/xcodes install "$latest"
     fix_xcode_headers
 }
-
-[$(find /Applications -maxdepth 1 -iname 'xcode*' >/dev/null | wc -l) -gt 0 ] || install_xcode
-which xcodebuild || xcode-select --install
 
 echo "#!/bin/bash" >/opt/homebrew/bin/aws
 echo "" >/opt/homebrew/bin/aws
@@ -162,7 +159,15 @@ killall -HUP cfprefsd
 sudo ln -sfn /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-17.jdk
 
 echo 'nix-shell -p gh --run "gh $(printf "%q " "$@")"' >/opt/homebrew/bin/gh
+echo 'nix-shell -p ncdu --run "ncdu $(printf "%q " "$@")"' >/opt/homebrew/bin/ncdu
 echo 'nix-shell -p doppler --run "doppler $(printf "%q " "$@")"' >/opt/homebrew/bin/doppler
+echo 'nix-shell -p xcodes --run "xcodes $(printf "%q " "$@")"' >/opt/homebrew/bin/xcodes
+echo 'nix-shell -p tree --run "tree $(printf "%q " "$@")"' >/opt/homebrew/bin/tree
+echo 'nix-shell -p terraform --run "terraform $(printf "%q " "$@")"' >/opt/homebrew/bin/terraform
+echo 'nix-shell -p mosh --run "mosh $(printf "%q " "$@")"' >/opt/homebrew/bin/mosh
+echo 'nix-shell -p nginx --run "nginx $(printf "%q " "$@")"' >/opt/homebrew/bin/nginx
+echo 'nix-shell -p neofetch --run "neofetch $(printf "%q " "$@")"' >/opt/homebrew/bin/neofetch
+echo 'nix-shell -p rsync --run "rsync $(printf "%q " "$@")"' >/opt/homebrew/bin/rsync
 echo 'raw_flyctl() {
   nix-shell -p flyctl --run "flyctl $(printf "%q " "$@")"
 }
@@ -189,3 +194,6 @@ fi
 ' >/opt/homebrew/bin/flyctl
 echo 'flyctl "$@"' >/opt/homebrew/bin/fly
 chmod +x /opt/homebrew/bin/* 2>/dev/null || true
+
+[ $(find /Applications -maxdepth 1 -iname 'xcode*' >/dev/null | wc -l) -gt 0 ] || install_xcode
+which xcodebuild || xcode-select --install
