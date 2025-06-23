@@ -179,53 +179,6 @@
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
 
-      environment.launchAgents = {
-        sketchybar = {
-          enable = true;
-          target = "homebrew.mxcl.sketchybar.plist";
-          text = ''
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>EnvironmentVariables</key>
-	<dict>
-		<key>LANG</key>
-		<string>en_US.UTF-8</string>
-		<key>PATH</key>
-		<string>/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin</string>
-	</dict>
-	<key>KeepAlive</key>
-	<true/>
-	<key>Label</key>
-	<string>homebrew.mxcl.sketchybar</string>
-	<key>LimitLoadToSessionType</key>
-	<array>
-		<string>Aqua</string>
-		<string>Background</string>
-		<string>LoginWindow</string>
-		<string>StandardIO</string>
-		<string>System</string>
-	</array>
-	<key>ProcessType</key>
-	<string>Interactive</string>
-	<key>ProgramArguments</key>
-	<array>
-		<string>/opt/homebrew/opt/sketchybar/bin/sketchybar</string>
-	</array>
-	<key>RunAtLoad</key>
-	<true/>
-	<key>StandardErrorPath</key>
-	<string>/opt/homebrew/var/log/sketchybar/sketchybar.err.log</string>
-	<key>StandardOutPath</key>
-	<string>/opt/homebrew/var/log/sketchybar/sketchybar.out.log</string>
-</dict>
-</plist>
-          '';
-        };
-      };
-
-
 
       system.activationScripts.postActivation.text = ''
         sudo -u ${username} bash -c "cd /Users/${username}/dotfiles/scripts; ./post-activation.sh"
@@ -257,7 +210,6 @@
           "protobuf"
           "python"
           "redis"
-          "sketchybar"
           "sqlite"
           "wget"
           "cargo-lambda"
