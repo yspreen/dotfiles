@@ -45,6 +45,7 @@ upload_yt() {
 
     local status=$?
     if [ $status -ne 0 ]; then
+        [ -f "$HOME/.youtube-upload-oauth.json" ] && rm "$HOME/.youtube-upload-oauth.json"
         echo "Failed to upload $video_file (error code: $status)"
     fi
 
