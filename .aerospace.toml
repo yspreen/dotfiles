@@ -129,14 +129,14 @@ alt-shift-l = 'move right'
 # alt-7 = 'workspace 7'
 # alt-8 = 'workspace 8'
 # alt-9 = 'workspace 9'
-alt-a = ['workspace A', 'exec-and-forget open -a Safari']
+alt-a = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh A Safari'
 # alt-b = 'workspace B'
-alt-c = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-code.sh'
-alt-d = ['workspace D', 'exec-and-forget open -a Notion']
-alt-e = ['exec-and-forget ~/dotfiles/.config/aerospace/launch-messages.sh']
-alt-f = ['workspace F', 'exec-and-forget open -a Fork']
-alt-g = ['workspace G', 'exec-and-forget open -a Ghostty']
-alt-q = ['workspace Q', 'exec-and-forget open -a Figma']
+alt-c = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh C "Visual Studio Code"'
+alt-d = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh D Notion'
+alt-e = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-messages.sh'
+alt-f = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh F Fork'
+alt-g = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh G Ghostty'
+alt-q = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh Q Figma'
 # alt-i = 'workspace I'
 # alt-m = 'workspace M'
 # alt-n = 'workspace N'
@@ -147,9 +147,9 @@ alt-q = ['workspace Q', 'exec-and-forget open -a Figma']
 # alt-s = 'workspace S'
 # alt-t = 'workspace T'
 # alt-u = 'workspace U'
-alt-v = ['workspace V', 'exec-and-forget open -a Spotify']
-alt-w = ['workspace W', 'exec-and-forget open -a Calendar']
-alt-x = ['workspace X', 'exec-and-forget open /Applications/Xcode.app']
+alt-v = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh V Spotify'
+alt-w = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh W Calendar'
+alt-x = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh X Xcode'
 # alt-y = 'workspace Y'
 alt-z = 'workspace Z'
 cmd-alt-ctrl-shift-p = "workspace-back-and-forth"
@@ -301,6 +301,10 @@ run = ['move-node-to-workspace V']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.Safari'
+run = ['move-node-to-workspace A']
+
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
 run = ['move-node-to-workspace A']
 
 [[on-window-detected]]
