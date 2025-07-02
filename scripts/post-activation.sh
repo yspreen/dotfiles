@@ -1,8 +1,12 @@
 #!/bin/bash
 set -e
 
-username=$(whoami)
+username=$1
 export HOME=/Users/${username}
+
+stow() {
+    nix-shell -p stow --run "stow --adopt ."
+}
 
 fix_xcode_headers() {
     # for each Xcode.app in /Applications, like Xcode.app, Xcode-beta.app, etc.:
@@ -29,7 +33,13 @@ fix_xcode_headers() {
 install_xcode() {
     latest="$(/opt/homebrew/bin/xcodes list | grep -iv beta | grep -iv candidate | grep -Eo '^[^ ]+' | tail -1)"
     /opt/homebrew/bin/xcodes install "$latest"
+    /opt/homebrew/bin/xcodes select "$latest"
     fix_xcode_headers
+
+    # find first Xcode*.app in /Applications and link it to /Applications/Xcode.app:
+    sudo rm -rf /Applications/Xcode.app 2>/dev/null || true
+    first_xcode=$(find /Applications -maxdepth 1 -iname 'Xcode*.app' | sort | head -n 1)
+    sudo ln -s "$first_xcode" /Applications/Xcode.app
 }
 
 echo "#!/bin/bash" >/opt/homebrew/bin/aws
@@ -53,7 +63,7 @@ sudotouchid
 
 /bin/launchctl load -w /Library/LaunchAgents/homebrew.mxcl.sketchybar.plist 2>/dev/null
 
-./decrypt-ssh.sh && cd .. && stow --adopt .
+./decrypt-ssh.sh && cd .. && stow
 
 install_oh_my_zsh() {
     git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh ~/.oh-my-zsh
@@ -167,7 +177,6 @@ echo 'nix-shell -p terraform --run "terraform $(printf "%q " "$@")"' >/opt/homeb
 echo 'nix-shell -p mosh --run "mosh $(printf "%q " "$@")"' >/opt/homebrew/bin/mosh
 echo 'nix-shell -p nginx --run "nginx $(printf "%q " "$@")"' >/opt/homebrew/bin/nginx
 echo 'nix-shell -p neofetch --run "neofetch $(printf "%q " "$@")"' >/opt/homebrew/bin/neofetch
-echo 'nix-shell -p rsync --run "rsync $(printf "%q " "$@")"' >/opt/homebrew/bin/rsync
 echo 'raw_flyctl() {
   nix-shell -p flyctl --run "flyctl $(printf "%q " "$@")"
 }
@@ -195,5 +204,5 @@ fi
 echo 'flyctl "$@"' >/opt/homebrew/bin/fly
 chmod +x /opt/homebrew/bin/* 2>/dev/null || true
 
-[ $(find /Applications -maxdepth 1 -iname 'xcode*' >/dev/null | wc -l) -gt 0 ] || install_xcode
+[ $(find /Applications -maxdepth 1 -iname 'xcode*' | wc -l) -gt 0 ] || install_xcode
 which xcodebuild || xcode-select --install

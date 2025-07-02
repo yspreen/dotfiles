@@ -314,8 +314,7 @@ nu() {
 
 # nix switch
 ns() {
-    sudo whoami >/dev/null
-    darwin-rebuild switch --impure --flake ~/dotfiles/nix#spreen 
+    sudo darwin-rebuild switch --impure --flake ~/dotfiles/nix#spreen 
 }
 
 # nix clean
@@ -443,6 +442,8 @@ cleancaches() {
     rm -rf ~/Library/Application\ Support/Google/Chrome/Default/Cache\ Storage
     rm -rf ~/Library/Application\ Support/Google/Chrome/Default/IndexedDB
     rm -rf ~/Library/Application\ Support/Google/Chrome/Default/Service\ Worker
+
+    rm -rf ~/.local/state/fnm_multishells
 }
 
 androidemulator() {

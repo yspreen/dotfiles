@@ -36,7 +36,7 @@
     homebrew-bundle,
   }:
   let
-    username = let val = builtins.getEnv "USER"; in if val == "" then "user" else val;
+    username = "user";
     configuration = { pkgs, ... }: let
       # Get the directory containing this flake
       flakeDir = builtins.dirOf __curPos.file;
@@ -73,7 +73,7 @@
         pkgs.montserrat
         pkgs.geist-font
         pkgs.roboto-mono
-        (pkgs.callPackage "/Users/${username}/dotfiles/nix/font/figtree.nix" { }).out
+        (pkgs.callPackage "${flakeDir}/font/figtree.nix" { }).out
       ];
 
       system.defaults = {
@@ -88,10 +88,21 @@
         NSGlobalDomain._HIHideMenuBar = false;
         NSGlobalDomain.AppleInterfaceStyleSwitchesAutomatically = true;
         NSGlobalDomain.AppleShowScrollBars = "Automatic";
-        controlcenter.BatteryShowPercentage = true;
+        controlcenter.BatteryShowPercentage = false;
       };
 
       system.defaults.CustomUserPreferences = {
+        # 1. Tell Siri to use the “SAE”-style custom hot-key
+        "com.apple.Siri" = {
+          CustomizedKeyboardShortcutSAE = {
+            enabled = true;
+            value = {
+              parameters = [ 109 46 1966080 ];  # ascii 109 (‘m’), key-code 46, ⌃⌥⇧⌘ mask
+              type       = "SAE1.0";
+            };
+          };
+        };
+
         # Sets Downloads folder with fan view in Dock
         "com.apple.dock" = {
           persistent-others = [
@@ -148,6 +159,7 @@
             "65" = {
               enabled = true;
             };
+            # DnD
             "175" = {
               enabled = true;
               value = {
@@ -157,6 +169,18 @@
                   8388608
                 ];
                 type = "standard";
+              };
+            };
+            # siri
+            "176" = {
+              enabled = true;
+              value = {
+                type = "standard";
+                parameters = [
+                  109
+                  46
+                  1966080
+                ];
               };
             };
           };
@@ -179,13 +203,16 @@
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
 
+      # Set the primary user for user-specific options
+      system.primaryUser = username;
 
       system.activationScripts.postActivation.text = ''
-        sudo -u ${username} bash -c "cd /Users/${username}/dotfiles/scripts; ./post-activation.sh"
+        sudo -u ${username} bash -c "cd /Users/${username}/dotfiles/scripts; ./post-activation.sh ${username}"
       '';
 
       homebrew = {
         enable = true;
+        user = username;
         onActivation.cleanup = "zap";
         onActivation.autoUpdate = true;
         onActivation.upgrade = true;
@@ -218,6 +245,7 @@
           "openjdk@17"
         ];
         casks = [
+          "hiddenbar"
           "orbstack"
           "aerospace@0.17.1"
           "hammerspoon"
