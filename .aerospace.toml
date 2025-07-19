@@ -133,7 +133,7 @@ alt-a = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh A Safari'
 # alt-b = 'workspace B'
 alt-c = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh C "Visual Studio Code"'
 alt-d = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh D Notion'
-alt-e = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-messages.sh'
+alt-e = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh E "Messages"'
 alt-f = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh F Fork'
 alt-g = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh G Ghostty'
 alt-q = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh Q Figma'
@@ -142,7 +142,7 @@ alt-q = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh Q Figma'
 # alt-n = 'workspace N'
 # alt-o = 'workspace O'
 # alt-p = 'workspace P'
-# alt-r = 'workspace R'
+alt-r = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh R Gmail'
 # alt-s = 'workspace S'
 # alt-t = 'workspace T'
 # alt-u = 'workspace U'
@@ -176,7 +176,7 @@ alt-shift-g = 'move-node-to-workspace G'
 # alt-shift-o = 'move-node-to-workspace O'
 # alt-shift-p = 'move-node-to-workspace P'
 alt-shift-q = 'move-node-to-workspace Q'
-# alt-shift-r = 'move-node-to-workspace R'
+alt-shift-r = 'move-node-to-workspace R'
 # alt-shift-s = 'move-node-to-workspace S'
 # alt-shift-t = 'move-node-to-workspace T'
 # alt-shift-u = 'move-node-to-workspace U'
@@ -337,6 +337,10 @@ run = ['move-node-to-workspace E']
 [[on-window-detected]]
 if.app-id = 'com.apple.SecurityAgent'
 run = []
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari.WebApp.FC7A244C-1C78-4D1A-A28D-D4C8B18E89E7'
+run = ['move-node-to-workspace R']
 
 [[on-window-detected]]
 run = ['move-node-to-workspace Z']

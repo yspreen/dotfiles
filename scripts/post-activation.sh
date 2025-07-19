@@ -206,3 +206,5 @@ chmod +x /opt/homebrew/bin/* 2>/dev/null || true
 
 [ $(find /Applications -maxdepth 1 -iname 'xcode*' | wc -l) -gt 0 ] || install_xcode
 which xcodebuild || xcode-select --install
+
+[ -d ~/Applications/Gmail.app ] || unzip -q ~/dotfiles/other/Gmail.zip -d ~/Applications

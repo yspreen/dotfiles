@@ -1,4 +1,3 @@
-
 if ! [[ -n $NO_P10K ]]; then
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -6,6 +5,49 @@ if ! [[ -n $NO_P10K ]]; then
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+fi
+
+if [[ -n $NO_P10K ]]; then
+# echo "WARNING: The prompt has changed. run \`get-next-prompt\` again to get the new prompt."
+# echo "WARNING: The prompt has changed. run \`get-next-prompt\` again to get the new prompt."
+# echo "WARNING: The prompt has changed. run \`get-next-prompt\` again to get the new prompt."
+# exit 0
+
+  no_npx() {
+    echo "npx is disabled. Please use 'pnpm dlx' instead."
+  }
+  alias npx='no_npx'
+
+  # npm to pnpm:
+  no_npm() {
+    echo "npm is disabled. Please use 'pnpm' instead."
+  }
+  alias npm='no_npm'
+
+  # yarn to pnpm:
+  no_yarn() {
+    echo "yarn is disabled. Please use 'pnpm' instead."
+  }
+  alias yarn='no_yarn'
+
+  # create an alias for pnpm that does everything pnpm does, but filters out `pnpm dev` because the `dev` command is not supported in pnpm:
+  orig_pnpm=$(command -v pnpm)
+  no_pnpm() {
+    if [[ "$1" == "dev" ]] || ([[ "$2" == "dev" ]] && [[ "$1" == "run" ]]); then
+      echo "The server is already running. Don't start commands that never exit. You can run pnpm build to check build errors, or access the server at http://localhost:3000"
+    else
+        if [[ "$1" == "drizzle-kit" ]] && [[ "$2" != "push" ]]; then
+        echo "Migrations are run with 'drizzle-kit push'. That's the only drizzle kit command you need."
+        else
+            if [[ "$1" == "exec" ]] && [[ "$2" == "drizzle-kit" ]] && [[ "$3" != "push" ]]; then
+            echo "Migrations are run with 'drizzle-kit push'. That's the only drizzle kit command you need."
+            else
+            pnpm "$@"
+            fi
+        fi
+    fi
+  }
+  alias pnpm='no_pnpm'
 fi
 
 # Add completions to search path
@@ -370,6 +412,7 @@ dotenv() {
 
     # source your .env (only if it exists)
     [ -f .env ] && source .env
+    [ -f .env.development.local ] && source .env.development.local
 
     # turn off automatic exporting
     set +o allexport
@@ -407,6 +450,7 @@ cleancaches() {
     rm -rf ~/.cache/deno
     rm -rf ~/.cargo/registry/cache
     rm -rf ~/.cargo/git/db
+    rm -rf ~/.cache/*
 
     # Android Studio caches
     rm -rf ~/Library/Caches/Google/AndroidStudio*
@@ -443,7 +487,10 @@ cleancaches() {
     rm -rf ~/Library/Application\ Support/Google/Chrome/Default/IndexedDB
     rm -rf ~/Library/Application\ Support/Google/Chrome/Default/Service\ Worker
 
+    rm -rf ~/Library/Caches/fnm_multishells
     rm -rf ~/.local/state/fnm_multishells
+    rm -rf ~/.local/share/fnm/node-versions
+    rm -rf ~/.local/share/fnm/aliases/*
 }
 
 androidemulator() {
@@ -459,3 +506,49 @@ uuidgen20() {
         uuidgen
     done
 }
+
+
+
+get-current-prompt() {
+    # wait for file and wait for it to not be empty:
+    while [[ ! -s ~/prompt.txt ]]; do
+        sleep 0.5
+    done
+    
+    prompt=$(cat ~/prompt.txt)
+    # system="IMPORTANT: We're running in infinite mode. This means you should **never** end the current chat. To get the next user input, don't end your turn, but just call the "'`get-next-prompt`'" command in the shell tool. This will fetch the next user input without ending the chat."
+
+    # # add <system> around the system message:
+    # system="<system>$system</system>"
+
+    # # print without replacing any special characters or backslashes:
+    # printf "%s\n" "$system"
+    # echo
+    # echo
+    printf "%s\n" "$prompt"
+    echo
+    echo '---'
+    echo
+    echo 'Then, once you are done, run `get-next-prompt` with shell_execute again. Never end the chat, just run `get-next-prompt` with shell_execute to get the next user input. Run `zsh -ic restart-next` to restart the next server anytime.'
+}
+
+get-next-prompt() {
+    rm ~/prompt.txt
+    get-current-prompt
+}
+
+restart-next() {
+    # find pid for port 3000:
+    lsof -ti:3000 | xargs kill -9
+}
+
+kill-mcp-child() {
+    mcp=`ps -A | grep 'uv run mcp-shell-server' | grep -v grep | grep -Eo '^\s*\d+'`
+    child1=`ps -axo pid,ppid,stat,etime,command | awk '$2=='$mcp | grep -Eo '^\s*\d+'`
+    child2=`ps -axo pid,ppid,stat,etime,command | awk '$2=='$child1 | grep -Eo '^\s*\d+'`
+    kill $child2
+    sleep 1
+    kill -9 $child2
+}
+
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
