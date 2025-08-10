@@ -62,6 +62,7 @@
           pkgs.cocoapods
           pkgs.fastlane
           pkgs.uv
+          pkgs.go
         ];
 
       fonts.packages = [
@@ -247,7 +248,7 @@
         casks = [
           "hiddenbar"
           "orbstack"
-          "aerospace@0.17.1"
+          "aerospace"
           "hammerspoon"
           # "firefox"
           "iina"
