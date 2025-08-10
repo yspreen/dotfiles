@@ -1,3 +1,13 @@
+restart-next() {
+    # find pid for port 3000:
+    lsof -ti:3000 | xargs kill -9
+}
+
+# if SHELL_INTEGRATION contains xcode-copilot-zsh, set NO_P10K to true:
+if [[ -n $SHELL_INTEGRATION ]] && [[ "$SHELL_INTEGRATION" == *"xcode-copilot-zsh"* ]]; then
+  NO_P10K=true
+fi
+
 if ! [[ -n $NO_P10K ]]; then
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -12,6 +22,10 @@ if [[ -n $NO_P10K ]]; then
 # echo "WARNING: The prompt has changed. run \`get-next-prompt\` again to get the new prompt."
 # echo "WARNING: The prompt has changed. run \`get-next-prompt\` again to get the new prompt."
 # exit 0
+
+    xcodebuild() {
+        echo "xcodebuild is disabled. Just ask the user to build with Xcode."
+    }
 
   no_npx() {
     echo "npx is disabled. Please use 'pnpm dlx' instead."
@@ -35,16 +49,22 @@ if [[ -n $NO_P10K ]]; then
   no_pnpm() {
     if [[ "$1" == "dev" ]] || ([[ "$2" == "dev" ]] && [[ "$1" == "run" ]]); then
       echo "The server is already running. Don't start commands that never exit. You can run pnpm build to check build errors, or access the server at http://localhost:3000"
-    else
-        if [[ "$1" == "drizzle-kit" ]] && [[ "$2" != "push" ]]; then
+    elif [[ "$1" == "drizzle-kit" ]] && [[ "$2" != "push" ]]; then
         echo "Migrations are run with 'drizzle-kit push'. That's the only drizzle kit command you need."
-        else
-            if [[ "$1" == "exec" ]] && [[ "$2" == "drizzle-kit" ]] && [[ "$3" != "push" ]]; then
-            echo "Migrations are run with 'drizzle-kit push'. That's the only drizzle kit command you need."
-            else
-            pnpm "$@"
-            fi
-        fi
+    elif [[ "$1" == "exec" ]] && [[ "$2" == "drizzle-kit" ]] && [[ "$3" != "push" ]]; then
+        echo "Migrations are run with 'drizzle-kit push'. That's the only drizzle kit command you need."
+    elif [[ "$1" == "drizzle-kit" ]] && [[ "$2" == "push" ]]; then
+        echo "Migrations complete!"
+    elif [[ "$1" == "exec" ]] && [[ "$2" == "drizzle-kit" ]] && [[ "$3" == "push" ]]; then
+        echo "Migrations complete!"
+    elif [[ "$1" == "build" ]]; then
+        $orig_pnpm "$@"
+        restart-next 2> /dev/null
+    elif [[ "$2" == "build" ]] && [[ "$1" == "run" ]]; then
+        $orig_pnpm "$@"
+        restart-next 2> /dev/null
+    else
+        $orig_pnpm "$@"
     fi
   }
   alias pnpm='no_pnpm'
@@ -529,17 +549,13 @@ get-current-prompt() {
     echo
     echo '---'
     echo
-    echo 'Then, once you are done, run `get-next-prompt` with shell_execute again. Never end the chat, just run `get-next-prompt` with shell_execute to get the next user input. Run `zsh -ic restart-next` to restart the next server anytime.'
+    echo 'Then, once you are done, run `get-next-prompt` with shell_execute again. Never end your turn, just run `get-next-prompt` with shell_execute to get the next user input.'
 }
 
 get-next-prompt() {
+    afplay "/System/Library/Sounds/Submarine.aiff" &
     rm ~/prompt.txt
     get-current-prompt
-}
-
-restart-next() {
-    # find pid for port 3000:
-    lsof -ti:3000 | xargs kill -9
 }
 
 kill-mcp-child() {

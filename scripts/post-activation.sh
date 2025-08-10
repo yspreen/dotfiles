@@ -177,6 +177,7 @@ echo 'nix-shell -p terraform --run "terraform $(printf "%q " "$@")"' >/opt/homeb
 echo 'nix-shell -p mosh --run "mosh $(printf "%q " "$@")"' >/opt/homebrew/bin/mosh
 echo 'nix-shell -p nginx --run "nginx $(printf "%q " "$@")"' >/opt/homebrew/bin/nginx
 echo 'nix-shell -p neofetch --run "neofetch $(printf "%q " "$@")"' >/opt/homebrew/bin/neofetch
+echo 'nix-shell -p xcbeautify --run "xcbeautify $*"' >/opt/homebrew/bin/xcbeautify
 echo 'raw_flyctl() {
   nix-shell -p flyctl --run "flyctl $(printf "%q " "$@")"
 }
