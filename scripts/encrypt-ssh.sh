@@ -11,7 +11,24 @@ fi
 
 PASSWORD=$(cat .ssh_pw)
 
-# Compress and encrypt .ssh directory
-tar -czf - .ssh .aws .doppler .npmrc .gnupg scriptswithsecrets | gpg --batch --yes --symmetric --passphrase "$PASSWORD" -o .ssh_enc
+# Build list of items to include only if they exist
+items=(.ssh .aws .doppler .npmrc .gnupg scriptswithsecrets)
+existing=()
+for item in $items; do
+    if [ -e "$item" ]; then
+        existing+=("$item")
+    fi
+done
 
-echo "SSH directory encrypted to .ssh_enc using password from .ssh_pw"
+if [ ${#existing[@]} -eq 0 ]; then
+    echo "No files or directories to encrypt. None of the following exist: ${items[*]}"
+    exit 0
+fi
+
+# Compress and encrypt the existing items
+if tar -czf - "${existing[@]}" | gpg --batch --yes --symmetric --passphrase "$PASSWORD" -o .ssh_enc; then
+    echo "Encrypted: ${existing[*]} -> .ssh_enc using password from .ssh_pw"
+else
+    echo "Encryption failed" >&2
+    exit 1
+fi
