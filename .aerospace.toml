@@ -116,7 +116,7 @@ alt-l = 'focus right'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move
 alt-shift-i = 'move up'
 alt-shift-j = 'move left'
-alt-shift-k = 'move down'
+# alt-shift-k = 'move down'
 alt-shift-l = 'move right'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
@@ -144,7 +144,7 @@ alt-q = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh Q Figma'
 # alt-p = 'workspace P'
 alt-r = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh R Gmail'
 # alt-s = 'workspace S'
-# alt-t = 'workspace T'
+alt-t = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh T ChatGPT'
 # alt-u = 'workspace U'
 alt-v = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh V Spotify'
 alt-w = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh W Calendar'
@@ -178,7 +178,7 @@ alt-shift-g = 'move-node-to-workspace G'
 alt-shift-q = 'move-node-to-workspace Q'
 alt-shift-r = 'move-node-to-workspace R'
 # alt-shift-s = 'move-node-to-workspace S'
-# alt-shift-t = 'move-node-to-workspace T'
+alt-shift-t = 'move-node-to-workspace T'
 # alt-shift-u = 'move-node-to-workspace U'
 alt-shift-v = 'move-node-to-workspace V'
 alt-shift-w = 'move-node-to-workspace W'
@@ -341,6 +341,14 @@ run = []
 [[on-window-detected]]
 if.app-id = 'com.apple.Safari.WebApp.FC7A244C-1C78-4D1A-A28D-D4C8B18E89E7'
 run = ['move-node-to-workspace R']
+
+[[on-window-detected]]
+if.app-id = 'com.openai.chat'
+run = ['move-node-to-workspace T']
+
+[[on-window-detected]]
+if.app-id = 'org.kicad.kicad'
+run = ['layout floating']
 
 [[on-window-detected]]
 run = ['move-node-to-workspace Z']

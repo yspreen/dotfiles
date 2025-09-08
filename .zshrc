@@ -446,71 +446,71 @@ fi
 
 cleancaches() {
     # Xcode caches
-    rm -rf ~/Library/Developer/Xcode/DerivedData
-    rm -rf ~/Library/Developer/Xcode/Archives
-    rm -rf ~/Library/Developer/Xcode/DocumentationCache
-    rm -rf ~/Library/Developer/Xcode/Products
-    rm -rf ~/Library/Developer/Xcode/UserData/Previews
-    rm -rf ~/Library/Developer/CoreSimulator/Caches
+    bash -c 'rm -rf ~/Library/Developer/Xcode/DerivedData'
+    bash -c 'rm -rf ~/Library/Developer/Xcode/Archives'
+    bash -c 'rm -rf ~/Library/Developer/Xcode/DocumentationCache'
+    bash -c 'rm -rf ~/Library/Developer/Xcode/Products'
+    bash -c 'rm -rf ~/Library/Developer/Xcode/UserData/Previews'
+    bash -c 'rm -rf ~/Library/Developer/CoreSimulator/Caches'
 
     # Node.js caches
-    rm -rf ~/.npm/_cacache
-    rm -rf ~/.cache/nodejs-compile-cache
-    rm -rf ~/.yarn/cache
-    rm -rf ~/.pnpm-store
-    rm -rf node_modules/.cache
+    bash -c 'rm -rf ~/.npm/_cacache'
+    bash -c 'rm -rf ~/.cache/nodejs-compile-cache'
+    bash -c 'rm -rf ~/.yarn/cache'
+    bash -c 'rm -rf ~/.pnpm-store'
+    bash -c 'rm -rf node_modules/.cache'
 
     # Development tool caches
-    rm -rf ~/.cache/pip
-    rm -rf ~/.gradle/caches
-    rm -rf ~/.m2/repository/.cache
-    rm -rf ~/.docker/desktop/vms/*/log.log
-    rm -rf ~/.cache/composer
-    rm -rf ~/.cache/go-build
-    rm -rf ~/.cache/deno
-    rm -rf ~/.cargo/registry/cache
-    rm -rf ~/.cargo/git/db
-    rm -rf ~/.cache/*
+    bash -c 'rm -rf ~/.cache/pip'
+    bash -c 'rm -rf ~/.gradle/caches'
+    bash -c 'rm -rf ~/.m2/repository/.cache'
+    bash -c 'rm -rf ~/.docker/desktop/vms/*/log.log'
+    bash -c 'rm -rf ~/.cache/composer'
+    bash -c 'rm -rf ~/.cache/go-build'
+    bash -c 'rm -rf ~/.cache/deno'
+    bash -c 'rm -rf ~/.cargo/registry/cache'
+    bash -c 'rm -rf ~/.cargo/git/db'
+    bash -c 'rm -rf ~/.cache/*'
 
     # Android Studio caches
-    rm -rf ~/Library/Caches/Google/AndroidStudio*
-    rm -rf ~/Library/Application\ Support/Google/AndroidStudio*/caches
-    rm -rf ~/Library/Logs/Google/AndroidStudio*
-    rm -rf ~/.android/cache
-    rm -rf ~/.android/avd/*.avd/cache
-    rm -rf ~/.gradle/daemon
+    bash -c 'rm -rf ~/Library/Caches/Google/AndroidStudio*'
+    bash -c 'rm -rf ~/Library/Application\ Support/Google/AndroidStudio*/caches'
+    bash -c 'rm -rf ~/Library/Logs/Google/AndroidStudio*'
+    bash -c 'rm -rf ~/.android/cache'
+    bash -c 'rm -rf ~/.android/avd/*.avd/cache'
+    bash -c 'rm -rf ~/.gradle/daemon'
 
     # VS Code caches
-    rm -rf ~/Library/Application\ Support/Code/CachedExtensions
-    rm -rf ~/Library/Application\ Support/Code/logs
+    bash -c 'rm -rf ~/Library/Application\ Support/Code/CachedExtensions'
+    bash -c 'rm -rf ~/Library/Application\ Support/Code/logs'
 
     # System and general caches
-    sudo rm -rf /tmp/*
-    rm -rf ~/Library/Caches/*
-    rm -rf ~/Library/Logs/*
-    sudo rm -rf /Library/Caches/*
-    sudo rm -rf /Library/Logs/*
-    rm -rf ~/.Trash/*
+    bash -c 'sudo rm -rf /tmp/*'
+    bash -c 'rm -rf ~/Library/Caches/*'
+    bash -c 'rm -rf ~/Library/Logs/*'
+    bash -c 'sudo rm -rf /Library/Caches/*'
+    bash -c 'sudo rm -rf /Library/Logs/*'
+    bash -c 'rm -rf ~/.Trash/*'
     
     # macOS system caches
-    sudo rm -rf /private/var/folders/*/C/com.apple.DeveloperTools
-    sudo rm -rf /System/Library/Caches/*
-    sudo rm -rf /var/db/diagnostics
-    sudo rm -rf /var/db/uuidtext
+    bash -c 'sudo rm -rf /private/var/folders/*/C/com.apple.DeveloperTools'
+    bash -c 'sudo rm -rf /System/Library/Caches/*'
+    bash -c 'sudo rm -rf /var/db/diagnostics'
+    bash -c 'sudo rm -rf /var/db/uuidtext'
 
-    rm -rf ~/Library/Developer/Xcode/iOS\ DeviceSupport/
-    rm -rf ~/Library/Developer/CoreSimulator/
+    bash -c 'rm -rf ~/Library/Developer/Xcode/iOS\ DeviceSupport/'
+    bash -c 'rm -rf ~/Library/Developer/CoreSimulator/'
 
     # Chrome caches (but not cookies)
-    rm -rf ~/Library/Application\ Support/Google/Chrome/Default/Cache
-    rm -rf ~/Library/Application\ Support/Google/Chrome/Default/Cache\ Storage
-    rm -rf ~/Library/Application\ Support/Google/Chrome/Default/IndexedDB
-    rm -rf ~/Library/Application\ Support/Google/Chrome/Default/Service\ Worker
+    bash -c 'rm -rf ~/Library/Application\ Support/Google/Chrome/Default/Cache'
+    bash -c 'rm -rf ~/Library/Application\ Support/Google/Chrome/Default/Cache\ Storage'
+    bash -c 'rm -rf ~/Library/Application\ Support/Google/Chrome/Default/IndexedDB'
+    bash -c 'rm -rf ~/Library/Application\ Support/Google/Chrome/Default/Service\ Worker'
 
-    rm -rf ~/Library/Caches/fnm_multishells
-    rm -rf ~/.local/state/fnm_multishells
-    rm -rf ~/.local/share/fnm/node-versions
-    rm -rf ~/.local/share/fnm/aliases/*
+    bash -c 'rm -rf ~/Library/Caches/fnm_multishells'
+    bash -c 'rm -rf ~/.local/state/fnm_multishells'
+    bash -c 'rm -rf ~/.local/share/fnm/node-versions'
+    bash -c 'rm -rf ~/.local/share/fnm/aliases/*'
 }
 
 androidemulator() {
