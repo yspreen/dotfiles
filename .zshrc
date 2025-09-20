@@ -255,21 +255,6 @@ lnhyper() {
 
 
 autoload -U add-zsh-hook
-nvmrc_file_active=false
-loadnvmrc() {
-  local nvmrc_path=".nvmrc"
-
-  if [ -f "$nvmrc_path" ]; then
-    nvm use
-    nvmrc_file_active=true
-  elif $nvmrc_file_active; then
-    nvmrc_file_active=false
-    nvm use default
-  fi
-}
-
-(&>/dev/null add-zsh-hook chpwd loadnvmrc &)
-(&>/dev/null loadnvmrc &)
 
 alias unplugalarm="while pmset -g batt | head -n 1 | cut -d \' -f2 | grep attery; do sleep 1; done; sudo sh -c \"while true; do sleep 1; pmset -g batt | head -n 1 | cut -d \' -f2 | grep attery && osascript -e 'set Volume 5' && afplay ~/Music/alarm.wav; done\""
 
