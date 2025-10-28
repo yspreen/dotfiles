@@ -496,6 +496,16 @@ cleancaches() {
     bash -c 'rm -rf ~/.local/state/fnm_multishells'
     bash -c 'rm -rf ~/.local/share/fnm/node-versions'
     bash -c 'rm -rf ~/.local/share/fnm/aliases/*'
+
+    find ~/Documents/proj -name node_modules -type d | grep -Ev 'node_modules/.' | while read d
+    do
+        rm -rf "$d"
+    done
+    find ~/Documents/proj -iname 'cargo.toml' -print0 | while IFS= read -r -d '' manifest
+    do
+        rm -rf "${manifest%/*}/target"
+    done
+    go clean --modcache
 }
 
 androidemulator() {
@@ -552,4 +562,39 @@ kill-mcp-child() {
     kill -9 $child2
 }
 
+cx() {
+    which codex >/dev/null 2>&1 && brew upgrade codex
+    which codex >/dev/null 2>&1 || brew install codex
+    codex --search --model "gpt-5-codex" --sandbox danger-full-access "$*"
+}
+
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+openscad() {
+    nix-shell -p openscad --run "open /nix/store/`ls /nix/store | grep openscad | grep -v .drv`/Applications/OpenSCAD.app"
+}
+
+petname() {
+    # first param = number of words, default 1:
+    local words=${1:-1}
+    nix run nixpkgs#rust-petname -- -w "$words"
+}
+
+# Git Add Commit Push make Github repo
+gacpg() {
+    gac "$@"
+    # check if remotes is empty:
+    remotes=$(git remote)
+    if [[ -n $remotes ]]; then
+        echo "This repository already has a remote. Aborting."
+        return 1
+    fi
+
+    fallback=$(petname 1)
+    nix run nixpkgs#gh -- repo create "$(basename "$PWD")" --source=. --remote=origin --private --push && return 0
+    nix run nixpkgs#gh -- repo create "$(basename "$PWD")-$(date +%Y)" --source=. --remote=origin --private --push && return 0
+    nix run nixpkgs#gh -- repo create "$(basename "$PWD")-$fallback" --source=. --remote=origin --private --push && return 0
+} 
+
+killfly() {
+    ps -A | grep fly | grep -v grep | grep -Eo '^\s*\d+' | while read pid; do kill $pid; done
+}

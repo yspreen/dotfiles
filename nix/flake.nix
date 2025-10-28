@@ -63,6 +63,7 @@
           pkgs.fastlane
           pkgs.uv
           pkgs.go
+          pkgs.fd
         ];
 
       fonts.packages = [

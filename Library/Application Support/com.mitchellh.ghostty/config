@@ -12,3 +12,4 @@ window-padding-y = 12
 cursor-color = #71006d
 cursor-style = bar
 adjust-cursor-thickness = 3
+auto-update = off
