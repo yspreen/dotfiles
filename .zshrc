@@ -565,7 +565,7 @@ kill-mcp-child() {
 cx() {
     which codex >/dev/null 2>&1 && brew upgrade codex
     which codex >/dev/null 2>&1 || brew install codex
-    codex --search --model "gpt-5-codex" --sandbox danger-full-access "$*"
+    codex --enable web_search_request --model "gpt-5-codex" --sandbox danger-full-access "$*"
 }
 
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
