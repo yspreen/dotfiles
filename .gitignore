@@ -5,3 +5,7 @@
 /.npmrc
 /.aws/
 /scriptswithsecrets/
+.codex/log/codex-tui.log
+.codex/history.jsonl
+.codex/auth.json
+.codex/sessions/

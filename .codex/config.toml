@@ -1,0 +1,9 @@
+model = "gpt-5-codex"
+sandbox_mode = "danger-full-access"
+[mcp_servers.sentry]
+args = ["dlx", "mcp-remote@latest", "https://mcp.sentry.dev/mcp"]
+command = "pnpm"
+[sandbox_workspace_write]
+network_access = true
+[features]
+web_search_request = true

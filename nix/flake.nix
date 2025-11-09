@@ -219,6 +219,7 @@
         onActivation.autoUpdate = true;
         onActivation.upgrade = true;
         brews = [
+          "coreutils"
           "bat"
           "carthage"
           # "fontconfig"

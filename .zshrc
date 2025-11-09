@@ -188,6 +188,7 @@ alias randompw='LC_ALL=C tr -dc "A-Za-z0-9-_" </dev/urandom | head -c 20 ; echo'
 
 # alias kraken='LC_CTYPE=C open -na GitKraken --args -p "$(git rev-parse --show-toplevel)"'
 alias kraken='fork'
+alias sentry-wizard='pnpm dlx @sentry/wizard@latest'
 
 alias wifion='networksetup -setnetworkserviceenabled Wi-Fi on'
 alias wifioff='networksetup -setnetworkserviceenabled Wi-Fi off'
@@ -263,6 +264,7 @@ alias unplugalarm="while pmset -g batt | head -n 1 | cut -d \' -f2 | grep attery
 
 unalias gcp
 gcp() { git commit -m "$*"; git push }
+gac() { git add -A; git commit -m "$*" }
 gacp() { git add -A; git commit -m "$*"; git push }
 giacp() { git init; git add -A; git commit -m "$*"; git push }
 export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
@@ -506,6 +508,7 @@ cleancaches() {
         rm -rf "${manifest%/*}/target"
     done
     go clean --modcache
+    find "$HOME/Library/Developer/Xcode/Archives" -type d -name "*.xcarchive" -print -exec rm -rf {} +
 }
 
 androidemulator() {
@@ -565,7 +568,7 @@ kill-mcp-child() {
 cx() {
     which codex >/dev/null 2>&1 && brew upgrade codex
     which codex >/dev/null 2>&1 || brew install codex
-    codex --enable web_search_request --model "gpt-5-codex" --sandbox danger-full-access "$*"
+    codex "$@"
 }
 
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
