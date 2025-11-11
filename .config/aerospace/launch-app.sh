@@ -5,6 +5,7 @@
 
 workspace_letter="$1"
 app_name="$2"
+full_screen="$3"
 
 if [ -z "$workspace_letter" ] || [ -z "$app_name" ]; then
     echo "Usage: $0 <workspace_letter> <app_name>"
@@ -29,3 +30,6 @@ else
         open -a "$app_name"
     fi
 fi
+
+sleep 0.1
+[ "$full_screen" = "f" ] && aerospace fullscreen

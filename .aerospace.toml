@@ -134,8 +134,8 @@ alt-a = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh A Safari'
 alt-c = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh C "Visual Studio Code"'
 alt-d = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh D Notion'
 alt-e = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh E "Messages"'
-alt-f = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh F Fork'
-alt-g = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh G Ghostty'
+alt-f = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh F Fork f'
+alt-g = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh G Ghostty f'
 alt-q = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh Q Figma'
 # alt-i = 'workspace I'
 # alt-m = 'workspace M'
@@ -194,7 +194,6 @@ alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
 alt-shift-backslash = [
   'mode service',
-  'exec-and-forget touch ~/.aerospaceservice && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=`aerospace list-workspaces --focused`',
 ]
 
 # 'service' binding mode declaration.
@@ -206,63 +205,51 @@ minus = 'resize smart -50'
 
 alt-shift-backslash = [
   'mode main',
-  'exec-and-forget rm ~/.aerospaceservice && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=`aerospace list-workspaces --focused`',
 ]
 backspace = [
   'close-all-windows-but-current',
   'mode main',
-  'exec-and-forget rm ~/.aerospaceservice && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=`aerospace list-workspaces --focused`',
 ]
 esc = [
   'reload-config',
   'mode main',
-  'exec-and-forget rm ~/.aerospaceservice && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=`aerospace list-workspaces --focused`',
 ]
 f = [
   'layout floating tiling',
   'mode main',
-  'exec-and-forget rm ~/.aerospaceservice && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=`aerospace list-workspaces --focused`',
 ] # Toggle between floating and tiling layout
 m = [
   'fullscreen',
   'mode main',
-  'exec-and-forget rm ~/.aerospaceservice && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=`aerospace list-workspaces --focused`',
 ] # Toggle fullscreen
 r = [
   'flatten-workspace-tree',
   'mode main',
-  'exec-and-forget rm ~/.aerospaceservice && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=`aerospace list-workspaces --focused`',
 ] # reset layout
 
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
-#s = ['layout sticky tiling', 'mode main', 'exec-and-forget rm ~/.aerospaceservice && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=`aerospace list-workspaces --focused`']
 
 alt-shift-h = [
   'join-with left',
   'mode main',
-  'exec-and-forget rm ~/.aerospaceservice && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=`aerospace list-workspaces --focused`',
 ]
 alt-shift-j = [
   'join-with down',
   'mode main',
-  'exec-and-forget rm ~/.aerospaceservice && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=`aerospace list-workspaces --focused`',
 ]
 alt-shift-k = [
   'join-with up',
   'mode main',
-  'exec-and-forget rm ~/.aerospaceservice && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=`aerospace list-workspaces --focused`',
 ]
 alt-shift-l = [
   'join-with right',
   'mode main',
-  'exec-and-forget rm ~/.aerospaceservice && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=`aerospace list-workspaces --focused`',
 ]
 
 down = 'volume down'
 shift-down = [
   'volume set 0',
   'mode main',
-  'exec-and-forget rm ~/.aerospaceservice && sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=`aerospace list-workspaces --focused`',
 ]
 up = 'volume up'
 

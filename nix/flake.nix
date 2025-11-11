@@ -56,7 +56,6 @@
           pkgs.fnm
           pkgs.pnpm
           pkgs.stow
-          pkgs.spotify
           pkgs.lazygit
           pkgs.zoom-us
           pkgs.cocoapods
@@ -271,11 +270,16 @@
           "github-copilot-for-xcode"
           "zed"
           "slack"
+          "spotify"
         ];
         taps = [
           "nikitabobko/tap" # aerospace
           "cargo-lambda/cargo-lambda"
         ];
+
+        # put casks in ~/Applications so updates don't prompt for admin
+        caskArgs = { appdir = "~/Applications"; };
+
         masApps = {
           # AdGuardForSafari = 1440147259; # replaced by adguard brew package
           Amphetamine = 937984704;
