@@ -168,6 +168,7 @@ killall -HUP cfprefsd
 
 sudo ln -sfn /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-17.jdk
 
+mkdir -p /opt/homebrew/bin
 echo 'nix-shell -p gh --run "gh $(printf "%q " "$@")"' >/opt/homebrew/bin/gh
 echo 'nix-shell -p ncdu --run "ncdu $(printf "%q " "$@")"' >/opt/homebrew/bin/ncdu
 echo 'nix-shell -p doppler --run "doppler $(printf "%q " "$@")"' >/opt/homebrew/bin/doppler
@@ -178,6 +179,14 @@ echo 'nix-shell -p mosh --run "mosh $(printf "%q " "$@")"' >/opt/homebrew/bin/mo
 echo 'nix-shell -p nginx --run "nginx $(printf "%q " "$@")"' >/opt/homebrew/bin/nginx
 echo 'nix-shell -p neofetch --run "neofetch $(printf "%q " "$@")"' >/opt/homebrew/bin/neofetch
 echo 'nix-shell -p xcbeautify --run "xcbeautify $*"' >/opt/homebrew/bin/xcbeautify
+echo '
+#!/bin/bash
+OLD_WORKING_DIR=$(pwd)
+cd ~/dotfiles/scripts/mcp-sentry
+pnpm install >/dev/null 2>&1
+pnpm --silent run latest-issue "$@" --cwd="$OLD_WORKING_DIR"
+cd "$OLD_WORKING_DIR"' >/opt/homebrew/bin/sentry-latest
+
 echo 'raw_flyctl() {
   nix-shell -p flyctl --run "flyctl $(printf "%q " "$@")"
 }

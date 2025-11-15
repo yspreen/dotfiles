@@ -1,9 +1,12 @@
-model = "gpt-5-codex"
+model = "gpt-5.1-codex"
 sandbox_mode = "danger-full-access"
-[mcp_servers.sentry]
-args = ["dlx", "mcp-remote@latest", "https://mcp.sentry.dev/mcp"]
-command = "pnpm"
+# [mcp_servers.sentry]
+# args = ["dlx", "mcp-remote@latest", "https://mcp.sentry.dev/mcp"]
+# command = "pnpm"
 [sandbox_workspace_write]
 network_access = true
 [features]
 web_search_request = true
+
+[notice]
+hide_gpt5_1_migration_prompt = true

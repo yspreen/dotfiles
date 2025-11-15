@@ -1,0 +1,15 @@
+{
+  "name": "mcp-sentry",
+  "version": "1.0.0",
+  "description": "Utility helpers for talking to the Sentry MCP server from scripts.",
+  "type": "module",
+  "scripts": {
+    "latest-issue": "node sentry-latest-issue.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mcp-remote": "^0.1.30"
+  }
+}

@@ -601,3 +601,5 @@ gacpg() {
 killfly() {
     ps -A | grep fly | grep -v grep | grep -Eo '^\s*\d+' | while read pid; do kill $pid; done
 }
+
+alias cursor="open -a Cursor"
