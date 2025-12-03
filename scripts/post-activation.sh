@@ -44,7 +44,7 @@ install_xcode() {
 
 echo "#!/bin/bash" >/opt/homebrew/bin/aws
 echo "" >/opt/homebrew/bin/aws
-echo 'nix-shell -p awscli --run "aws $(printf '\''%q '\'' "$@")"' >/opt/homebrew/bin/aws
+echo 'nix-shell -p awscli2 --run "aws $(printf '\''%q '\'' "$@")"' >/opt/homebrew/bin/aws
 chmod +x /opt/homebrew/bin/aws
 
 sudotouchid() {
@@ -187,7 +187,8 @@ pnpm install >/dev/null 2>&1
 pnpm --silent run latest-issue "$@" --cwd="$OLD_WORKING_DIR"
 cd "$OLD_WORKING_DIR"' >/opt/homebrew/bin/sentry-latest
 
-echo 'raw_flyctl() {
+echo '#!/bin/bash
+raw_flyctl() {
   nix-shell -p flyctl --run "flyctl $(printf "%q " "$@")"
 }
 
@@ -211,7 +212,8 @@ else
   raw_flyctl "$@"
 fi
 ' >/opt/homebrew/bin/flyctl
-echo 'flyctl "$@"' >/opt/homebrew/bin/fly
+echo '#!/bin/bash
+flyctl "$@"' >/opt/homebrew/bin/fly
 chmod +x /opt/homebrew/bin/* 2>/dev/null || true
 
 [ $(find /Applications -maxdepth 1 -iname 'xcode*' | wc -l) -gt 0 ] || install_xcode

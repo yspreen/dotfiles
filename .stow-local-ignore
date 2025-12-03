@@ -4,6 +4,8 @@
 ^/scripts(/.*)?$
 ^/copy(/.*)?$
 ^/other(/.*)?$
+^/.claude/debug/.*$
+^/.claude/projects/.*$
 ^/readme.md$
 ^/.ssh_pw$
 ^/.ssh_enc$

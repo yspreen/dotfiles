@@ -571,6 +571,12 @@ cx() {
     codex "$@"
 }
 
+cl() {
+    which claude-code >/dev/null 2>&1 && brew upgrade --cask claude-code
+    which claude-code >/dev/null 2>&1 || brew install --cask claude-code
+    claude "$@" --dangerously-skip-permissions
+}
+
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 openscad() {
     nix-shell -p openscad --run "open /nix/store/`ls /nix/store | grep openscad | grep -v .drv`/Applications/OpenSCAD.app"
@@ -603,3 +609,66 @@ killfly() {
 }
 
 alias cursor="open -a Cursor"
+
+# find nearest .fly_token in parent directories
+find_fly_token() {
+    local dir="$PWD"
+    while [[ "$dir" != "/" ]]; do
+        if [[ -f "$dir/.fly_token" ]]; then
+            echo "$dir/.fly_token"
+            return 0
+        fi
+        dir="$(dirname "$dir")"
+    done
+    return 1
+}
+
+flylaunch() {
+    local app_name="$1"
+    if [[ -z "$app_name" ]]; then
+        echo "Usage: flylaunch <app-name>"
+        return 1
+    fi
+
+    local token
+    if token_file=$(find_fly_token); then
+        token=$(cat "$token_file")
+    fi
+
+    if [[ -z "$token" ]]; then
+        echo "Error: Could not find .fly_token"
+        return 1
+    fi
+
+    curl -sS -X POST "https://api.machines.dev/v1/apps" \
+        -H "Authorization: Bearer $token" \
+        -H "Content-Type: application/json" \
+        -d "{\"app_name\": \"$app_name\", \"org_slug\": \"personal\"}"
+    echo
+}
+
+flydeleteapp() {
+    local app_name="$1"
+    if [[ -z "$app_name" ]]; then
+        echo "Usage: flylaunch <app-name>"
+        return 1
+    fi
+
+    local token
+    if token_file=$(find_fly_token); then
+        token=$(cat "$token_file")
+    fi
+
+    if [[ -z "$token" ]]; then
+        echo "Error: Could not find .fly_token"
+        return 1
+    fi
+
+    curl -o - -I -sS -X DELETE "https://api.machines.dev/v1/apps/$app_name" \
+        -H "Authorization: Bearer $token" \
+        -H "Content-Type: application/json" 2>&1 | head -1
+    echo
+}
+
+# Added by Antigravity
+export PATH="/Users/user/.antigravity/antigravity/bin:$PATH"
