@@ -334,8 +334,17 @@ function findConfigForPath(cwd, config) {
 function isOpenStatus(statusText) {
   if (!statusText) return true; // be permissive if unknown
   const normalized = statusText.toLowerCase();
+  // Check for explicitly open statuses
+  if (
+    normalized === "unresolved" ||
+    normalized === "regressed" ||
+    normalized.includes("unhandled")
+  ) {
+    return true;
+  }
+  // Check for closed statuses
   return !(
-    normalized.includes("resolved") ||
+    normalized === "resolved" ||
     normalized.includes("closed") ||
     normalized.includes("archived") ||
     normalized.includes("ignored")
