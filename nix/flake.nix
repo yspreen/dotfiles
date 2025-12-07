@@ -271,6 +271,7 @@
           "zed"
           "slack"
           "spotify"
+          "obs"
         ];
         taps = [
           "nikitabobko/tap" # aerospace
