@@ -144,7 +144,7 @@ alt-q = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh Q Figma'
 # alt-p = 'workspace P'
 alt-r = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh R Gmail'
 # alt-s = 'workspace S'
-alt-t = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh T ChatGPT'
+alt-t = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh T Claude'
 # alt-u = 'workspace U'
 alt-v = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh V Spotify'
 alt-w = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh W Calendar'
@@ -335,6 +335,10 @@ run = ['move-node-to-workspace R']
 
 [[on-window-detected]]
 if.app-id = 'com.openai.chat'
+run = ['move-node-to-workspace T']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari.WebApp.4204FF37-08AF-44E1-B2A4-5A0EF902B64E'
 run = ['move-node-to-workspace T']
 
 [[on-window-detected]]

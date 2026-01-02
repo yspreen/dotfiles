@@ -220,3 +220,4 @@ chmod +x /opt/homebrew/bin/* 2>/dev/null || true
 which xcodebuild || xcode-select --install
 
 [ -d ~/Applications/Gmail.app ] || unzip -q ~/dotfiles/other/Gmail.zip -d ~/Applications
+[ -d ~/Applications/Claude.app ] || unzip -q ~/dotfiles/other/Claude.zip -d ~/Applications

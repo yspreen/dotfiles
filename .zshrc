@@ -588,6 +588,10 @@ petname() {
     nix run nixpkgs#rust-petname -- -w "$words"
 }
 
+stripe() {
+    nix run nixpkgs#stripe-cli -- "$@"
+}
+
 # Git Add Commit Push make Github repo
 gacpg() {
     gac "$@"
@@ -668,6 +672,11 @@ flydeleteapp() {
         -H "Authorization: Bearer $token" \
         -H "Content-Type: application/json" 2>&1 | head -1
     echo
+}
+
+killport() {
+    local port=${1:-3000}
+    kill `lsof -i :$port | grep -Eio '^\s*\w*\s*\d+' | grep -Eio '\d+'`
 }
 
 # Added by Antigravity

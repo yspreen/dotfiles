@@ -63,6 +63,7 @@
           pkgs.uv
           pkgs.go
           pkgs.fd
+          pkgs.keka
         ];
 
       fonts.packages = [
@@ -151,7 +152,7 @@
           AppleSymbolicHotKeys = {
             # Disable 'Cmd + Space' for Spotlight Search
             "64" = {
-              enabled = false;
+              enabled = true;
             };
             # Disable 'Ctrl + Space'
             "60" = {
@@ -272,10 +273,14 @@
           "slack"
           "spotify"
           "obs"
+          "calendr"
+          "codexbar"
         ];
         taps = [
           "nikitabobko/tap" # aerospace
           "cargo-lambda/cargo-lambda"
+          "pakerwreah/calendr"
+          "steipete/tap"
         ];
 
         # put casks in ~/Applications so updates don't prompt for admin
