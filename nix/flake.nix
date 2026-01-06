@@ -63,6 +63,7 @@
           pkgs.uv
           pkgs.go
           pkgs.fd
+          pkgs.ripgrep
           pkgs.keka
         ];
 
@@ -245,6 +246,7 @@
           "cargo-lambda"
           "zig" # for cargo lambda
           "mas"
+          "claude-code"
           "openjdk@17"
         ];
         casks = [
