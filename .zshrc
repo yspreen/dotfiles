@@ -572,8 +572,7 @@ cx() {
 }
 
 cl() {
-    which claude-code >/dev/null 2>&1 && brew upgrade --cask claude-code
-    which claude-code >/dev/null 2>&1 || brew install --cask claude-code
+    (brew upgrade --cask claude-code >/dev/null 2>&1 &)
     claude "$@" --dangerously-skip-permissions
 }
 
