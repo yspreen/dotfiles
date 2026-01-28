@@ -314,10 +314,10 @@ fixxcodetemplate() {
     echo "$xcode_apps" | while read -r app
     do
         echo "Processing $app"
-        
+
         # Construct the path to the Templates directory
         templates_dir="$app/Contents/Developer/Library/Xcode/Templates/"
-        
+
 #/Applications/Xcode-16.0.0-Release.Candidate.app/Contents/Developer/Library/Xcode/Templates/File Templates/MultiPlatform/Source/Swift File.xctemplate/___FILEBASENAME___.swift
 
         # Check if the Templates directory exists
@@ -325,7 +325,7 @@ fixxcodetemplate() {
             # Find all .swift files in the Templates directory and its subdirectories
             while IFS= read -r -d '' file; do
                 echo "  Modifying $file"
-                
+
                 # Perform the string replacement
                 perform_sed_replacement "$file"
             done < <(find "$templates_dir" -type f -name "*.swift" -print0)
@@ -363,7 +363,7 @@ nu() {
 
 # nix switch
 ns() {
-    sudo darwin-rebuild switch --impure --flake ~/dotfiles/nix#spreen 
+    sudo darwin-rebuild switch --impure --flake ~/dotfiles/nix#spreen
 }
 
 # nix clean
@@ -478,7 +478,7 @@ cleancaches() {
     bash -c 'sudo rm -rf /Library/Caches/*'
     bash -c 'sudo rm -rf /Library/Logs/*'
     bash -c 'rm -rf ~/.Trash/*'
-    
+
     # macOS system caches
     bash -c 'sudo rm -rf /private/var/folders/*/C/com.apple.DeveloperTools'
     bash -c 'sudo rm -rf /System/Library/Caches/*'
@@ -532,7 +532,7 @@ get-current-prompt() {
     while [[ ! -s ~/prompt.txt ]]; do
         sleep 0.5
     done
-    
+
     prompt=$(cat ~/prompt.txt)
     # system="IMPORTANT: We're running in infinite mode. This means you should **never** end the current chat. To get the next user input, don't end your turn, but just call the "'`get-next-prompt`'" command in the shell tool. This will fetch the next user input without ending the chat."
 
@@ -591,6 +591,10 @@ stripe() {
     nix run nixpkgs#stripe-cli -- "$@"
 }
 
+gcloud() {
+	nix run nixpkgs#google-cloud-sdk -- "$@"
+}
+
 # Git Add Commit Push make Github repo
 gacpg() {
     gac "$@"
@@ -605,7 +609,7 @@ gacpg() {
     nix run nixpkgs#gh -- repo create "$(basename "$PWD")" --source=. --remote=origin --private --push && return 0
     nix run nixpkgs#gh -- repo create "$(basename "$PWD")-$(date +%Y)" --source=. --remote=origin --private --push && return 0
     nix run nixpkgs#gh -- repo create "$(basename "$PWD")-$fallback" --source=. --remote=origin --private --push && return 0
-} 
+}
 
 killfly() {
     ps -A | grep fly | grep -v grep | grep -Eo '^\s*\d+' | while read pid; do kill $pid; done
@@ -676,6 +680,10 @@ flydeleteapp() {
 killport() {
     local port=${1:-3000}
     kill `lsof -i :$port | grep -Eio '^\s*\w*\s*\d+' | grep -Eio '\d+'`
+}
+
+midnight() {
+	s=$(( $(date -v+1d -v0H -v0M -v0S +%s) - $(date +%s) )); echo "Waiting $((s/3600))h $((s%3600/60))m $((s%60))s until midnight"; sleep $s
 }
 
 # Added by Antigravity

@@ -277,6 +277,7 @@
           "obs"
           "calendr"
           "codexbar"
+          "ghostty"
         ];
         taps = [
           "nikitabobko/tap" # aerospace

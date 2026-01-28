@@ -271,7 +271,7 @@ run = ['move-node-to-workspace X']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.iphonesimulator'
-run = ['move-node-to-workspace X']
+run = ['layout floating']
 
 [[on-window-detected]]
 if.app-id = 'com.github.CopilotForXcode.ExtensionService'

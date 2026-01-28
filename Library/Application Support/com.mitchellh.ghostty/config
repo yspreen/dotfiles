@@ -4,7 +4,8 @@ font-size = 17
 theme = Bluloco Light
 background-blur-radius = 10
 background-opacity = 0.5	
-keybind = cmd+backspace=esc:w
+keybind = opt+backspace=text:\x17
+keybind = cmd+backspace=text:\x15
 window-save-state = always
 font-variation = "wght=500"
 window-padding-x = 18

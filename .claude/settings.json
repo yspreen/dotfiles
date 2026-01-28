@@ -1,3 +1,6 @@
 {
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "enabledPlugins": {
+    "dev-browser@dev-browser-marketplace": true
+  }
 }
