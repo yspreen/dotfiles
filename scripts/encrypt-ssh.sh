@@ -12,7 +12,7 @@ fi
 PASSWORD=$(cat .ssh_pw)
 
 # Build list of items to include only if they exist
-items=(.ssh .aws .doppler .npmrc .gnupg scriptswithsecrets .sentryclirc)
+items=(.ssh .aws .doppler .npmrc .gnupg scriptswithsecrets .sentryclirc .appstoreconnect)
 existing=()
 for item in $items; do
     if [ -e "$item" ]; then

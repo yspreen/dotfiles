@@ -1,6 +1,7 @@
 .DS_Store
 /.ssh_pw
 /.ssh/
+/.appstoreconnect/
 /.doppler/
 /.npmrc
 /.aws/
