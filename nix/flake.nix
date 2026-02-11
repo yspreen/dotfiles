@@ -246,7 +246,6 @@
           "cargo-lambda"
           "zig" # for cargo lambda
           "mas"
-          "claude-code"
           "rudrankriyam/tap/asc"
           "openjdk@17"
         ];
@@ -279,6 +278,7 @@
           "calendr"
           "codexbar"
           "ghostty"
+          "claude-code"
         ];
         taps = [
           "nikitabobko/tap" # aerospace
