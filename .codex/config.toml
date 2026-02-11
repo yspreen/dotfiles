@@ -1,13 +1,16 @@
-model = "gpt-5.1-codex-max"
+model = "gpt-5.3-codex"
 model_reasoning_effort = "high"
 sandbox_mode = "danger-full-access"
+personality = "pragmatic"
 
 [sandbox_workspace_write]
 network_access = true
-[features]
-web_search_request = true
+web_search = "live"
 
 [notice]
 "hide_gpt-5.1-codex-max_migration_prompt" = true
 hide_gpt5_1_migration_prompt = true
 hide_rate_limit_model_nudge = true
+
+[notice.model_migrations]
+"gpt-5.1-codex-max" = "gpt-5.2-codex"

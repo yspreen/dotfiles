@@ -12,3 +12,8 @@
 .codex/sessions/
 .codex/skills/
 .codex/tmp
+.codex/.codex-global-state.json
+.codex/models_cache.json
+.codex/sqlite/codex-dev.db
+.codex/vendor_imports/skills-curated-cache.json
+.codex/vendor_imports/skills/
