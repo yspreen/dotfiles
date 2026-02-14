@@ -696,3 +696,7 @@ midnight() {
 export PATH="/Users/user/.antigravity/antigravity/bin:$PATH"
 
 export ANDROID_HOME=$HOME/Library/Android/sdk && export PATH=$PATH:$ANDROID_HOME/emulator && export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+design-revision-plan() {
+	claude -p "Your goal is to review our design-revision-plan.md. Make sure it addresses all the goals and concerns of the frontend design skill. Study the files in this folder closely. Does the plan come up with 5 different iterations of the current home page? They should, when done, be hosted on /1, ..., /5. It is CRITICAL that these five designs look DRASTICALLY different so that we give our client meaningfully different drafts. Not just different color schemes, different designs."
+}
