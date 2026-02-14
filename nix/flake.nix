@@ -268,7 +268,7 @@
           "sf-symbols"
           "ukelele"
           "karabiner-elements"
-          "fork"
+          "gitbutler"
           "raycast"
           "github-copilot-for-xcode"
           "zed"
