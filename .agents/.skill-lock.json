@@ -6,99 +6,99 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-build-lifecycle/SKILL.md",
-      "skillFolderHash": "",
+      "skillFolderHash": "2a3d381411b00e1c22a16917d649d4aff3c93da0",
       "installedAt": "2026-02-11T21:10:35.445Z",
-      "updatedAt": "2026-02-11T22:04:43.734Z"
+      "updatedAt": "2026-02-13T22:28:00.599Z"
     },
     "asc-cli-usage": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-cli-usage/SKILL.md",
-      "skillFolderHash": "",
+      "skillFolderHash": "5d0a4ad28c807995f330b12732f48057826d0cff",
       "installedAt": "2026-02-11T21:10:35.502Z",
-      "updatedAt": "2026-02-11T22:04:43.788Z"
+      "updatedAt": "2026-02-13T22:28:00.648Z"
     },
     "asc-id-resolver": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-id-resolver/SKILL.md",
-      "skillFolderHash": "",
+      "skillFolderHash": "895ad60198bb498c9b0e748b203bb03bc11d8f1e",
       "installedAt": "2026-02-11T21:10:35.551Z",
-      "updatedAt": "2026-02-11T22:04:43.844Z"
+      "updatedAt": "2026-02-13T22:28:00.695Z"
     },
     "asc-metadata-sync": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-metadata-sync/SKILL.md",
-      "skillFolderHash": "",
+      "skillFolderHash": "ffb1456b3c60f9d128e092a8c1e8b6a38b185f1f",
       "installedAt": "2026-02-11T21:10:35.604Z",
-      "updatedAt": "2026-02-11T22:04:43.919Z"
+      "updatedAt": "2026-02-13T22:28:00.748Z"
     },
     "asc-notarization": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-notarization/SKILL.md",
-      "skillFolderHash": "",
+      "skillFolderHash": "36d8850790528df621beafcd6e511a6d24d685c0",
       "installedAt": "2026-02-11T21:10:35.656Z",
-      "updatedAt": "2026-02-11T22:04:44.052Z"
+      "updatedAt": "2026-02-13T22:28:00.809Z"
     },
     "asc-ppp-pricing": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-ppp-pricing/SKILL.md",
-      "skillFolderHash": "",
+      "skillFolderHash": "4cf3cd38729fc3548b9a9a8df276e122ad1a96ac",
       "installedAt": "2026-02-11T21:10:35.709Z",
-      "updatedAt": "2026-02-11T22:04:44.113Z"
+      "updatedAt": "2026-02-13T22:28:00.867Z"
     },
     "asc-release-flow": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-release-flow/SKILL.md",
-      "skillFolderHash": "",
+      "skillFolderHash": "4915c35537763e7f05643479c049425dfffe865f",
       "installedAt": "2026-02-11T21:10:35.761Z",
-      "updatedAt": "2026-02-11T22:04:44.195Z"
+      "updatedAt": "2026-02-13T22:28:00.911Z"
     },
     "asc-signing-setup": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-signing-setup/SKILL.md",
-      "skillFolderHash": "",
+      "skillFolderHash": "8b2604f2319bf6e03b86028c2d759de9fb8e9725",
       "installedAt": "2026-02-11T21:10:35.901Z",
-      "updatedAt": "2026-02-11T22:04:44.245Z"
+      "updatedAt": "2026-02-13T22:28:00.960Z"
     },
     "asc-submission-health": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-submission-health/SKILL.md",
-      "skillFolderHash": "",
+      "skillFolderHash": "6ca3230cee881b1d1013f27b51db8627ca21e611",
       "installedAt": "2026-02-11T21:10:35.943Z",
-      "updatedAt": "2026-02-11T22:04:44.322Z"
+      "updatedAt": "2026-02-13T22:28:01.005Z"
     },
     "asc-testflight-orchestration": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-testflight-orchestration/SKILL.md",
-      "skillFolderHash": "",
+      "skillFolderHash": "656aa6bb681a823fcc4e339f1b6c8817c990632a",
       "installedAt": "2026-02-11T21:10:35.986Z",
-      "updatedAt": "2026-02-11T22:04:44.411Z"
+      "updatedAt": "2026-02-13T22:28:01.057Z"
     },
     "asc-xcode-build": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-xcode-build/SKILL.md",
-      "skillFolderHash": "",
+      "skillFolderHash": "dbe116df4539acff2a5a560a70d7e6cb21a521e4",
       "installedAt": "2026-02-11T21:10:36.034Z",
-      "updatedAt": "2026-02-11T22:04:44.589Z"
+      "updatedAt": "2026-02-13T22:28:01.106Z"
     }
   },
   "dismissed": {
