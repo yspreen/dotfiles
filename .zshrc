@@ -187,7 +187,8 @@ alias cat=bat
 alias randompw='LC_ALL=C tr -dc "A-Za-z0-9-_" </dev/urandom | head -c 20 ; echo'
 
 # alias kraken='LC_CTYPE=C open -na GitKraken --args -p "$(git rev-parse --show-toplevel)"'
-alias kraken='fork'
+alias kraken='open -a "Git Butler"'
+fork() { open -a "Git Butler" "${1:-.}"; }
 alias sentry-wizard='pnpm dlx @sentry/wizard@latest'
 
 alias wifion='networksetup -setnetworkserviceenabled Wi-Fi on'
