@@ -17,3 +17,4 @@
 .codex/sqlite/codex-dev.db
 .codex/vendor_imports/skills-curated-cache.json
 .codex/vendor_imports/skills/
+.codex/shell_snapshots
