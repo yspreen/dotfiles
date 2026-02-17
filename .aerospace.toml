@@ -134,7 +134,7 @@ alt-a = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh A Safari'
 alt-c = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh C "Zed"'
 alt-d = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh D Notion'
 alt-e = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh E "Messages"'
-alt-f = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh F "GitButler" f'
+alt-f = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh F "GitButler Nightly" f'
 alt-g = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh G Ghostty f'
 alt-q = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh Q Figma'
 # alt-i = 'workspace I'
@@ -283,7 +283,11 @@ run = ['layout floating', 'move-node-to-workspace G']
 
 [[on-window-detected]]
 if.app-id = 'com.gitbutler.app'
-run = ['layout floating', 'move-node-to-workspace F']
+run = ['move-node-to-workspace F']
+
+[[on-window-detected]]
+if.app-id = 'com.gitbutler.app.nightly'
+run = ['move-node-to-workspace F']
 
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
