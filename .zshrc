@@ -76,6 +76,11 @@ if [[ ":$FPATH:" != *":/Users/$USER/.zsh/completions:"* ]]; then export FPATH="/
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH="/opt/homebrew/bin:$PATH"; export PATH;
 
+# Prevent stale local "but" shims from shadowing the intended command.
+if [[ -e "$HOME/.local/bin/but" || -L "$HOME/.local/bin/but" ]]; then
+    rm -f "$HOME/.local/bin/but"
+fi
+
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/$USER/.oh-my-zsh"
 
@@ -189,15 +194,6 @@ alias randompw='LC_ALL=C tr -dc "A-Za-z0-9-_" </dev/urandom | head -c 20 ; echo'
 # alias kraken='LC_CTYPE=C open -na GitKraken --args -p "$(git rev-parse --show-toplevel)"'
 alias kraken='open -a "GitButler"'
 fork() { open -a "GitButler" "${1:-.}"; }
-but() {
-    local gitbutler_bin="$HOME/Applications/GitButler Nightly.app/Contents/MacOS/gitbutler-tauri"
-
-    if (( $# == 0 )); then
-        "$gitbutler_bin" status
-    else
-        "$gitbutler_bin" "$@"
-    fi
-}
 alias sentry-wizard='pnpm dlx @sentry/wizard@latest'
 
 alias wifion='networksetup -setnetworkserviceenabled Wi-Fi on'
