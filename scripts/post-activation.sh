@@ -214,6 +214,22 @@ fi
 ' >/opt/homebrew/bin/flyctl
 echo '#!/bin/bash
 flyctl "$@"' >/opt/homebrew/bin/fly
+
+cat <<'EOF' >/opt/homebrew/bin/but
+#!/bin/bash
+gitbutler_bin="$HOME/Applications/GitButler Nightly.app/Contents/MacOS/gitbutler-tauri"
+
+if [ "$#" -eq 0 ]; then
+    "$gitbutler_bin" status
+else
+    "$gitbutler_bin" "$@"
+fi
+EOF
+
+# Keep PATH resolution stable even if GitButler creates its own ~/.local/bin/but symlink.
+mkdir -p "$HOME/.local/bin"
+ln -sfn /opt/homebrew/bin/but "$HOME/.local/bin/but"
+
 chmod +x /opt/homebrew/bin/* 2>/dev/null || true
 
 [ $(find /Applications -maxdepth 1 -iname 'xcode*' | wc -l) -gt 0 ] || install_xcode
