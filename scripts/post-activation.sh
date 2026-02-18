@@ -169,6 +169,10 @@ killall -HUP cfprefsd
 sudo ln -sfn /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-17.jdk
 
 mkdir -p /opt/homebrew/bin
+cat <<'EOF' >/opt/homebrew/bin/search-internet
+#!/usr/bin/env bash
+exec "${HOME}/dotfiles/scripts/search-internet.sh" "$@"
+EOF
 echo 'nix-shell -p gh --run "gh $(printf "%q " "$@")"' >/opt/homebrew/bin/gh
 echo 'nix-shell -p ncdu --run "ncdu $(printf "%q " "$@")"' >/opt/homebrew/bin/ncdu
 echo 'nix-shell -p doppler --run "doppler $(printf "%q " "$@")"' >/opt/homebrew/bin/doppler
@@ -229,6 +233,7 @@ EOF
 # Keep PATH resolution stable even if GitButler creates its own ~/.local/bin/but symlink.
 mkdir -p "$HOME/.local/bin"
 ln -sfn /opt/homebrew/bin/but "$HOME/.local/bin/but"
+ln -sfn /opt/homebrew/bin/search-internet "$HOME/.local/bin/search-internet"
 
 chmod +x /opt/homebrew/bin/* 2>/dev/null || true
 
