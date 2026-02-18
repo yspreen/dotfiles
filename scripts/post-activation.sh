@@ -173,6 +173,10 @@ cat <<'EOF' >/opt/homebrew/bin/search-internet
 #!/usr/bin/env bash
 exec "${HOME}/dotfiles/scripts/search-internet.sh" "$@"
 EOF
+cat <<'EOF' >/opt/homebrew/bin/swift-format
+#!/usr/bin/env bash
+exec nix run nixpkgs#swift-format -- "$@"
+EOF
 echo 'nix-shell -p gh --run "gh $(printf "%q " "$@")"' >/opt/homebrew/bin/gh
 echo 'nix-shell -p ncdu --run "ncdu $(printf "%q " "$@")"' >/opt/homebrew/bin/ncdu
 echo 'nix-shell -p doppler --run "doppler $(printf "%q " "$@")"' >/opt/homebrew/bin/doppler
