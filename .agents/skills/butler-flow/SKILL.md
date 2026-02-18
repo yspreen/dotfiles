@@ -1,6 +1,6 @@
 ---
 name: butler-flow
-description: "End-to-end feature workflow: ask for feature, create branch, plan, implement with surgical commits, push, and open PR — all through the but CLI. Use when starting any new feature or bug fix."
+description: "End-to-end feature workflow: ask for feature, create branch, plan, implement with surgical commits — all through the but CLI. Use when starting any new feature or bug fix."
 ---
 
 # Butler Flow
@@ -10,6 +10,8 @@ Orchestrates a complete feature branch lifecycle using GitButler (`but`) for all
 ## Prerequisites
 
 Invoke the `gitbutler` skill FIRST to load the full `but` CLI reference. Use it as your source of truth for command syntax and flags throughout this flow.
+
+**PARALLEL AGENTS: Many agents may be running simultaneously on different GitButler branches. Always ignore changes, hunks, and files that are not yours. Only commit, amend, or act on changes from YOUR plan.**
 
 ## Step 1 — Gather Context
 
@@ -48,6 +50,13 @@ Name: `<branch-name>`
 All version control uses GitButler CLI (`but`). NEVER use `git add`, `git commit`,
 `git push`, `git checkout`, `git rebase`, or `gh pr create`.
 
+**Multiple agents run in parallel on different branches. Always ignore changes that
+are not yours. Only touch hunks whose diff content matches work from THIS plan.**
+
+**NEVER unapply, remove, or disable another branch.** Other agents are actively
+working on those branches. Unapplying a branch will destroy their work. If a
+conflict blocks your commit, escalate to the user — do NOT try to unapply anything.
+
 ### How to commit (graduated escalation)
 
 Other agents may be working in parallel on other GitButler branches. When multiple
@@ -80,51 +89,21 @@ Repeat for each rejected ID. `but rub` may print `AssignmentRejection` warnings 
 Then run `but diff --json` again — hunk IDs will have changed. Re-identify your
 hunks by reading their diff content, and retry the commit with the new IDs.
 
-**Step 4 — If commit still fails after unassign:**
-
-A specific other branch is blocking. Find which branch by reading the error.
-Unapply ONLY that branch, commit, then re-apply it:
-
-    but unapply <conflicting-branch-cliId> --json
-    but diff --json
-    but commit "<branch-name>" -c -m "<message>" --changes <ids> --json --status-after
-    but apply <conflicting-branch-name> --json
-
-**Step 5 — If still stuck:** Stop and ask the user for help. NEVER loop more than
-3 total attempts per commit.
+**Step 4 — If still stuck after unassign:** Stop and ask the user for help. NEVER
+unapply or disable another branch — other agents are working on them. NEVER loop
+more than 3 total attempts per commit.
 
 ### After EVERY commit — verify completeness
 
-Check the `--status-after` output and confirm NO uncommitted changes remain for files
-you edited. If changes remain:
+Check the `--status-after` output for uncommitted changes in files you edited.
+**Ignore any changes that are not from YOUR plan** — other agents may be working in
+parallel. If YOUR changes remain:
 
-- They are YOUR changes. Commit them with a follow-up `but commit`.
+- Commit them with a follow-up `but commit`.
 - If hunks won't commit, try `but amend <hunk-id> <commit-id> --json --status-after`.
   **`but amend` takes ONE hunk ID at a time.** The commit ID changes after each amend,
   so read `new_commit_id` from the result and use it for the next.
 - NEVER retry more than twice. If stuck, stop and ask the user for help.
-
-### How to create PR
-
-`but pr new` automatically pushes the branch before creating the PR. Do NOT run
-`but push` separately — it's redundant.
-
-ALWAYS use this exact pattern (substitute your values):
-
-    but pr new "<branch-name>" -m "$(cat <<'EOF'
-    <PR title — concise, under 70 chars>
-
-    ## Summary
-    <what changed and why>
-
-    ## Test plan
-    <how to verify>
-    EOF
-    )"
-
-- The first line of `-m` becomes the PR title, the rest becomes the description
-- The `-m` flag is REQUIRED — Claude cannot open an interactive editor
-- Do NOT use `gh pr create` — use `but pr new`
 
 ---
 
@@ -141,7 +120,7 @@ ALWAYS use this exact pattern (substitute your values):
 <detailed description of code changes>
 
 ### After implementing
-1. Run `bunx eslint .` — must pass
+1. Run the repo-appropriate formatter/linter command(s) if configured (for example: `xcrun swift-format format --in-place --recursive --configuration .swift-format .` for Swift repos, or `bunx eslint .` for JS/TS repos) — must pass
 2. Follow the "How to commit" steps above
 3. Commit message: `"<message>"`
 
@@ -151,9 +130,8 @@ ALWAYS use this exact pattern (substitute your values):
 
 ## Final Steps
 
-1. Run `bunx eslint .` one final time
-2. Create PR with `but pr new` using the pattern in "How to create PR" above (this also pushes automatically)
-3. Report: branch name, each commit (hash + message), PR URL
+1. Run the repo-appropriate formatter/linter command(s) one final time (if configured)
+2. Report: branch name, each commit (hash + message)
 ```
 
 Every plan you write MUST include the full "Version Control Rules" section verbatim. Do not abbreviate it, do not say "see the gitbutler skill," do not assume the executing agent knows how `but` works. The plan is the only document the agent will have.
