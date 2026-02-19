@@ -233,10 +233,15 @@ else
     "$gitbutler_bin" "$@"
 fi
 EOF
+cat <<'EOF' >/opt/homebrew/bin/butmerge
+#!/usr/bin/env bash
+exec "${HOME}/dotfiles/scripts/butmerge.sh" "$@"
+EOF
 
 # Keep PATH resolution stable even if GitButler creates its own ~/.local/bin/but symlink.
 mkdir -p "$HOME/.local/bin"
 ln -sfn /opt/homebrew/bin/but "$HOME/.local/bin/but"
+ln -sfn /opt/homebrew/bin/butmerge "$HOME/.local/bin/butmerge"
 ln -sfn /opt/homebrew/bin/search-internet "$HOME/.local/bin/search-internet"
 
 chmod +x /opt/homebrew/bin/* 2>/dev/null || true
