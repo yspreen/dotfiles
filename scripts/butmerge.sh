@@ -20,10 +20,28 @@ branch_is_open() {
 }
 
 normalize_pr_json() {
-    jq -c '{
-        title: (.title | gsub("^\\s+|\\s+$"; "")),
-        body: (.body | gsub("^\\s+|\\s+$"; ""))
-    }'
+    jq -c '
+        . as $root
+        | (($root.body | fromjson?) // null) as $parsed
+        | {
+            title: (
+                if ($parsed | type) == "object" and ($parsed | has("title")) and ($parsed | has("body"))
+                then $parsed.title
+                else $root.title
+                end
+                | tostring
+                | gsub("^\\s+|\\s+$"; "")
+            ),
+            body: (
+                if ($parsed | type) == "object" and ($parsed | has("title")) and ($parsed | has("body"))
+                then $parsed.body
+                else $root.body
+                end
+                | tostring
+                | gsub("^\\s+|\\s+$"; "")
+            )
+        }
+    '
 }
 
 validate_pr_json_shape() {
@@ -43,8 +61,11 @@ validate_pr_json_quality() {
         (.body | ascii_downcase) as $body |
         (.title | gsub("^\\s+|\\s+$"; "") | length >= 12) and
         (.body | gsub("^\\s+|\\s+$"; "") | length >= 60) and
-        ($title | test("ready to help|awaiting instructions|test title|untitled|placeholder"; "i") | not) and
-        ($body | test("ready to help|awaiting instructions|i can.t|i cannot|unable to|error:"; "i") | not)
+        ($title | test("^pr\\s*(description|json|title)\\b|^untitled$|^update$|^changes?$|ready to help|awaiting instructions|placeholder|test title"; "i") | not) and
+        ($body | test("ready to help|awaiting instructions|i can.t|i cannot|unable to|error:"; "i") | not) and
+        ($body | test("^\\s*\\{\\s*\"title\"\\s*:\\s*\""; "i") | not) and
+        ($body | test("\\\\\"title\\\\\"\\s*:\\s*\\\\\""; "i") | not) and
+        ($body | test("(^|\\n)-\\s+"))
     ' >/dev/null
 }
 
@@ -74,16 +95,68 @@ $branch_details
 EOF
 }
 
+normalize_commit_subject() {
+    local subject="$1"
+    local cleaned
+
+    cleaned="$(printf '%s' "$subject" | sed -E 's/^[a-z]+(\([^)]+\))?!?:[[:space:]]*//')"
+    cleaned="$(printf '%s' "$cleaned" | sed 's/[[:space:]]\+/ /g; s/^ //; s/ $//; s/[.]$//')"
+    printf '%s' "$cleaned"
+}
+
+strip_ansi() {
+    sed -E $'s/\x1b\\[[0-9;]*[[:alpha:]]//g'
+}
+
 default_pr_json_for_branch() {
     local branch_name="$1"
     local branch_details="$2"
+    local clean_details
     local default_title
     local default_body
+    local commit_subjects
+    local first_subject
+    local cleaned_subject
+    local file_bullets
 
-    default_title="$(printf '%s' "$branch_name" | tr '-' ' ')"
-    default_body="$(printf '%s\n' "$branch_details" | sed -n 's/^[[:xdigit:]]\{7\}[[:space:]]\+/- /p' | head -n 5)"
+    clean_details="$(printf '%s\n' "$branch_details" | strip_ansi)"
+
+    commit_subjects="$(printf '%s\n' "$clean_details" | sed -E -n 's/^[0-9a-fA-F]{7,40}[[:space:]]+//p' | head -n 6)"
+    first_subject="$(printf '%s\n' "$commit_subjects" | head -n 1)"
+    cleaned_subject="$(normalize_commit_subject "$first_subject")"
+
+    if [[ -n "${cleaned_subject//[[:space:]]/}" && "${#cleaned_subject}" -ge 10 ]]; then
+        default_title="$cleaned_subject"
+    else
+        default_title="$(printf '%s' "$branch_name" | tr '-' ' ')"
+    fi
+
+    default_title="$(printf '%s' "$default_title" | sed 's/[[:space:]]\+/ /g; s/^ //; s/ $//')"
+    default_title="$(printf '%s' "$default_title" | awk '{print toupper(substr($0,1,1)) substr($0,2)}')"
+    if [[ "${#default_title}" -gt 90 ]]; then
+        default_title="$(printf '%s' "$default_title" | cut -c1-90 | sed 's/[[:space:]]*$//')"
+    fi
+
+    default_body=""
+    if [[ -n "${commit_subjects//[[:space:]]/}" ]]; then
+        default_body="- Summary of changes:\n"
+        while IFS= read -r subject_line; do
+            [[ -z "${subject_line//[[:space:]]/}" ]] && continue
+            cleaned_subject="$(normalize_commit_subject "$subject_line")"
+            if [[ -n "${cleaned_subject//[[:space:]]/}" ]]; then
+                default_body+="- ${cleaned_subject}\n"
+            fi
+        done <<<"$commit_subjects"
+    fi
+
+    file_bullets="$(printf '%s\n' "$clean_details" | sed -E -n 's/^[[:space:]]{4,}([^[:space:]][^(]*)[[:space:]]*[(].*$/- \1/p' | sed 's/[[:space:]]*$//' | head -n 6)"
+    if [[ -n "${file_bullets//[[:space:]]/}" ]]; then
+        default_body+=$'\n- Files touched:\n'
+        default_body+="$file_bullets"$'\n'
+    fi
+
     if [[ -z "${default_body//[[:space:]]/}" ]]; then
-        default_body="- Updates from branch $branch_name"
+        default_body="- Summary of changes:\n- Updates from branch $branch_name"
     fi
 
     jq -nc \
@@ -166,12 +239,50 @@ generate_pr_json_for_branch() {
 
     pr_json="$(generate_pr_json_with_codex "$prompt_text" || true)"
     if [[ -n "${pr_json//[[:space:]]/}" ]] &&
-        printf '%s\n' "$pr_json" | validate_pr_json_shape; then
+        printf '%s\n' "$pr_json" | validate_pr_json_shape &&
+        printf '%s\n' "$pr_json" | validate_pr_json_quality; then
         printf '%s\n' "$pr_json" | normalize_pr_json
         return
     fi
 
     default_pr_json_for_branch "$branch_name" "$branch_details" | normalize_pr_json
+}
+
+build_branch_details() {
+    local branch_name="$1"
+    local branch_json
+    local commit_lines
+    local file_lines
+    local commit_count
+    local commit_sha
+    local raw_files
+
+    branch_json="$(but status --json | jq -c --arg branch_name "$branch_name" '
+        first(.stacks[]? | .branches[]? | select(.name == $branch_name)) // empty
+    ')"
+
+    if [[ -z "${branch_json//[[:space:]]/}" ]]; then
+        but branch show "$branch_name" -f 2>/dev/null || but branch show "$branch_name" 2>/dev/null || printf 'No branch details available.\n'
+        return
+    fi
+
+    commit_count="$(printf '%s\n' "$branch_json" | jq -r '.commits | length')"
+    commit_lines="$(printf '%s\n' "$branch_json" | jq -r '.commits[]? | "\(.commitId[0:7]) \((.message | split("\n")[0]))"')"
+
+    raw_files=""
+    while IFS= read -r commit_sha; do
+        [[ -z "${commit_sha//[[:space:]]/}" ]] && continue
+        raw_files+=$(git show --pretty='' --name-only "$commit_sha" 2>/dev/null || true)
+        raw_files+=$'\n'
+    done < <(printf '%s\n' "$branch_json" | jq -r '.commits[]?.commitId')
+
+    file_lines="$(printf '%s\n' "$raw_files" | sed '/^$/d' | sort -u | sed 's#^#    #; s#$# (modified)#')"
+
+    printf 'Branch: %s (%s commits ahead)\n\n' "$branch_name" "$commit_count"
+    printf '%s\n' "$commit_lines"
+    if [[ -n "${file_lines//[[:space:]]/}" ]]; then
+        printf '\n%s\n' "$file_lines"
+    fi
 }
 
 find_open_pr_number_for_branch() {
@@ -184,9 +295,10 @@ create_or_get_pr_number() {
     local existing_pr_number
     local branch_details
     local pr_json
-    local pr_message_file
     local title
     local body
+    local message
+    local pr_create_output
 
     existing_pr_number="$(find_open_pr_number_for_branch "$branch_name")"
     if [[ -n "$existing_pr_number" ]]; then
@@ -194,21 +306,64 @@ create_or_get_pr_number() {
         return
     fi
 
-    branch_details="$(but branch show "$branch_name" -f 2>/dev/null || but branch show "$branch_name" 2>/dev/null || printf 'No branch details available.\n')"
+    branch_details="$(build_branch_details "$branch_name")"
     pr_json="$(generate_pr_json_for_branch "$branch_name" "$branch_details")"
+
+    if [[ "${BUTMERGE_DEBUG:-0}" == "1" ]]; then
+        {
+            printf 'DEBUG branch details:\n%s\n' "$branch_details"
+            printf 'DEBUG generated pr_json raw:\n%s\n' "$pr_json"
+        } >&2
+    fi
+
+    pr_json="$(printf '%s\n' "$pr_json" | normalize_pr_json)"
+    if ! printf '%s\n' "$pr_json" | validate_pr_json_shape || ! printf '%s\n' "$pr_json" | validate_pr_json_quality; then
+        [[ "${BUTMERGE_DEBUG:-0}" == "1" ]] && printf 'DEBUG generated JSON failed validation, using deterministic fallback.\n' >&2
+        pr_json="$(default_pr_json_for_branch "$branch_name" "$branch_details" | normalize_pr_json)"
+    fi
+
+    [[ "${BUTMERGE_DEBUG:-0}" == "1" ]] && printf 'DEBUG final pr_json:\n%s\n' "$pr_json" >&2
+
     title="$(printf '%s\n' "$pr_json" | jq -r '.title')"
     body="$(printf '%s\n' "$pr_json" | jq -r '.body')"
 
-    pr_message_file="$(mktemp)"
-    {
-        printf '%s\n\n' "$title"
-        printf '%s\n' "$body"
-    } >"$pr_message_file"
+    if [[ -z "${title//[[:space:]]/}" || -z "${body//[[:space:]]/}" ]]; then
+        pr_json="$(default_pr_json_for_branch "$branch_name" "$branch_details" | normalize_pr_json)"
+        title="$(printf '%s\n' "$pr_json" | jq -r '.title')"
+        body="$(printf '%s\n' "$pr_json" | jq -r '.body')"
+    fi
 
-    but pr new "$branch_name" -F "$pr_message_file"
-    rm -f "$pr_message_file"
+    # Keep title single-line and strip control chars to avoid CLI parsing issues.
+    title="$(printf '%s' "$title" | tr -d '\000-\010\013\014\016-\037\177' | tr '\n' ' ' | sed 's/[[:space:]]\+/ /g; s/^ //; s/ $//')"
+    body="$(printf '%s' "$body" | tr -d '\000-\010\013\014\016-\037\177')"
+    body="${body//$'\r'/}"
+
+    if [[ -z "${title//[[:space:]]/}" ]]; then
+        title="$(printf '%s' "$branch_name" | tr '-' ' ' | sed 's/[[:space:]]\+/ /g; s/^ //; s/ $//')"
+    fi
+    if [[ -z "${body//[[:space:]]/}" ]]; then
+        body="- Updates from branch $branch_name"
+    fi
+
+    message="$(printf '%s\n\n%s' "$title" "$body")"
+
+    if [[ "${BUTMERGE_DEBUG:-0}" == "1" ]]; then
+        {
+            printf 'DEBUG branch: %s\n' "$branch_name"
+            printf 'DEBUG title: %s\n' "$title"
+            printf 'DEBUG body:\n%s\n' "$body"
+            printf 'DEBUG message preview:\n'
+            printf '%s\n' "$message" | sed -n '1,12p'
+        } >&2
+    fi
+
+    pr_create_output="$(but pr new "$branch_name" -m "$message" 2>&1)"
+    printf '%s\n' "$pr_create_output" >&2
 
     existing_pr_number="$(find_open_pr_number_for_branch "$branch_name")"
+    if [[ -z "$existing_pr_number" ]]; then
+        existing_pr_number="$(printf '%s\n' "$pr_create_output" | grep -Eo '#[0-9]+' | tail -n 1 | tr -d '#')"
+    fi
     if [[ -z "$existing_pr_number" ]]; then
         echo "Failed to discover PR number after creating PR for $branch_name" >&2
         exit 1
