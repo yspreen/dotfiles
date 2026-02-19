@@ -1,269 +1,150 @@
 {
   "version": 3,
   "skills": {
+    "asc-app-create-ui": {
+      "source": "rudrankriyam/asc-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
+      "skillPath": "skills/asc-app-create-ui/SKILL.md",
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.042Z",
+      "updatedAt": "2026-02-19T19:37:06.042Z"
+    },
     "asc-build-lifecycle": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-build-lifecycle/SKILL.md",
-      "skillFolderHash": "2a3d381411b00e1c22a16917d649d4aff3c93da0",
-      "installedAt": "2026-02-11T21:10:35.445Z",
-      "updatedAt": "2026-02-18T19:25:32.433Z"
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.090Z",
+      "updatedAt": "2026-02-19T19:37:06.090Z"
     },
     "asc-cli-usage": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-cli-usage/SKILL.md",
-      "skillFolderHash": "5d0a4ad28c807995f330b12732f48057826d0cff",
-      "installedAt": "2026-02-11T21:10:35.502Z",
-      "updatedAt": "2026-02-18T19:25:32.471Z"
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.142Z",
+      "updatedAt": "2026-02-19T19:37:06.142Z"
     },
     "asc-id-resolver": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-id-resolver/SKILL.md",
-      "skillFolderHash": "895ad60198bb498c9b0e748b203bb03bc11d8f1e",
-      "installedAt": "2026-02-11T21:10:35.551Z",
-      "updatedAt": "2026-02-18T19:25:32.518Z"
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.205Z",
+      "updatedAt": "2026-02-19T19:37:06.205Z"
+    },
+    "asc-localize-metadata": {
+      "source": "rudrankriyam/asc-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
+      "skillPath": "skills/asc-localize-metadata/SKILL.md",
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.257Z",
+      "updatedAt": "2026-02-19T19:37:06.257Z"
     },
     "asc-metadata-sync": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-metadata-sync/SKILL.md",
-      "skillFolderHash": "ffb1456b3c60f9d128e092a8c1e8b6a38b185f1f",
-      "installedAt": "2026-02-11T21:10:35.604Z",
-      "updatedAt": "2026-02-18T19:25:32.568Z"
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.327Z",
+      "updatedAt": "2026-02-19T19:37:06.327Z"
     },
     "asc-notarization": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-notarization/SKILL.md",
-      "skillFolderHash": "36d8850790528df621beafcd6e511a6d24d685c0",
-      "installedAt": "2026-02-11T21:10:35.656Z",
-      "updatedAt": "2026-02-18T19:25:32.605Z"
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.372Z",
+      "updatedAt": "2026-02-19T19:37:06.372Z"
     },
     "asc-ppp-pricing": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-ppp-pricing/SKILL.md",
-      "skillFolderHash": "4cf3cd38729fc3548b9a9a8df276e122ad1a96ac",
-      "installedAt": "2026-02-11T21:10:35.709Z",
-      "updatedAt": "2026-02-18T19:25:32.649Z"
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.416Z",
+      "updatedAt": "2026-02-19T19:37:06.416Z"
     },
     "asc-release-flow": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-release-flow/SKILL.md",
-      "skillFolderHash": "6c9ab1db85bb459a60051086ecb5569e99f52147",
-      "installedAt": "2026-02-11T21:10:35.761Z",
-      "updatedAt": "2026-02-18T19:25:32.695Z"
-    },
-    "asc-signing-setup": {
-      "source": "rudrankriyam/asc-skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
-      "skillPath": "skills/asc-signing-setup/SKILL.md",
-      "skillFolderHash": "8b2604f2319bf6e03b86028c2d759de9fb8e9725",
-      "installedAt": "2026-02-11T21:10:35.901Z",
-      "updatedAt": "2026-02-18T19:25:32.789Z"
-    },
-    "asc-submission-health": {
-      "source": "rudrankriyam/asc-skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
-      "skillPath": "skills/asc-submission-health/SKILL.md",
-      "skillFolderHash": "6ca3230cee881b1d1013f27b51db8627ca21e611",
-      "installedAt": "2026-02-11T21:10:35.943Z",
-      "updatedAt": "2026-02-18T19:25:32.834Z"
-    },
-    "asc-testflight-orchestration": {
-      "source": "rudrankriyam/asc-skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
-      "skillPath": "skills/asc-testflight-orchestration/SKILL.md",
-      "skillFolderHash": "5d1d559afab9ef79a4b1ff57e1c062bc37c64780",
-      "installedAt": "2026-02-11T21:10:35.986Z",
-      "updatedAt": "2026-02-18T19:25:32.927Z"
-    },
-    "asc-xcode-build": {
-      "source": "rudrankriyam/asc-skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
-      "skillPath": "skills/asc-xcode-build/SKILL.md",
-      "skillFolderHash": "d1859f2074a803b198583bf489d8df5d2e6f817e",
-      "installedAt": "2026-02-11T21:10:36.034Z",
-      "updatedAt": "2026-02-18T19:25:32.961Z"
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.461Z",
+      "updatedAt": "2026-02-19T19:37:06.461Z"
     },
     "asc-shots-pipeline": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-shots-pipeline/SKILL.md",
-      "skillFolderHash": "098dbb703edddff9f3f978d348fda29d8f367e8a",
-      "installedAt": "2026-02-14T23:49:29.662Z",
-      "updatedAt": "2026-02-18T19:25:32.740Z"
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.505Z",
+      "updatedAt": "2026-02-19T19:37:06.505Z"
+    },
+    "asc-signing-setup": {
+      "source": "rudrankriyam/asc-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
+      "skillPath": "skills/asc-signing-setup/SKILL.md",
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.556Z",
+      "updatedAt": "2026-02-19T19:37:06.556Z"
+    },
+    "asc-submission-health": {
+      "source": "rudrankriyam/asc-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
+      "skillPath": "skills/asc-submission-health/SKILL.md",
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.601Z",
+      "updatedAt": "2026-02-19T19:37:06.601Z"
     },
     "asc-subscription-localization": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
       "skillPath": "skills/asc-subscription-localization/SKILL.md",
-      "skillFolderHash": "2c4c4644d4c4e3a36fab11bab740d7032054b77b",
-      "installedAt": "2026-02-14T23:49:29.809Z",
-      "updatedAt": "2026-02-18T19:25:32.878Z"
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.650Z",
+      "updatedAt": "2026-02-19T19:37:06.650Z"
     },
-    "asc-app-create-ui": {
+    "asc-testflight-orchestration": {
       "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
-      "skillPath": "skills/asc-app-create-ui/SKILL.md",
-      "skillFolderHash": "02bdf35cd61c354aa8175a5a93a5cd8709b0927f",
-      "installedAt": "2026-02-17T13:58:27.660Z",
-      "updatedAt": "2026-02-18T19:25:32.387Z"
+      "skillPath": "skills/asc-testflight-orchestration/SKILL.md",
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.690Z",
+      "updatedAt": "2026-02-19T19:37:06.690Z"
     },
-    "avoid-feature-creep": {
-      "source": "waynesutton/convexskills",
+    "asc-workflow": {
+      "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
-      "sourceUrl": "https://github.com/waynesutton/convexskills.git",
-      "skillPath": "skills/avoid-feature-creep/SKILL.md",
-      "skillFolderHash": "65ad21afac08db49d0229542ef09d8e1d6228e9c",
-      "installedAt": "2026-02-17T19:12:03.827Z",
-      "updatedAt": "2026-02-19T18:09:40.259Z"
+      "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
+      "skillPath": "skills/asc-workflow/SKILL.md",
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.736Z",
+      "updatedAt": "2026-02-19T19:37:06.736Z"
     },
-    "convex": {
-      "source": "waynesutton/convexskills",
+    "asc-xcode-build": {
+      "source": "rudrankriyam/asc-skills",
       "sourceType": "github",
-      "sourceUrl": "https://github.com/waynesutton/convexskills.git",
-      "skillPath": "skills/convex/SKILL.md",
-      "skillFolderHash": "ed8cc5ba816144dd693b9f76e3cdb4550a9542d2",
-      "installedAt": "2026-02-17T19:12:03.945Z",
-      "updatedAt": "2026-02-19T18:09:40.288Z"
-    },
-    "convex-agents": {
-      "source": "waynesutton/convexskills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/waynesutton/convexskills.git",
-      "skillPath": "skills/convex-agents/SKILL.md",
-      "skillFolderHash": "da7b180cd7171dbec30d83b85066dd945ee0ee1f",
-      "installedAt": "2026-02-17T19:12:04.073Z",
-      "updatedAt": "2026-02-19T18:09:40.435Z"
-    },
-    "convex-best-practices": {
-      "source": "waynesutton/convexskills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/waynesutton/convexskills.git",
-      "skillPath": "skills/convex-best-practices/SKILL.md",
-      "skillFolderHash": "91f4ebc9572f72e6eef5764a78320531c4a92a21",
-      "installedAt": "2026-02-17T19:12:04.207Z",
-      "updatedAt": "2026-02-19T18:09:40.468Z"
-    },
-    "convex-component-authoring": {
-      "source": "waynesutton/convexskills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/waynesutton/convexskills.git",
-      "skillPath": "skills/convex-component-authoring/SKILL.md",
-      "skillFolderHash": "89086eb0b0da4ffb09fdbf2af2ff2a1839bb1186",
-      "installedAt": "2026-02-17T19:12:04.341Z",
-      "updatedAt": "2026-02-19T18:09:40.614Z"
-    },
-    "convex-cron-jobs": {
-      "source": "waynesutton/convexskills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/waynesutton/convexskills.git",
-      "skillPath": "skills/convex-cron-jobs/SKILL.md",
-      "skillFolderHash": "b97871573e530dc2426886f1769051d048421d27",
-      "installedAt": "2026-02-17T19:12:04.479Z",
-      "updatedAt": "2026-02-19T18:09:40.638Z"
-    },
-    "convex-file-storage": {
-      "source": "waynesutton/convexskills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/waynesutton/convexskills.git",
-      "skillPath": "skills/convex-file-storage/SKILL.md",
-      "skillFolderHash": "dd3d7329e36f9c735728909d295ee952f9b5275b",
-      "installedAt": "2026-02-17T19:12:04.613Z",
-      "updatedAt": "2026-02-19T18:09:40.765Z"
-    },
-    "convex-functions": {
-      "source": "waynesutton/convexskills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/waynesutton/convexskills.git",
-      "skillPath": "skills/convex-functions/SKILL.md",
-      "skillFolderHash": "29a30f400853ef8413d9ff0bda583416ed1bb9bd",
-      "installedAt": "2026-02-17T19:12:04.747Z",
-      "updatedAt": "2026-02-19T18:09:40.864Z"
-    },
-    "convex-http-actions": {
-      "source": "waynesutton/convexskills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/waynesutton/convexskills.git",
-      "skillPath": "skills/convex-http-actions/SKILL.md",
-      "skillFolderHash": "ed87dc8525282e284861f8e4dfe59a64f5167c20",
-      "installedAt": "2026-02-17T19:12:04.880Z",
-      "updatedAt": "2026-02-19T18:09:40.892Z"
-    },
-    "convex-migrations": {
-      "source": "waynesutton/convexskills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/waynesutton/convexskills.git",
-      "skillPath": "skills/convex-migrations/SKILL.md",
-      "skillFolderHash": "a7575f0bbb9b621dcf71b3a3b484bbb166dcccc0",
-      "installedAt": "2026-02-17T19:12:05.015Z",
-      "updatedAt": "2026-02-19T18:09:40.995Z"
-    },
-    "convex-realtime": {
-      "source": "waynesutton/convexskills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/waynesutton/convexskills.git",
-      "skillPath": "skills/convex-realtime/SKILL.md",
-      "skillFolderHash": "1768d1ae92994a52e01233b8f75ee7da5ff734ab",
-      "installedAt": "2026-02-17T19:12:05.150Z",
-      "updatedAt": "2026-02-19T18:09:41.021Z"
-    },
-    "convex-schema-validator": {
-      "source": "waynesutton/convexskills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/waynesutton/convexskills.git",
-      "skillPath": "skills/convex-schema-validator/SKILL.md",
-      "skillFolderHash": "96a0b924e5e1f3a33d6d2f873a3fc0380c667553",
-      "installedAt": "2026-02-17T19:12:05.347Z",
-      "updatedAt": "2026-02-19T18:09:41.123Z"
-    },
-    "convex-security-audit": {
-      "source": "waynesutton/convexskills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/waynesutton/convexskills.git",
-      "skillPath": "skills/convex-security-audit/SKILL.md",
-      "skillFolderHash": "f14a6c60507ce7ffbf0190bb9c52aaf822df155a",
-      "installedAt": "2026-02-17T19:12:05.491Z",
-      "updatedAt": "2026-02-19T18:09:41.147Z"
-    },
-    "convex-security-check": {
-      "source": "waynesutton/convexskills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/waynesutton/convexskills.git",
-      "skillPath": "skills/convex-security-check/SKILL.md",
-      "skillFolderHash": "8a143c98add66dfc3fb8772d0679c410230422bc",
-      "installedAt": "2026-02-17T19:12:05.632Z",
-      "updatedAt": "2026-02-19T18:09:41.247Z"
+      "sourceUrl": "https://github.com/rudrankriyam/asc-skills.git",
+      "skillPath": "skills/asc-xcode-build/SKILL.md",
+      "skillFolderHash": "",
+      "installedAt": "2026-02-19T19:37:06.790Z",
+      "updatedAt": "2026-02-19T19:37:06.790Z"
     }
   },
-  "dismissed": {
-    "findSkillsPrompt": true
-  },
-  "lastSelectedAgents": [
-    "amp",
-    "codex",
-    "gemini-cli",
-    "github-copilot",
-    "kimi-cli",
-    "opencode",
-    "claude-code"
-  ]
+  "dismissed": {}
 }
