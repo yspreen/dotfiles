@@ -156,13 +156,6 @@ one is empty or mismatched.
 ### Changes
 <detailed description of code changes>
 
-### Before implementing
-
-**Hot-File Preflight:** Before editing any files, run `but status --json`. If other
-active virtual branches show uncommitted changes in the exact same files you plan to
-edit, **STOP**. Do not proceed. Ask the user to serialize the work or designate an
-integrator to avoid cross-branch contamination.
-
 ### After implementing
 1. Do not run manual formatter/linter commands from this plan. If the repo has hooks,
    let them run during `but commit`; if not, proceed without manual formatting.
