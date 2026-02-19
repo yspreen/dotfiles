@@ -57,11 +57,32 @@ are not yours. Only touch hunks whose diff content matches work from THIS plan.*
 working on those branches. Unapplying a branch will destroy their work. If a
 conflict blocks your commit, escalate to the user — do NOT try to unapply anything.
 
+**NEVER commit hunks whose diff content doesn't match changes from THIS plan.** Never
+include extra, unrecognized hunks just to make a commit pass. This contaminates your
+branch and empties other agents' commits. If a commit fails unexpectedly, stop and ask
+the user for help.
+
+**NEVER delete `.git/index.lock` or any lock files.** Another agent is actively using
+the index. If you see an index lock error, wait 10 seconds and retry (up to 3 times).
+If still locked, stop and ask for help.
+
+**NEVER use `--no-hooks` or `-n` unless the user explicitly instructs you to.** The
+pre-commit hook is intentional. If a hook fails, diagnose the cause — do not bypass it.
+
+**Verify `but rub` success.** After every `but rub` command, you MUST run
+`but diff --json` or `but status --json` immediately afterward to verify the hunk
+actually moved. Do not assume the command succeeded. Do not proceed until verification
+confirms the expected state.
+
 ### How to commit (graduated escalation)
 
 Other agents may be working in parallel on other GitButler branches. When multiple
 branches touch the same file, hunk assignment conflicts can occur. Follow this
 escalation sequence — try each step, move to the next only if the previous fails.
+
+**Hunk IDs are ephemeral.** They change after any `but` mutation (commit, rub, amend,
+absorb) — even failed ones. After ANY such command, you MUST rerun `but diff --json`
+and re-identify your hunks from scratch before proceeding. Never reuse stale IDs.
 
 **Step 1 — Identify your hunks:**
 
@@ -83,11 +104,14 @@ Some hunks are locked to another branch. Unassign them first:
 
     but rub <rejected-hunk-id> zz
 
-Repeat for each rejected ID. `but rub` may print `AssignmentRejection` warnings —
-**that's normal, ignore the warnings.** It usually still unassigns the hunk.
+Repeat for each rejected ID. After each `but rub`, run `but diff --json` or
+`but status --json` to verify the hunk was actually unassigned. Do not assume
+success — proceed only after confirming the expected state.
 
-Then run `but diff --json` again — hunk IDs will have changed. Re-identify your
-hunks by reading their diff content, and retry the commit with the new IDs.
+Then run `but diff --json` again — **hunk IDs change after ANY mutation** (failed
+commit, `but rub`, amend, or any diff-rewriting step). You MUST re-identify your hunks
+by reading their diff content and collect fresh IDs before every retry. Never reuse
+hunk IDs from a previous `but diff` call after any intervening command.
 
 **Step 4 — If still stuck after unassign:** Stop and ask the user for help. NEVER
 unapply or disable another branch — other agents are working on them. NEVER loop
@@ -105,6 +129,19 @@ parallel. If YOUR changes remain:
   so read `new_commit_id` from the result and use it for the next.
 - NEVER retry more than twice. If stuck, stop and ask the user for help.
 
+### Post-commit integrity check
+
+After committing, verify the commit contains your changes. Use the `commit_id`
+returned by `but commit --json`:
+
+    but show <commit_id> --json
+
+Read the commit's file list. Confirm it contains the files you intended for THIS
+commit. If the commit shows zero changed files or the files don't match your plan,
+the commit is empty or corrupted — your hunks were likely claimed by another branch.
+**Stop and ask the user for help.** Do NOT continue to the next commit if the previous
+one is empty or mismatched.
+
 ---
 
 ## Context
@@ -119,8 +156,16 @@ parallel. If YOUR changes remain:
 ### Changes
 <detailed description of code changes>
 
+### Before implementing
+
+**Hot-File Preflight:** Before editing any files, run `but status --json`. If other
+active virtual branches show uncommitted changes in the exact same files you plan to
+edit, **STOP**. Do not proceed. Ask the user to serialize the work or designate an
+integrator to avoid cross-branch contamination.
+
 ### After implementing
-1. Run the repo-appropriate formatter/linter command(s) if configured (for example: `xcrun swift-format format --in-place --recursive --configuration .swift-format .` for Swift repos, or `bunx eslint .` for JS/TS repos) — must pass
+1. Do not run manual formatter/linter commands from this plan. If the repo has hooks,
+   let them run during `but commit`; if not, proceed without manual formatting.
 2. Follow the "How to commit" steps above
 3. Commit message: `"<message>"`
 
@@ -130,7 +175,8 @@ parallel. If YOUR changes remain:
 
 ## Final Steps
 
-1. Run the repo-appropriate formatter/linter command(s) one final time (if configured)
+1. Do not run manual formatter/linter commands. If the repo has hooks, they will
+   run during commits automatically.
 2. Report: branch name, each commit (hash + message)
 ```
 
