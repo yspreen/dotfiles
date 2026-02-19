@@ -10,7 +10,7 @@
 .codex/history.jsonl
 .codex/auth.json
 .codex/sessions/
-.codex/skills/
+.codex/skills/.system
 .codex/tmp
 .codex/.codex-global-state.json
 .codex/models_cache.json

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Formatter Hook"
+  short_description: "Staged-file hooks for Git and GitButler."
+  default_prompt: "Use $formatter-hook to set up staged-file formatting and lint hooks that work with both git and but."
+
+policy:
+  allow_implicit_invocation: true
