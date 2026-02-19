@@ -134,7 +134,7 @@
       "skillPath": "skills/avoid-feature-creep/SKILL.md",
       "skillFolderHash": "65ad21afac08db49d0229542ef09d8e1d6228e9c",
       "installedAt": "2026-02-17T19:12:03.827Z",
-      "updatedAt": "2026-02-17T19:12:03.827Z"
+      "updatedAt": "2026-02-19T18:09:40.259Z"
     },
     "convex": {
       "source": "waynesutton/convexskills",
@@ -143,7 +143,7 @@
       "skillPath": "skills/convex/SKILL.md",
       "skillFolderHash": "ed8cc5ba816144dd693b9f76e3cdb4550a9542d2",
       "installedAt": "2026-02-17T19:12:03.945Z",
-      "updatedAt": "2026-02-17T19:12:03.945Z"
+      "updatedAt": "2026-02-19T18:09:40.288Z"
     },
     "convex-agents": {
       "source": "waynesutton/convexskills",
@@ -152,7 +152,7 @@
       "skillPath": "skills/convex-agents/SKILL.md",
       "skillFolderHash": "da7b180cd7171dbec30d83b85066dd945ee0ee1f",
       "installedAt": "2026-02-17T19:12:04.073Z",
-      "updatedAt": "2026-02-17T19:12:04.073Z"
+      "updatedAt": "2026-02-19T18:09:40.435Z"
     },
     "convex-best-practices": {
       "source": "waynesutton/convexskills",
@@ -161,7 +161,7 @@
       "skillPath": "skills/convex-best-practices/SKILL.md",
       "skillFolderHash": "91f4ebc9572f72e6eef5764a78320531c4a92a21",
       "installedAt": "2026-02-17T19:12:04.207Z",
-      "updatedAt": "2026-02-17T19:12:04.207Z"
+      "updatedAt": "2026-02-19T18:09:40.468Z"
     },
     "convex-component-authoring": {
       "source": "waynesutton/convexskills",
@@ -170,7 +170,7 @@
       "skillPath": "skills/convex-component-authoring/SKILL.md",
       "skillFolderHash": "89086eb0b0da4ffb09fdbf2af2ff2a1839bb1186",
       "installedAt": "2026-02-17T19:12:04.341Z",
-      "updatedAt": "2026-02-17T19:12:04.341Z"
+      "updatedAt": "2026-02-19T18:09:40.614Z"
     },
     "convex-cron-jobs": {
       "source": "waynesutton/convexskills",
@@ -179,7 +179,7 @@
       "skillPath": "skills/convex-cron-jobs/SKILL.md",
       "skillFolderHash": "b97871573e530dc2426886f1769051d048421d27",
       "installedAt": "2026-02-17T19:12:04.479Z",
-      "updatedAt": "2026-02-17T19:12:04.479Z"
+      "updatedAt": "2026-02-19T18:09:40.638Z"
     },
     "convex-file-storage": {
       "source": "waynesutton/convexskills",
@@ -188,7 +188,7 @@
       "skillPath": "skills/convex-file-storage/SKILL.md",
       "skillFolderHash": "dd3d7329e36f9c735728909d295ee952f9b5275b",
       "installedAt": "2026-02-17T19:12:04.613Z",
-      "updatedAt": "2026-02-17T19:12:04.613Z"
+      "updatedAt": "2026-02-19T18:09:40.765Z"
     },
     "convex-functions": {
       "source": "waynesutton/convexskills",
@@ -197,7 +197,7 @@
       "skillPath": "skills/convex-functions/SKILL.md",
       "skillFolderHash": "29a30f400853ef8413d9ff0bda583416ed1bb9bd",
       "installedAt": "2026-02-17T19:12:04.747Z",
-      "updatedAt": "2026-02-17T19:12:04.747Z"
+      "updatedAt": "2026-02-19T18:09:40.864Z"
     },
     "convex-http-actions": {
       "source": "waynesutton/convexskills",
@@ -206,7 +206,7 @@
       "skillPath": "skills/convex-http-actions/SKILL.md",
       "skillFolderHash": "ed87dc8525282e284861f8e4dfe59a64f5167c20",
       "installedAt": "2026-02-17T19:12:04.880Z",
-      "updatedAt": "2026-02-17T19:12:04.880Z"
+      "updatedAt": "2026-02-19T18:09:40.892Z"
     },
     "convex-migrations": {
       "source": "waynesutton/convexskills",
@@ -215,7 +215,7 @@
       "skillPath": "skills/convex-migrations/SKILL.md",
       "skillFolderHash": "a7575f0bbb9b621dcf71b3a3b484bbb166dcccc0",
       "installedAt": "2026-02-17T19:12:05.015Z",
-      "updatedAt": "2026-02-17T19:12:05.015Z"
+      "updatedAt": "2026-02-19T18:09:40.995Z"
     },
     "convex-realtime": {
       "source": "waynesutton/convexskills",
@@ -224,7 +224,7 @@
       "skillPath": "skills/convex-realtime/SKILL.md",
       "skillFolderHash": "1768d1ae92994a52e01233b8f75ee7da5ff734ab",
       "installedAt": "2026-02-17T19:12:05.150Z",
-      "updatedAt": "2026-02-17T19:12:05.150Z"
+      "updatedAt": "2026-02-19T18:09:41.021Z"
     },
     "convex-schema-validator": {
       "source": "waynesutton/convexskills",
@@ -233,7 +233,7 @@
       "skillPath": "skills/convex-schema-validator/SKILL.md",
       "skillFolderHash": "96a0b924e5e1f3a33d6d2f873a3fc0380c667553",
       "installedAt": "2026-02-17T19:12:05.347Z",
-      "updatedAt": "2026-02-17T19:12:05.347Z"
+      "updatedAt": "2026-02-19T18:09:41.123Z"
     },
     "convex-security-audit": {
       "source": "waynesutton/convexskills",
@@ -242,7 +242,7 @@
       "skillPath": "skills/convex-security-audit/SKILL.md",
       "skillFolderHash": "f14a6c60507ce7ffbf0190bb9c52aaf822df155a",
       "installedAt": "2026-02-17T19:12:05.491Z",
-      "updatedAt": "2026-02-17T19:12:05.491Z"
+      "updatedAt": "2026-02-19T18:09:41.147Z"
     },
     "convex-security-check": {
       "source": "waynesutton/convexskills",
@@ -251,7 +251,7 @@
       "skillPath": "skills/convex-security-check/SKILL.md",
       "skillFolderHash": "8a143c98add66dfc3fb8772d0679c410230422bc",
       "installedAt": "2026-02-17T19:12:05.632Z",
-      "updatedAt": "2026-02-17T19:12:05.632Z"
+      "updatedAt": "2026-02-19T18:09:41.247Z"
     }
   },
   "dismissed": {
