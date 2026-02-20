@@ -201,7 +201,7 @@ generate_pr_json_with_codex() {
     printf '%s\n' "$PR_JSON_SCHEMA" >"$schema_file"
 
     set +e
-    printf '%s\n' "$prompt_text" | codex exec - --output-schema "$schema_file" --output-last-message "$message_file" >"$stdout_file" 2>"$stderr_file"
+    printf '%s\n' "$prompt_text" | codex exec -c 'model_reasoning_effort="medium"' - --output-schema "$schema_file" --output-last-message "$message_file" >"$stdout_file" 2>"$stderr_file"
     local status=$?
     set -e
 
@@ -383,6 +383,56 @@ merge_pr_number() {
     gh pr merge "$pr_number" --merge
 }
 
+push_and_create_pr_parallel() {
+    local branch_name="$1"
+    local pr_out_file
+    local pr_err_file
+    local push_pid
+    local pr_pid
+    local push_status=0
+    local pr_status=0
+    local pr_number
+
+    pr_out_file="$(mktemp)"
+    pr_err_file="$(mktemp)"
+
+    but push "$branch_name" --with-force &
+    push_pid=$!
+
+    (
+        create_or_get_pr_number "$branch_name" >"$pr_out_file"
+    ) 2>"$pr_err_file" &
+    pr_pid=$!
+
+    wait "$push_pid" || push_status=$?
+    wait "$pr_pid" || pr_status=$?
+
+    if [[ -s "$pr_err_file" ]]; then
+        cat "$pr_err_file" >&2
+    fi
+
+    if [[ $push_status -ne 0 ]]; then
+        rm -f "$pr_out_file" "$pr_err_file"
+        return "$push_status"
+    fi
+
+    if [[ $pr_status -ne 0 ]]; then
+        echo "  PR creation failed before push finished; retrying PR creation now that push is complete."
+        create_or_get_pr_number "$branch_name" >"$pr_out_file"
+    fi
+
+    pr_number="$(tr -d '\r' <"$pr_out_file" | tail -n 1)"
+
+    rm -f "$pr_out_file" "$pr_err_file"
+
+    if [[ -z "${pr_number//[[:space:]]/}" ]]; then
+        echo "Failed to discover PR number for $branch_name" >&2
+        return 1
+    fi
+
+    printf '%s\n' "$pr_number"
+}
+
 main() {
     require_command but
     require_command jq
@@ -423,11 +473,9 @@ main() {
             continue
         fi
 
-        echo "  1/4 Force push"
-        but push "$branch_name" --with-force
-
-        echo "  2/4 Create or reuse PR (Claude -> Codex -> default)"
-        pr_number="$(create_or_get_pr_number "$branch_name")"
+        echo "  1/4 Force push (parallel with PR creation)"
+        echo "  2/4 Create or reuse PR (Claude -> Codex medium -> default)"
+        pr_number="$(push_and_create_pr_parallel "$branch_name")"
         echo "  Using PR #$pr_number"
 
         if ! branch_is_open "$branch_name"; then
