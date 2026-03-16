@@ -247,6 +247,7 @@
           "zig" # for cargo lambda
           "mas"
           "rudrankriyam/tap/asc"
+          "dl-alexandre/tap/gpd"
           "openjdk@17"
         ];
         casks = [
@@ -286,6 +287,7 @@
           "pakerwreah/calendr"
           "steipete/tap"
           "rudrankriyam/tap"
+          "dl-alexandre/tap"
         ];
 
         # put casks in ~/Applications so updates don't prompt for admin
