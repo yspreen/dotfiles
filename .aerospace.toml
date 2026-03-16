@@ -130,11 +130,12 @@ alt-shift-l = 'move right'
 # alt-8 = 'workspace 8'
 # alt-9 = 'workspace 9'
 alt-a = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh A Safari'
-# alt-b = 'workspace B'
+alt-b = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh B Codex'
 alt-c = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh C "Zed"'
 alt-d = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh D Notion'
 alt-e = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh E "Messages"'
-alt-f = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh F "GitButler Nightly" f'
+alt-f = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh F "GitButler" f'
+# alt-f = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh F "GitButler Nightly" f'
 alt-g = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh G Ghostty f'
 alt-q = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh Q Figma'
 # alt-i = 'workspace I'
@@ -150,7 +151,7 @@ alt-v = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh V Spotify'
 alt-w = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh W Calendar'
 alt-x = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh X Xcode'
 # alt-y = 'workspace Y'
-alt-z = 'workspace Z'
+# alt-z = 'workspace Z'
 cmd-alt-ctrl-shift-p = "workspace-back-and-forth"
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
@@ -164,7 +165,7 @@ cmd-alt-ctrl-shift-p = "workspace-back-and-forth"
 # alt-shift-8 = 'move-node-to-workspace 8'
 # alt-shift-9 = 'move-node-to-workspace 9'
 alt-shift-a = 'move-node-to-workspace A'
-# alt-shift-b = 'move-node-to-workspace B'
+alt-shift-b = 'move-node-to-workspace B'
 alt-shift-c = 'move-node-to-workspace C'
 alt-shift-d = 'move-node-to-workspace D'
 alt-shift-e = 'move-node-to-workspace E'
@@ -290,6 +291,10 @@ if.app-id = 'com.gitbutler.app.nightly'
 run = ['move-node-to-workspace F']
 
 [[on-window-detected]]
+if.app-id = 'com.gitbutler.app'
+run = ['move-node-to-workspace F']
+
+[[on-window-detected]]
 if.app-id = 'com.spotify.client'
 run = ['move-node-to-workspace V']
 
@@ -348,6 +353,10 @@ run = ['move-node-to-workspace T']
 [[on-window-detected]]
 if.app-id = 'org.kicad.kicad'
 run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.openai.codex'
+run = ['move-node-to-workspace B']
 
 [[on-window-detected]]
 run = ['move-node-to-workspace Z']
