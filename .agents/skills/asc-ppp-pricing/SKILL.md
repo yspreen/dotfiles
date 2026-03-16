@@ -1,127 +1,233 @@
 ---
 name: asc-ppp-pricing
-description: Set territory-specific pricing for subscriptions and in-app purchases using purchasing power parity (PPP). Use when adjusting prices by country or implementing localized pricing strategies.
+description: Set territory-specific pricing for subscriptions and in-app purchases using current asc setup, pricing summary, price import, and price schedule commands. Use when adjusting prices by country or implementing localized PPP strategies.
 ---
 
-# PPP Pricing (Per-Territory Pricing)
+# PPP pricing (per-territory pricing)
 
-Use this skill to set different prices for different countries based on purchasing power parity or custom pricing strategies.
+Use this skill to create or update localized pricing across territories based on purchasing power parity (PPP) or your own regional pricing strategy.
+
+Prefer the current high-level flows:
+- `asc subscriptions setup` and `asc iap setup` when you are creating a new product
+- `asc subscriptions pricing ...` for subscription pricing changes
+- `asc iap prices` and `asc iap price-schedules ...` for IAP pricing changes
 
 ## Preconditions
 - Ensure credentials are set (`asc auth login` or `ASC_*` env vars).
-- Use `ASC_APP_ID` or pass `--app` explicitly.
-- Know your base territory (usually USA) and base price tier.
+- Prefer `ASC_APP_ID` or pass `--app` explicitly.
+- Decide your base territory (usually `USA`) and baseline price.
+- Use `asc pricing territories list --paginate` if you need supported territory IDs.
 
-## Workflow: Set PPP-Based Subscription Pricing
+## Subscription PPP workflow
 
-### 1. List subscriptions for your app
+### New subscription: bootstrap with `setup`
+Use `setup` when you are creating a new subscription and want to create the group, subscription, first localization, initial price, and availability in one verified flow.
+
 ```bash
-asc subscriptions groups list --app "APP_ID"
-asc subscriptions list --group "GROUP_ID"
+asc subscriptions setup \
+  --app "APP_ID" \
+  --group-reference-name "Pro" \
+  --reference-name "Pro Monthly" \
+  --product-id "com.example.pro.monthly" \
+  --subscription-period ONE_MONTH \
+  --locale "en-US" \
+  --display-name "Pro Monthly" \
+  --description "Unlock everything" \
+  --price "9.99" \
+  --price-territory "USA" \
+  --territories "USA,CAN,GBR" \
+  --output json
 ```
 
-### 2. Get price points for base territory (e.g., USA at $9.99)
+Notes:
+- `setup` verifies the created state by default.
+- Use `--no-verify` only when you explicitly want speed over readback verification.
+- Use `--tier` or `--price-point-id` instead of `--price` when your workflow is tier-driven.
+
+### Inspect current subscription pricing before changes
+Use the summary view first when you want a compact current-state snapshot.
+
 ```bash
-asc subscriptions price-points list --id "SUB_ID" --territory "USA"
-```
-Note the price point ID for your desired tier.
-
-### 3. Get equalizations (equivalent prices in all territories)
-```bash
-asc subscriptions price-points equalizations --id "PRICE_POINT_ID" --paginate
-```
-This returns price points for all territories with their local currency amounts.
-
-### 4. Find target price points for each territory
-From equalizations output, identify the price point IDs that match your PPP targets:
-- India: Find price point near your PPP-adjusted target (e.g., ~$3 equivalent)
-- Germany: Find price point for your EU target
-- Japan: Find price point for your JP target
-
-### 5. Set prices for each territory
-```bash
-# Set price for India
-asc subscriptions prices add --id "SUB_ID" --price-point "IND_PRICE_POINT_ID" --territory "IND"
-
-# Set price for Germany
-asc subscriptions prices add --id "SUB_ID" --price-point "DEU_PRICE_POINT_ID" --territory "DEU"
-
-# Set price for Japan
-asc subscriptions prices add --id "SUB_ID" --price-point "JPN_PRICE_POINT_ID" --territory "JPN"
+asc subscriptions pricing summary --subscription-id "SUB_ID" --territory "USA"
+asc subscriptions pricing summary --subscription-id "SUB_ID" --territory "IND"
+asc subscriptions pricing prices list --subscription-id "SUB_ID" --paginate
 ```
 
-### 6. Verify current prices
-```bash
-asc subscriptions prices list --id "SUB_ID"
+Use `summary` for quick before/after spot checks and `prices list` when you need raw price records.
+
+### Preferred bulk PPP update: import a CSV with dry run
+For broad PPP rollouts, prefer the subscription pricing import command instead of manually adding territory prices one by one.
+
+Example CSV:
+
+```csv
+territory,price,start_date,preserved
+IND,2.99,2026-04-01,false
+BRA,4.99,2026-04-01,false
+MEX,4.99,2026-04-01,false
+DEU,8.99,2026-04-01,false
 ```
 
-## Workflow: Set PPP-Based IAP Pricing
+Dry-run first:
 
-### 1. List in-app purchases
 ```bash
-asc iap list --app "APP_ID"
+asc subscriptions pricing prices import \
+  --subscription-id "SUB_ID" \
+  --input "./ppp-prices.csv" \
+  --dry-run \
+  --output table
 ```
 
-### 2. Get price points for base territory
+Apply for real:
+
 ```bash
-asc iap price-points list --id "IAP_ID" --territory "USA"
+asc subscriptions pricing prices import \
+  --subscription-id "SUB_ID" \
+  --input "./ppp-prices.csv" \
+  --output table
 ```
 
-### 3. Get equalizations
+Notes:
+- `--dry-run` validates rows and resolves price points without creating prices.
+- `--continue-on-error=false` gives you a fail-fast mode.
+- CSV required columns: `territory`, `price`
+- CSV optional columns: `currency_code`, `start_date`, `preserved`, `preserve_current_price`, `price_point_id`
+- When `price_point_id` is omitted, the CLI resolves the matching price point for the row's territory and price automatically.
+- Territory inputs in import can be 3-letter IDs, 2-letter codes, or common territory names that map cleanly.
+
+### One-off subscription territory changes
+For a small number of manual overrides, use the canonical `set` command.
+
 ```bash
-asc iap price-points equalizations --id "PRICE_POINT_ID" --paginate
+asc subscriptions pricing prices set --subscription-id "SUB_ID" --price "2.99" --territory "IND"
+asc subscriptions pricing prices set --subscription-id "SUB_ID" --tier 5 --territory "BRA"
+asc subscriptions pricing prices set --subscription-id "SUB_ID" --price-point "PRICE_POINT_ID" --territory "DEU"
 ```
 
-### 4. Create price schedule with base territory
+Notes:
+- Add `--start-date "YYYY-MM-DD"` to schedule a future change.
+- Add `--preserved` when you want to preserve the current price relationship.
+- The command handles both initial pricing and later price changes.
+
+### Discover raw price points only when you need them
+Use price-point lookup and equalizations when you want to inspect Apple's localized ladder directly or pin exact price point IDs.
+
 ```bash
-asc iap price-schedule create --id "IAP_ID" --base-territory "USA" --price-point "PRICE_POINT_ID"
+asc subscriptions pricing price-points list --subscription-id "SUB_ID" --territory "USA" --paginate --price "9.99"
+asc subscriptions pricing price-points equalizations --price-point-id "PRICE_POINT_ID" --paginate
 ```
 
-### 5. View manual and automatic prices
+### Verify after apply
+Re-run the summary and raw list views after changes.
+
 ```bash
-asc iap price-schedule manual-prices --schedule-id "SCHEDULE_ID"
-asc iap price-schedule automatic-prices --schedule-id "SCHEDULE_ID"
+asc subscriptions pricing summary --subscription-id "SUB_ID" --territory "IND"
+asc subscriptions pricing summary --subscription-id "SUB_ID" --territory "BRA"
+asc subscriptions pricing prices list --subscription-id "SUB_ID" --paginate
 ```
 
-## Updating Existing Prices
+If the subscription was newly created, you can also use `asc subscriptions setup` with verification enabled instead of stitching together separate create and pricing steps.
 
-To change a territory's price:
-1. List current prices to get the price ID:
-   ```bash
-   asc subscriptions prices list --id "SUB_ID"
-   ```
-2. Delete the old price:
-   ```bash
-   asc subscriptions prices delete --price-id "PRICE_ID" --confirm
-   ```
-3. Add the new price:
-   ```bash
-   asc subscriptions prices add --id "SUB_ID" --price-point "NEW_PRICE_POINT_ID" --territory "TERRITORY"
-   ```
+### Subscription availability
+If you need to explicitly enable territories for an existing subscription, use the pricing availability family.
 
-## Common PPP Strategies
-
-### BigMac Index Approach
-Adjust prices based on relative purchasing power:
-- USA: $9.99 (baseline)
-- India: $2.99-3.99 (~70% discount)
-- Brazil: $4.99-5.99 (~50% discount)
-- UK: $8.99-9.99 (similar)
-- Switzerland: $11.99-12.99 (premium)
-
-### Tiered Regional Pricing
-Group countries into pricing tiers:
-- Tier 1 (High): USA, UK, Germany, Australia, Switzerland
-- Tier 2 (Medium): France, Spain, Italy, Japan, South Korea
-- Tier 3 (Low): India, Brazil, Mexico, Indonesia, Turkey
-
-## Listing All Territories
 ```bash
-asc pricing territories list --paginate
+asc subscriptions pricing availability set --subscription-id "SUB_ID" --territories "USA,CAN,IND,BRA"
+asc subscriptions pricing availability get --subscription-id "SUB_ID"
 ```
+
+## IAP PPP workflow
+
+### New IAP: bootstrap with `setup`
+Use `setup` when you are creating a new IAP and want to create the product, first localization, and initial price schedule in one verified flow.
+
+```bash
+asc iap setup \
+  --app "APP_ID" \
+  --type NON_CONSUMABLE \
+  --reference-name "Pro Lifetime" \
+  --product-id "com.example.pro.lifetime" \
+  --locale "en-US" \
+  --display-name "Pro Lifetime" \
+  --description "Unlock everything forever" \
+  --price "9.99" \
+  --base-territory "USA" \
+  --output json
+```
+
+Notes:
+- `setup` verifies the created IAP, localization, and price schedule by default.
+- Use `--start-date` for scheduled pricing.
+- Use `--tier` or `--price-point-id` when you want deterministic tier- or ID-based setup.
+
+### Inspect current IAP pricing before changes
+Use `asc iap prices` as the main current-state summary for PPP work.
+
+```bash
+asc iap prices --iap-id "IAP_ID" --territory "USA"
+asc iap prices --iap-id "IAP_ID" --territory "IND"
+```
+
+This returns the base territory, current price, estimated proceeds, and scheduled changes for the requested territory.
+
+### Discover candidate IAP price points
+Use price-point lookup when you want to inspect or pin exact price point IDs.
+
+```bash
+asc iap price-points list --iap-id "IAP_ID" --territory "USA" --paginate --price "9.99"
+asc iap price-points equalizations --id "PRICE_POINT_ID"
+```
+
+### Create or update an IAP price schedule
+For manual PPP updates, create a price schedule directly.
+
+```bash
+asc iap price-schedules create --iap-id "IAP_ID" --base-territory "USA" --price "4.99" --start-date "2026-04-01"
+asc iap price-schedules create --iap-id "IAP_ID" --base-territory "USA" --tier 5 --start-date "2026-04-01"
+asc iap price-schedules create --iap-id "IAP_ID" --base-territory "USA" --prices "PRICE_POINT_ID:2026-04-01"
+```
+
+Use these when you are intentionally creating or replacing schedule entries. For deeper inspection:
+
+```bash
+asc iap price-schedules get --iap-id "IAP_ID"
+asc iap price-schedules manual-prices --schedule-id "SCHEDULE_ID" --paginate
+asc iap price-schedules automatic-prices --schedule-id "SCHEDULE_ID" --paginate
+```
+
+### Verify after apply
+Use the summary command again after scheduling or applying pricing changes.
+
+```bash
+asc iap prices --iap-id "IAP_ID" --territory "USA"
+asc iap prices --iap-id "IAP_ID" --territory "IND"
+```
+
+For future-dated schedules, expect scheduled changes rather than an immediately updated current price.
+
+## Common PPP strategy patterns
+
+### Base territory first
+- Pick one baseline territory, usually `USA`.
+- Set the baseline price there first.
+- Derive lower or higher territory targets from that baseline.
+
+### Tiered regional pricing
+- High-income markets stay close to baseline.
+- Mid-income markets get moderate discounts.
+- Lower-income markets get stronger PPP adjustments.
+
+### Spreadsheet-driven rollout
+- Build the target territory list in a CSV.
+- Dry-run the import.
+- Fix any resolution failures.
+- Apply the import.
+- Re-run summary checks for the most important territories.
 
 ## Notes
-- Price changes may take up to 24 hours to reflect in the App Store.
-- Use `--start-date "YYYY-MM-DD"` to schedule future price changes.
-- Always verify with `prices list` after making changes.
-- Some territories may have restrictions; check App Store Connect for eligibility.
+- Prefer canonical commands in docs and automation: `asc subscriptions pricing ...`
+- Older `asc subscriptions prices ...` paths still exist, but the canonical pricing family is clearer.
+- `asc subscriptions pricing prices import --dry-run` is the safest subscription batch PPP path today.
+- `asc subscriptions setup` and `asc iap setup` already provide built-in post-create verification.
+- There is not yet a single first-class before/after PPP diff command; use the current summary commands before and after apply.
+- Price changes may take time to propagate in App Store Connect and storefronts.
