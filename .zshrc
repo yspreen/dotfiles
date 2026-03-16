@@ -592,7 +592,7 @@ cl() {
 
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 openscad() {
-    nix-shell -p openscad --run "open /nix/store/`ls /nix/store | grep openscad | grep -v .drv`/Applications/OpenSCAD.app"
+    nix-shell -p openscad --run "open /nix/store/`ls /nix/store | grep -i openscad | grep -v .drv`/Applications/OpenSCAD.app"
 }
 
 petname() {
@@ -704,3 +704,13 @@ midnight() {
 export PATH="/Users/user/.antigravity/antigravity/bin:$PATH"
 
 export ANDROID_HOME=$HOME/Library/Android/sdk && export PATH=$PATH:$ANDROID_HOME/emulator && export PATH=$PATH:$ANDROID_HOME/platform-tools
+export GOOGLE_APPLICATION_CREDENTIALS=/Users/user/dotfiles/scriptswithsecrets/play-service-account.json
+unalias gpd 2>/dev/null
+
+# Added by GitButler installer
+export PATH="/Users/user/.local/bin:$PATH"
+eval "$(but completions zsh)"
+export PATH=$PATH:$HOME/.maestro/bin
+codex() {
+	/Applications/Codex.app/Contents/Resources/codex "$@"
+}
