@@ -18,3 +18,7 @@
 .codex/vendor_imports/skills-curated-cache.json
 .codex/vendor_imports/skills/
 .codex/shell_snapshots
+.codex/logs_*.sqlite*
+.codex/state_*.sqlite*
+.codex/session_index.jsonl
+.codex/archived_sessions/
