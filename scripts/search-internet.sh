@@ -10,6 +10,7 @@ SEARXNG_DATA_DIR="${SEARXNG_WORKDIR}/data"
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/search-internet"
 LAST_SEARCH_FILE="${STATE_DIR}/last-search-epoch"
 WATCHER_PID_FILE="${STATE_DIR}/watcher.pid"
+CONTAINER_LOCK_DIR="${STATE_DIR}/container.lock"
 
 IDLE_TIMEOUT_SECONDS=$((10 * 60))
 WAIT_TIMEOUT_SECONDS=120
@@ -76,28 +77,75 @@ container_matches_expected_config() {
     grep -Eq ':8888$' <<<"$ports" || return 1
 }
 
-start_search_container_if_needed() {
-    mkdir -p "${SEARXNG_CONFIG_DIR}" "${SEARXNG_DATA_DIR}"
+acquire_container_lock() {
+    local waited=0
 
-    if container_is_running && ! container_matches_expected_config; then
-        docker rm -f "${SEARXNG_CONTAINER_NAME}" >/dev/null 2>&1 || true
+    while ! mkdir "${CONTAINER_LOCK_DIR}" 2>/dev/null; do
+        if [[ -f "${CONTAINER_LOCK_DIR}/pid" ]]; then
+            local lock_pid
+            lock_pid="$(cat "${CONTAINER_LOCK_DIR}/pid" 2>/dev/null || true)"
+            if [[ -n "$lock_pid" ]] && ! kill -0 "$lock_pid" 2>/dev/null; then
+                rm -rf "${CONTAINER_LOCK_DIR}"
+                continue
+            fi
+        fi
+
+        sleep 1
+        waited=$((waited + 1))
+        if ((waited >= WAIT_TIMEOUT_SECONDS)); then
+            echo "Timed out waiting for the SearXNG container lock." >&2
+            exit 1
+        fi
+    done
+
+    echo "$$" >"${CONTAINER_LOCK_DIR}/pid"
+}
+
+release_container_lock() {
+    rm -rf "${CONTAINER_LOCK_DIR}"
+}
+
+ensure_container_running_locked() {
+    if container_exists; then
+        if ! container_matches_expected_config; then
+            docker rm -f "${SEARXNG_CONTAINER_NAME}" >/dev/null 2>&1 || true
+        elif container_is_running; then
+            return
+        else
+            docker start "${SEARXNG_CONTAINER_NAME}" >/dev/null
+            return
+        fi
+    fi
+
+    if (
+        cd "${SEARXNG_WORKDIR}"
+        docker run --rm --name "${SEARXNG_CONTAINER_NAME}" -d \
+            -p 8888:8080 \
+            -v "./config/:/etc/searxng/" \
+            -v "./data/:/var/cache/searxng/" \
+            "${SEARXNG_IMAGE}" >/dev/null
+    ); then
+        return
+    fi
+
+    if ! container_exists || ! container_matches_expected_config; then
+        echo "Failed to start the SearXNG container." >&2
+        exit 1
     fi
 
     if ! container_is_running; then
-
-        if container_exists; then
-            docker rm -f "${SEARXNG_CONTAINER_NAME}" >/dev/null 2>&1 || true
-        fi
-
-        (
-            cd "${SEARXNG_WORKDIR}"
-            docker run --rm --name "${SEARXNG_CONTAINER_NAME}" -d \
-                -p 8888:8080 \
-                -v "./config/:/etc/searxng/" \
-                -v "./data/:/var/cache/searxng/" \
-                "${SEARXNG_IMAGE}" >/dev/null
-        )
+        docker start "${SEARXNG_CONTAINER_NAME}" >/dev/null
     fi
+}
+
+start_search_container_if_needed() {
+    mkdir -p "${SEARXNG_CONFIG_DIR}" "${SEARXNG_DATA_DIR}" "${STATE_DIR}"
+
+    acquire_container_lock
+    trap release_container_lock RETURN
+    ensure_container_running_locked
+    trap - RETURN
+    release_container_lock
 
     local waited=0
     until searxng_is_ready; do
