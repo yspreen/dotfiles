@@ -616,14 +616,6 @@ cx() {
 
 cl() {
     (brew upgrade --cask claude-code >/dev/null 2>&1 &)
-    local stamp=~/.cl_skills_last_update
-    if [[ ! -f "$stamp" ]] || (( $(date +%s) - $(date -r "$stamp" +%s) >= 86400 )); then
-        touch "$stamp"
-        (bunx --yes skills add rudrankriyam/asc-skills --global --agent claude-code --skill '*' -y >/dev/null 2>&1 &)
-        (bunx --yes skills add rudrankriyam/asc-skills --global --agent codex --skill '*' -y >/dev/null 2>&1 &)
-        (bunx --yes skills add waynesutton/convexskills --global --agent claude-code --skill '*' -y >/dev/null 2>&1 &)
-        (bunx --yes skills add waynesutton/convexskills --global --agent codex --skill '*' -y >/dev/null 2>&1 &)
-    fi
     claude "$@" --dangerously-skip-permissions
 }
 
