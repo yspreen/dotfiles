@@ -230,6 +230,42 @@ alias archiveall='ls -1 | grep -Ev '.tgz$' | while read f; do sudo tar czf "$f.t
 alias unarchiveall='ls -1 | grep -E '.tgz$' | while read f; do sudo tar xzf "$f" && sudo rm "$f"; done'
 alias rooktools='kubectl -n rook-ceph exec -it $(kubectl -n rook-ceph get pod -l "app=rook-ceph-tools" -o jsonpath='\''{.items[0].metadata.name}'\'') bash'
 dockerrun () { docker run -it --rm -v "$(pwd):/m" --entrypoint sh "${1:-alpine}" -c "cd /m && sh" }
+transmissiondocker() {
+    local transmission_dir="$HOME/dotfiles/transmission"
+    local settings_file="$transmission_dir/settings.json"
+    local rpc_password
+
+    if [[ ! -f "$settings_file" ]]; then
+        echo "Transmission settings file not found: $settings_file" >&2
+        return 1
+    fi
+
+    rpc_password="$(uuidgen | tr '[:upper:]' '[:lower:]')"
+
+    python3 - "$settings_file" "$rpc_password" <<'PY'
+import json
+import sys
+
+settings_file, rpc_password = sys.argv[1], sys.argv[2]
+
+with open(settings_file, "r", encoding="utf-8") as f:
+    settings = json.load(f)
+
+settings["rpc-password"] = rpc_password
+
+with open(settings_file, "w", encoding="utf-8") as f:
+    json.dump(settings, f, indent=4)
+    f.write("\n")
+PY
+
+    printf 'Transmission RPC password: %s\n' "$rpc_password"
+
+    command docker run --rm \
+        -p 9091:9091 \
+        -v /Users/user/Downloads/torr:/downloads \
+        -v /Users/user/dotfiles/transmission:/config \
+        lscr.io/linuxserver/transmission:latest
+}
 
 eval "$(fnm env --use-on-cd --shell zsh)" >/dev/null 2>&1
 
