@@ -1,0 +1,6 @@
+*.torrent
+*.resume
+*.magnet
+stats.json
+queue.json
+dht.dat
