@@ -609,9 +609,7 @@ kill-mcp-child() {
 }
 
 cx() {
-    which codex >/dev/null 2>&1 && brew upgrade codex
-    which codex >/dev/null 2>&1 || brew install codex
-    codex "$@"
+    codex --yolo "$@"
 }
 
 cl() {
@@ -741,7 +739,7 @@ export PATH="/Users/user/.local/bin:$PATH"
 eval "$(but completions zsh)"
 export PATH=$PATH:$HOME/.maestro/bin
 codex() {
-	/Applications/Codex.app/Contents/Resources/codex "$@"
+	bunx @openai/codex@latest "$@"
 }
 
 # >>> forge initialize >>>
