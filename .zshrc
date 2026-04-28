@@ -74,12 +74,6 @@ fi
 if [[ ":$FPATH:" != *":/Users/$USER/.zsh/completions:"* ]]; then export FPATH="/Users/$USER/.zsh/completions:$FPATH"; fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH="/opt/homebrew/bin:$PATH"; export PATH;
-
-# Prevent stale local "but" shims from shadowing the intended command.
-if [[ -e "$HOME/.local/bin/but" || -L "$HOME/.local/bin/but" ]]; then
-    rm -f "$HOME/.local/bin/but"
-fi
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/$USER/.oh-my-zsh"
@@ -165,13 +159,6 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='zed'
-fi
-
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
@@ -211,9 +198,6 @@ randomstring()
 {
     cat /dev/urandom | base64 | sed 's/\//_/' | fold -w ${1:-32} | head -n 1
 }
-export LC_MESSAGES=en_US.UTF-8
-
-
 dockspeedup() {
     defaults write com.apple.dock autohide-delay -int 0; defaults write com.apple.dock autohide-time-modifier -float 0.15; killall Dock
 }
@@ -222,8 +206,6 @@ unlockapp() {
     sudo chflags noschg "$1"
 }
 
-export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-export PATH="$PATH:/Users/$USER/Documents/proj/flutter/bin"
 hlg() { hyperlayout global "$1" ; }
 
 alias archiveall='ls -1 | grep -Ev '.tgz$' | while read f; do sudo tar czf "$f.tgz" "$f" && sudo rm -rf "$f"; done'
@@ -267,18 +249,9 @@ PY
         lscr.io/linuxserver/transmission:latest
 }
 
-eval "$(fnm env --use-on-cd --shell zsh)" >/dev/null 2>&1
-
-PATH="/Users/$USER/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/Users/$USER/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/Users/$USER/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/Users/$USER/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/Users/$USER/perl5"; export PERL_MM_OPT;
-
 # added by travis gem
 [ ! -s /Users/$USER/.travis/travis.sh ] || source /Users/$USER/.travis/travis.sh
 # export PATH="/usr/local/opt/openjdk/bin:$PATH"; export PATH;
-export BAT_THEME="GitHub"
 # alias code=code-insiders
 
 unloaditunes() {
@@ -309,8 +282,6 @@ gcp() { git commit -m "$*"; git push }
 gac() { git add -A; git commit -m "$*" }
 gacp() { git add -A; git commit -m "$*"; git push }
 giacp() { git init; git add -A; git commit -m "$*"; git push }
-export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-export PATH="/System/Volumes/Data/opt/homebrew/lib/ruby/gems/3.1.0/bin:$PATH"
 
 # RUN
 alias aocr='python main.py'
@@ -470,7 +441,6 @@ dotenv() {
 if ! [[ -n $NO_P10K ]]; then
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-export NODE_COMPILE_CACHE=~/.cache/nodejs-compile-cache
 fi
 
 cleancaches() {
@@ -727,17 +697,9 @@ midnight() {
 	s=$(( $(date -v+1d -v0H -v0M -v0S +%s) - $(date +%s) )); echo "Waiting $((s/3600))h $((s%3600/60))m $((s%60))s until midnight"; sleep $s
 }
 
-# Added by Antigravity
-export PATH="/Users/user/.antigravity/antigravity/bin:$PATH"
-
-export ANDROID_HOME=$HOME/Library/Android/sdk && export PATH=$PATH:$ANDROID_HOME/emulator && export PATH=$PATH:$ANDROID_HOME/platform-tools
-export GOOGLE_APPLICATION_CREDENTIALS=/Users/user/dotfiles/scriptswithsecrets/play-service-account.json
 unalias gpd 2>/dev/null
 
-# Added by GitButler installer
-export PATH="/Users/user/.local/bin:$PATH"
 eval "$(but completions zsh)"
-export PATH=$PATH:$HOME/.maestro/bin
 codex() {
 	bunx @openai/codex@latest "$@"
 }
