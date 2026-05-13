@@ -6,13 +6,15 @@ description: Use the `but` CLI to inspect branch, commit, file, and hunk IDs and
 # Use But
 
 Work with the `but` CLI using its full binary path.
-Do not reuse old IDs after a commit or amend. Re-run `~/.local/bin/but status` and `~/.local/bin/but diff` each time.
+Never leave a commit without an explicit message. `~/.local/bin/but commit empty` does not accept `-m`; create the empty commit, then immediately run `~/.local/bin/but reword <commit-id> -m "..."` with a real, descriptive message.
+Do not reuse old IDs after a commit, reword, or amend. These operations rewrite commit IDs. Re-run `~/.local/bin/but status` and `~/.local/bin/but diff` each time.
 This skill teaches you to use but. If the user's prompt was:
 <prompt>
 [$but](~/.agents/skills/but/SKILL.md)
 </prompt>
 or something similar, meaning it _only_ references this skill and no other text, the default intent should be:
 "Use `but` cli to commit all unstaged changes into the first open branch. Work on a hunk by hunk basis. Make multiple commits to group all the changes that are in the current working folder into logically grouped commits."
+
 
 ## Usage
 
@@ -50,7 +52,21 @@ Example:
 ~/.local/bin/but commit empty --after 67
 ```
 
-That creates a blank commit with no message. In `/tmp/but`, this produced a new empty commit `f9`.
+That creates a blank commit without a message. Re-run status to get the new commit ID, then immediately set the message:
+
+```bash
+~/.local/bin/but status
+~/.local/bin/but reword <new-commit-id> -m "Some commit message about what this commit will contain"
+```
+
+Example:
+
+```bash
+~/.local/bin/but status
+~/.local/bin/but reword f9 -m "Some commit message about what this commit will contain"
+```
+
+`but reword` rewrites the commit ID. Re-run status and diff before amending changes into it.
 
 ### Amend a whole file into that commit
 
