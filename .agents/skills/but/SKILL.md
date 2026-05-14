@@ -8,6 +8,8 @@ description: Use the `but` CLI to inspect branch, commit, file, and hunk IDs and
 Work with the `but` CLI using its full binary path.
 Never leave a commit without an explicit message. `~/.local/bin/but commit empty` does not accept `-m`; create the empty commit, then immediately run `~/.local/bin/but reword <commit-id> -m "..."` with a real, descriptive message.
 Do not reuse old IDs after a commit, reword, or amend. These operations rewrite commit IDs. Re-run `~/.local/bin/but status` and `~/.local/bin/but diff` each time.
+Prefer `stage` + `absorb` for normal dirty worktrees. `but commit <branch> -m ...` can create an empty commit if the changes are already staged/assigned to a branch. If `but status` shows a section like `[staged to <branch>]`, do not keep running `but commit`; use `but absorb <stack-id>` to materialize those assigned changes into the branch history.
+Do not run plain `git add` / `git commit` in GitButler workspace branches. The pre-commit hook blocks direct commits, and using the Git index can confuse what `but` sees as assigned changes.
 This skill teaches you to use but. If the user's prompt was:
 <prompt>
 [$but](~/.agents/skills/but/SKILL.md)
@@ -37,6 +39,35 @@ Use these commands to see the IDs you need before amending anything:
 
 - `status` shows branch IDs, commit IDs, and file IDs.
 - `diff` shows hunk IDs.
+
+### Commit normal dirty changes
+
+For normal unassigned changes, stage files or hunks to the target branch, then absorb the staged branch changes:
+
+```bash
+~/.local/bin/but status
+~/.local/bin/but diff
+~/.local/bin/but stage <file-or-hunk-id> <branch-id>
+~/.local/bin/but status
+~/.local/bin/but absorb <stack-id>
+```
+
+Example:
+
+```bash
+~/.local/bin/but stage h0 re
+~/.local/bin/but stage i0 re
+~/.local/bin/but status
+~/.local/bin/but absorb r0
+```
+
+Important details:
+
+- The target for `stage` is the branch ID, such as `re`.
+- The target for `absorb` is the stack ID that contains the staged changes, such as `r0`.
+- After staging, `status` may show `[staged to release]`; those are assigned changes, not normal unassigned changes.
+- `absorb` may amend older commits whose line ranges overlap the current changes. That is expected behavior for GitButler. Re-run `status` and `diff` afterwards to verify no changes remain.
+- If the user specifically wants a new standalone commit, use the empty-commit workflow below, then amend/rub changes into that commit deliberately.
 
 ### Create a new empty commit
 
