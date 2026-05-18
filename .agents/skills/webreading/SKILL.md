@@ -12,6 +12,13 @@ Fetch any web page as clean, LLM-friendly markdown using the Jina Reader API.
 To read a web page, make an HTTP request to the Jina Reader API by prefixing the target URL with `https://r.jina.ai/`:
 
 ```bash
+curl -s -H "Accept: text/markdown" \
+     "https://r.jina.ai/https://example.com"
+```
+
+Prefer the unauthenticated request above first. Only add the configured bearer token if an unauthenticated request is rate-limited or the page requires it:
+
+```bash
 curl -s -H "Authorization: Bearer $(cat ~/dotfiles/scriptswithsecrets/jina)" \
      -H "Accept: text/markdown" \
      "https://r.jina.ai/https://example.com"
@@ -40,23 +47,20 @@ By default, returns markdown. You can request other formats:
 
 ### Read a documentation page
 ```bash
-curl -s -H "Authorization: Bearer $(cat ~/dotfiles/scriptswithsecrets/jina)" \
-     -H "Accept: text/markdown" \
+curl -s -H "Accept: text/markdown" \
      "https://r.jina.ai/https://docs.example.com/getting-started"
 ```
 
 ### Extract just the article content
 ```bash
-curl -s -H "Authorization: Bearer $(cat ~/dotfiles/scriptswithsecrets/jina)" \
-     -H "Accept: text/markdown" \
+curl -s -H "Accept: text/markdown" \
      -H "X-Target-Selector: article" \
      "https://r.jina.ai/https://blog.example.com/post"
 ```
 
 ### Read a page with links preserved
 ```bash
-curl -s -H "Authorization: Bearer $(cat ~/dotfiles/scriptswithsecrets/jina)" \
-     -H "Accept: text/markdown" \
+curl -s -H "Accept: text/markdown" \
      -H "X-With-Links: true" \
      "https://r.jina.ai/https://example.com/resources"
 ```
@@ -65,4 +69,5 @@ curl -s -H "Authorization: Bearer $(cat ~/dotfiles/scriptswithsecrets/jina)" \
 
 - The API converts JavaScript-rendered pages to clean text, so it works on SPAs and dynamic sites.
 - For very large pages, consider using `X-Target-Selector` to extract only the relevant section.
-- Rate limits apply per the Jina API plan associated with this token.
+- If an authenticated request returns `InsufficientBalanceError`, retry without the `Authorization` header.
+- If `X-Target-Selector` returns no content, retry without the selector. Some documentation sites, including Kubernetes docs pages, may not expose content under a plain `article` selector to Reader.
