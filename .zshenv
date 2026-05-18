@@ -467,6 +467,7 @@ gcloud() {
 }
 
 gacpg() {
+    git init || return
     gac "$@"
     # check if remotes is empty:
     remotes=$(git remote)
