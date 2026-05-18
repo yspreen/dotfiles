@@ -134,9 +134,16 @@ alt-b = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh B Codex'
 alt-c = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh C "Zed"'
 alt-d = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh D Notion'
 alt-e = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh E "Messages"'
-alt-f = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh F "GitButler" f'
-# alt-f = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh F "GitButler Nightly" f'
-alt-g = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh G Ghostty f'
+alt-f = [
+  'workspace F',
+  'exec-and-forget open -a Fork',
+  'fullscreen',
+]
+alt-g = [
+  'workspace G',
+  'exec-and-forget open -a Ghostty',
+  'fullscreen',
+]
 alt-q = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh Q Figma'
 # alt-i = 'workspace I'
 # alt-m = 'workspace M'
@@ -283,16 +290,8 @@ if.app-id = 'com.mitchellh.ghostty'
 run = ['layout floating', 'move-node-to-workspace G']
 
 [[on-window-detected]]
-if.app-id = 'com.gitbutler.app'
-run = ['move-node-to-workspace F']
-
-[[on-window-detected]]
-if.app-id = 'com.gitbutler.app.nightly'
-run = ['move-node-to-workspace F']
-
-[[on-window-detected]]
-if.app-id = 'com.gitbutler.app'
-run = ['move-node-to-workspace F']
+if.app-id = 'com.DanPristupov.Fork'
+run = ['layout floating', 'move-node-to-workspace F']
 
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'

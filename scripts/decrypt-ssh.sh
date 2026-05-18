@@ -8,9 +8,17 @@ gpg() {
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 cd "$SCRIPT_DIR/.." || exit 1
 
-# Skip if .ssh already exists
-if [ -d .ssh ]; then
-    echo ".ssh directory already exists, skipping decryption"
+# Skip if all managed secret files/directories already exist
+managed_items=(.ssh .aws .doppler .npmrc .gnupg scriptswithsecrets secrets .sentryclirc .appstoreconnect)
+missing_items=()
+for item in "${managed_items[@]}"; do
+    if [ ! -e "$item" ]; then
+        missing_items+=("$item")
+    fi
+done
+
+if [ ${#missing_items[@]} -eq 0 ]; then
+    echo "All managed secret files/directories already exist, skipping decryption"
     exit 0
 fi
 
@@ -50,5 +58,5 @@ EOL
 
 chmod +x "$PRE_COMMIT"
 
-echo "SSH directory decrypted successfully"
+echo "Managed secret files/directories decrypted successfully"
 echo "Pre-commit hook installed"
