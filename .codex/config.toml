@@ -1,8 +1,12 @@
-model = "gpt-5.4"
-model_reasoning_effort = "high"
+model = "gpt-5.5"
+model_reasoning_effort = "low"
 sandbox_mode = "danger-full-access"
 personality = "pragmatic"
-notify = ["bash", "-lc", "afplay /System/Library/Sounds/Bottle.aiff"]
+
+
+
+
+notify = ["/Users/user/dotfiles/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended", "--previous-notify", "[\"bash\",\"-lc\",\"afplay \\/System\\/Library\\/Sounds\\/Bottle.aiff\"]"]
 
 [sandbox_workspace_write]
 network_access = true
@@ -18,6 +22,7 @@ hide_rate_limit_model_nudge = true
 
 [tui.model_availability_nux]
 "gpt-5.3-codex-spark" = 1
+"gpt-5.5" = 4
 
 [projects."/Users/user/Documents/proj/remy"]
 trust_level = "trusted"
@@ -27,3 +32,161 @@ trust_level = "trusted"
 
 [projects."/Users/user/Documents/proj/taxes"]
 trust_level = "trusted"
+
+[projects."/Users/user/dotfiles"]
+trust_level = "trusted"
+
+[projects."/Users/user"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/proj/mta"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/proj"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/proj/spreens"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/proj/translate"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/proj/hiragana"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/proj/code-business-card"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/proj/varick"]
+trust_level = "trusted"
+
+[projects."/Users/user/tmp"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/proj/tmp"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/proj/vpn"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/proj/question"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/proj/google-voice"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/proj/night-routine"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/proj/revenuecatskill"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/Codex/2026-05-12/let-s-build-a-new-settings"]
+trust_level = "trusted"
+
+[projects."/Users/user/Documents/proj/figmajson"]
+trust_level = "trusted"
+
+[projects."/Users/user/Downloads/torr/complete/Everything.Everywhere.All.At.Once.2022.1080p.WEBRip.DDP5.1.x264-NOGRP"]
+trust_level = "trusted"
+
+[[skills.config]]
+path = "/Users/user/dotfiles/.codex/skills/.system/imagegen/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/user/dotfiles/.codex/skills/.system/openai-docs/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/user/dotfiles/.codex/skills/.system/plugin-creator/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/user/dotfiles/.codex/skills/.system/skill-creator/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/user/dotfiles/.codex/skills/.system/skill-installer/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/user/dotfiles/.codex/skills/codex-primary-runtime/spreadsheets/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/Users/user/dotfiles/.codex/skills/codex-primary-runtime/slides/SKILL.md"
+enabled = false
+
+[[skills.config]]
+name = "documents:documents"
+enabled = false
+
+[[skills.config]]
+name = "figma:figma-code-connect"
+enabled = false
+
+[[skills.config]]
+name = "figma:figma-create-new-file"
+enabled = false
+
+[[skills.config]]
+name = "figma:figma-generate-design"
+enabled = false
+
+[[skills.config]]
+name = "figma:figma-generate-library"
+enabled = false
+
+[[skills.config]]
+name = "figma:figma-implement-design"
+enabled = false
+
+[[skills.config]]
+name = "figma:figma-use"
+enabled = false
+
+[[skills.config]]
+name = "figma:figma-create-design-system-rules"
+enabled = false
+
+[marketplaces.openai-bundled]
+last_updated = "2026-05-16T15:23:22Z"
+source_type = "local"
+source = "/Users/user/dotfiles/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+last_updated = "2026-05-16T03:08:52Z"
+source_type = "local"
+source = "/Users/user/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = false
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = false
+
+[plugins."documents@openai-primary-runtime"]
+enabled = false
+
+[plugins."gmail@openai-curated"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
+enabled = true
+
+[apps.connector_68df038e0ba48191908c8434991bbac2]
+enabled = false
+
+[mcp_servers.revenuecat]
+url = "https://mcp.revenuecat.ai/mcp"
+enabled = false
+
+[mcp_servers.cloudflare]
+url = "https://mcp.cloudflare.com/mcp"

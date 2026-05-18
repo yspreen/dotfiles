@@ -2,6 +2,7 @@
 set -euo pipefail
 
 SEARCH_ENDPOINT="http://localhost:8888/search"
+SEARCH_LANGUAGE="en"
 SEARXNG_CONTAINER_NAME="searxng"
 SEARXNG_IMAGE="docker.io/searxng/searxng:latest"
 SEARXNG_WORKDIR="${HOME}/Documents/proj/searxng"
@@ -53,6 +54,7 @@ searxng_is_ready() {
     curl -fsS --max-time 10 \
         --get \
         --data-urlencode "q=healthcheck" \
+        --data "language=${SEARCH_LANGUAGE}" \
         --data "format=json" \
         "$SEARCH_ENDPOINT" >/dev/null 2>&1
 }
@@ -63,6 +65,18 @@ container_is_running() {
 
 container_exists() {
     docker ps -a --filter "name=^/${SEARXNG_CONTAINER_NAME}$" --format '{{.Names}}' | grep -qx "${SEARXNG_CONTAINER_NAME}"
+}
+
+pull_latest_searxng_image() {
+    docker pull "${SEARXNG_IMAGE}" >/dev/null
+}
+
+container_uses_current_image() {
+    local container_image_id current_image_id
+    container_image_id="$(docker inspect -f '{{.Image}}' "${SEARXNG_CONTAINER_NAME}" 2>/dev/null || true)"
+    current_image_id="$(docker image inspect -f '{{.Id}}' "${SEARXNG_IMAGE}" 2>/dev/null || true)"
+
+    [[ -n "$container_image_id" && "$container_image_id" == "$current_image_id" ]]
 }
 
 container_matches_expected_config() {
@@ -106,8 +120,10 @@ release_container_lock() {
 }
 
 ensure_container_running_locked() {
+    pull_latest_searxng_image
+
     if container_exists; then
-        if ! container_matches_expected_config; then
+        if ! container_matches_expected_config || ! container_uses_current_image; then
             docker rm -f "${SEARXNG_CONTAINER_NAME}" >/dev/null 2>&1 || true
         elif container_is_running; then
             return
@@ -175,6 +191,7 @@ run_search_query() {
             if curl -fsS \
                 --get \
                 --data-urlencode "q=${query}" \
+                --data "language=${SEARCH_LANGUAGE}" \
                 --data "format=json" \
                 "$SEARCH_ENDPOINT" 2>/dev/null; then
                 return 0
@@ -183,6 +200,7 @@ run_search_query() {
             curl -fsS \
                 --get \
                 --data-urlencode "q=${query}" \
+                --data "language=${SEARCH_LANGUAGE}" \
                 --data "format=json" \
                 "$SEARCH_ENDPOINT"
             return 0
