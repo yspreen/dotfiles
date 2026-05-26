@@ -129,34 +129,26 @@ alt-shift-l = 'move right'
 # alt-7 = 'workspace 7'
 # alt-8 = 'workspace 8'
 # alt-9 = 'workspace 9'
-alt-a = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh A Safari'
-alt-b = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh B Codex'
-alt-c = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh C "Zed"'
-alt-d = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh D Notion'
-alt-e = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh E "Messages"'
-alt-f = [
-  'workspace F',
-  'exec-and-forget open -a Fork',
-  'fullscreen',
-]
-alt-g = [
-  'workspace G',
-  'exec-and-forget open -a Ghostty',
-  'fullscreen',
-]
-alt-q = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh Q Figma'
+alt-a = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh A Safari'
+alt-b = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh B Codex'
+alt-c = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh C "Zed"'
+alt-d = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh D Notion'
+alt-e = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh E "Messages"'
+alt-f = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh F Fork f'
+alt-g = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh G Ghostty f'
+alt-q = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh Q Figma'
 # alt-i = 'workspace I'
 # alt-m = 'workspace M'
 # alt-n = 'workspace N'
 # alt-o = 'workspace O'
 # alt-p = 'workspace P'
-alt-r = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh R Gmail'
+alt-r = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh R Gmail'
 # alt-s = 'workspace S'
-alt-t = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh T ChatGPT'
+alt-t = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh T ChatGPT'
 # alt-u = 'workspace U'
-alt-v = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh V Spotify'
-alt-w = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh W Calendar'
-alt-x = 'exec-and-forget ~/dotfiles/.config/aerospace/launch-app.sh X Xcode'
+alt-v = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh V Spotify'
+alt-w = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh W Calendar'
+alt-x = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh X Xcode'
 # alt-y = 'workspace Y'
 # alt-z = 'workspace Z'
 cmd-alt-ctrl-shift-p = "workspace-back-and-forth"

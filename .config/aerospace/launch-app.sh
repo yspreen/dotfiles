@@ -6,6 +6,7 @@
 workspace_letter="$1"
 app_name="$2"
 full_screen="$3"
+aerospace_bin="/usr/local/bin/aerospace"
 
 if [ -z "$workspace_letter" ] || [ -z "$app_name" ]; then
     echo "Usage: $0 <workspace_letter> <app_name>"
@@ -13,23 +14,19 @@ if [ -z "$workspace_letter" ] || [ -z "$app_name" ]; then
     exit 1
 fi
 
-# Get current workspace
-current_workspace=$(aerospace list-workspaces --focused)
+"$aerospace_bin" workspace "$workspace_letter"
 
-if [ "$current_workspace" = "$workspace_letter" ]; then
-    # Already on target workspace, launch the app
+window_count=$("$aerospace_bin" list-windows --workspace "$workspace_letter" --count)
+if [ "$window_count" -eq 0 ]; then
     open -a "$app_name"
-else
-    # Switch to target workspace
-    aerospace workspace "$workspace_letter"
 
-    # Check if workspace is empty (no windows)
-    window_count=$(aerospace list-windows --workspace "$workspace_letter" | wc -l)
-    if [ "$window_count" -eq 0 ]; then
-        # Workspace is empty, launch the app
-        open -a "$app_name"
+    if [ "$full_screen" = "f" ]; then
+        for _ in {1..30}; do
+            window_count=$("$aerospace_bin" list-windows --workspace "$workspace_letter" --count)
+            [ "$window_count" -gt 0 ] && break
+            sleep 0.1
+        done
     fi
 fi
 
-sleep 0.1
-[ "$full_screen" = "f" ] && aerospace fullscreen
+[ "$full_screen" = "f" ] && "$aerospace_bin" fullscreen
