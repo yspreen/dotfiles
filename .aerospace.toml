@@ -150,7 +150,7 @@ alt-v = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh V 
 alt-w = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh W Calendar'
 alt-x = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh X Xcode'
 # alt-y = 'workspace Y'
-# alt-z = 'workspace Z'
+alt-z = 'workspace Z'
 cmd-alt-ctrl-shift-p = "workspace-back-and-forth"
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
