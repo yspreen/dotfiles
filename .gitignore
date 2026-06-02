@@ -39,6 +39,15 @@
 .codex/..codex-global-state.json.tmp-1777368513223-de4584a0-3cca-4a14-92db-795308fef9c0
 .codex/..codex-global-state.json.tmp-1777614863806-0880872d-5e3a-4ccd-a31d-ef9d31d97b28
 .codex/.codex-global-state.json.bak
+.codex/..codex-global-state.json.bak.tmp-*
+.codex/attachments/
+.codex/chrome-native-hosts.json
+.codex/goals_*.sqlite*
+.codex/memories_*.sqlite*
+.codex/packages/
+.codex/process_manager/
+.codex/transcription-history.jsonl
+.codex/version.json
 .codex/ambient-suggestions/
 .codex/browser/
 .codex/computer-use/
