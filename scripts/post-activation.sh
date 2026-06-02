@@ -251,3 +251,10 @@ which xcodebuild || xcode-select --install
 
 [ -d ~/Applications/Gmail.app ] || unzip -q ~/dotfiles/other/Gmail.zip -d ~/Applications
 [ -d ~/Applications/Claude.app ] || unzip -q ~/dotfiles/other/Claude.zip -d ~/Applications
+
+command -v codex >/dev/null 2>&1 || {
+  tmp="$(mktemp)"
+  curl -fsSL https://chatgpt.com/codex/install.sh -o "$tmp" &&
+    yes "" | sh "$tmp"
+  rm -f "$tmp"
+} || true
