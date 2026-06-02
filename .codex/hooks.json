@@ -12,6 +12,19 @@
           }
         ]
       }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Frog.aiff",
+            "timeout": 5,
+            "statusMessage": "Playing pre-compact sound"
+          }
+        ]
+      }
     ]
   }
 }
