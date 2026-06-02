@@ -17,7 +17,7 @@ after-startup-command = [
 exec-on-workspace-change = [
   '/bin/bash',
   '-c',
-  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE; if [ "$AEROSPACE_PREV_WORKSPACE" = "U" ] && [ "$AEROSPACE_FOCUSED_WORKSPACE" != "U" ]; then /Users/user/dotfiles/.config/aerospace/set-reminders-gaps.sh "$AEROSPACE_FOCUSED_WORKSPACE"; fi',
 ]
 
 # Start AeroSpace at login
@@ -145,6 +145,7 @@ alt-q = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh Q 
 alt-r = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh R Gmail'
 # alt-s = 'workspace S'
 alt-t = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh T ChatGPT'
+ctrl-space = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-reminders-focused.sh'
 # alt-u = 'workspace U'
 alt-v = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh V Spotify'
 alt-w = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh W Calendar'
@@ -312,6 +313,10 @@ run = ['move-node-to-workspace E']
 [[on-window-detected]]
 if.app-id = 'com.apple.iCal'
 run = ['move-node-to-workspace W']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.reminders'
+run = ['move-node-to-workspace U']
 
 [[on-window-detected]]
 if.app-id = 'notion.id'

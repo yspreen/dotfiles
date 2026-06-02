@@ -14,10 +14,11 @@ if [ -z "$workspace_letter" ] || [ -z "$app_name" ]; then
     exit 1
 fi
 
+focused_workspace=$("$aerospace_bin" list-workspaces --focused)
 "$aerospace_bin" workspace "$workspace_letter"
 
 window_count=$("$aerospace_bin" list-windows --workspace "$workspace_letter" --count)
-if [ "$window_count" -eq 0 ]; then
+if [ "$focused_workspace" = "$workspace_letter" ] || [ "$window_count" -eq 0 ]; then
     open -a "$app_name"
 
     if [ "$full_screen" = "f" ]; then
