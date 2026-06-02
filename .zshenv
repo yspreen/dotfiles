@@ -554,8 +554,5 @@ midnight() {
 	s=$(( $(date -v+1d -v0H -v0M -v0S +%s) - $(date +%s) )); echo "Waiting $((s/3600))h $((s%3600/60))m $((s%60))s until midnight"; sleep $s
 }
 
-codex() {
-	bunx @openai/codex@latest "$@"
-}
 
 unfunction _zshenv_prepend_path _zshenv_append_path
