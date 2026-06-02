@@ -9,6 +9,8 @@ This skill means: clean up the current Git working copy by committing every inte
 
 Use plain `git`. Do not use GitButler or the `but` CLI.
 
+Prefer MANY SMALL commits over ONE LARGE commit.
+
 ## Default Intent
 
 If the user only invokes this skill, treat it as:
