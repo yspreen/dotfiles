@@ -37,7 +37,7 @@
   }:
   let
     username = "user";
-    configuration = { pkgs, ... }: let
+    configuration = { pkgs, lib, config, ... }: let
       # Get the directory containing this flake
       flakeDir = builtins.dirOf __curPos.file;
     in {
@@ -209,6 +209,26 @@
       # Set the primary user for user-specific options
       system.primaryUser = username;
 
+      system.activationScripts.applications.text = lib.mkForce ''
+        echo "setting up /Users/${username}/Applications/Nix Apps..." >&2
+
+        targetFolder="/Users/${username}/Applications/Nix Apps"
+        mkdir -p "$targetFolder"
+
+        rsyncFlags=(
+          --checksum
+          --copy-unsafe-links
+          --archive
+          --delete
+          --chmod=-w
+          --no-group
+          --no-owner
+        )
+
+        ${pkgs.rsync}/bin/rsync "''${rsyncFlags[@]}" ${config.system.build.applications}/Applications/ "$targetFolder"
+        chown -R ${username}:staff "$targetFolder"
+      '';
+
       system.activationScripts.postActivation.text = ''
         sudo -u ${username} bash -c "cd /Users/${username}/dotfiles/scripts; ./post-activation.sh ${username}"
       '';
@@ -261,31 +281,31 @@
           # "inkscape"
           # "macfuse"
           # "mitmproxy" # I don't know why I had this one twice. once in the brews and once in the casks
-          "ngrok"
+          # "ngrok"
           # "openscad"
           "cloudflare-warp"
           "adguard"
-          "visual-studio-code"
+          # "visual-studio-code"
           "sf-symbols"
           "ukelele"
           "karabiner-elements"
-          "gitbutler"
-          "raycast"
-          "github-copilot-for-xcode"
+          # "gitbutler"
+          # "raycast"
+          # "github-copilot-for-xcode"
           "zed"
           "slack"
           "spotify"
           "obs"
           "calendr"
-          "codexbar"
+          # "codexbar"
           "ghostty"
-          "claude-code"
+          # "claude-code"
         ];
         taps = [
           "nikitabobko/tap" # aerospace
-          "cargo-lambda/cargo-lambda"
+          # "cargo-lambda/cargo-lambda"
           "pakerwreah/calendr"
-          "steipete/tap"
+          # "steipete/tap"
           "rudrankriyam/tap"
           "dl-alexandre/tap"
         ];
@@ -303,7 +323,7 @@
           TestFlight = 899247664;
           UnlimitedClipboardHistory = 6705136056;
           Telegram = 747648890;
-          Unblocked = 6736508661;
+          # Unblocked = 6736508661;
         };
       };
     };
