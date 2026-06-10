@@ -317,8 +317,15 @@ cleancaches() {
 
     # Node.js caches
     bash -c 'sudo rm -rf ~/.npm/_cacache'
+    bash -c 'sudo rm -rf ~/.npm/_npx'
+    bash -c 'sudo rm -rf ~/.npm/_prebuilds'
+    bash -c 'sudo rm -rf ~/.npm/_libvips'
     bash -c 'sudo rm -rf ~/.cache/nodejs-compile-cache'
     bash -c 'sudo rm -rf ~/.yarn/cache'
+    bash -c 'sudo rm -rf ~/.yarn/berry/cache'
+    bash -c 'sudo rm -rf ~/.cache/yarn'
+    bash -c 'sudo rm -rf ~/Library/Caches/Yarn'
+    bash -c 'sudo rm -rf ~/Library/Caches/bun'
     bash -c 'sudo rm -rf ~/.pnpm-store'
     bash -c 'sudo rm -rf node_modules/.cache'
 
