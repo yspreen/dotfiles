@@ -40,6 +40,33 @@
     configuration = { pkgs, lib, config, ... }: let
       # Get the directory containing this flake
       flakeDir = builtins.dirOf __curPos.file;
+      masApps = {
+        # AdGuardForSafari = 1440147259; # replaced by adguard brew package
+        Amphetamine = 937984704;
+        Tailscale = 1475387142;
+        JsonPeep = 1458969831;
+        WhatsApp = 310633997;
+        VpnUnlimited = 694633015;
+        TestFlight = 899247664;
+        UnlimitedClipboardHistory = 6705136056;
+        Telegram = 747648890;
+        # Unblocked = 6736508661;
+      };
+      brewfileWithoutMasApps = pkgs.writeText "Brewfile-without-mas-apps" (
+        builtins.concatStringsSep "\n" (
+          builtins.filter
+            (line: !(lib.hasPrefix "mas " line))
+            (lib.splitString "\n" config.homebrew.brewfile)
+        )
+      );
+      masInstallCommands = lib.concatStringsSep "\n" (
+        lib.mapAttrsToList
+          (name: id: ''
+            echo >&2 "Using ${name}"
+            mas install ${toString id}
+          '')
+          masApps
+      );
     in {
       nixpkgs.config.allowUnfree = true;
 
@@ -233,6 +260,32 @@
         sudo -u ${username} bash -c "cd /Users/${username}/dotfiles/scripts; ./post-activation.sh ${username}"
       '';
 
+      system.activationScripts.homebrew.text = lib.mkForce ''
+        ${config.system.activationScripts.setup-homebrew.text}
+
+        # Homebrew Bundle
+        echo >&2 "Homebrew bundle..."
+        if [ -f "/opt/homebrew/bin/brew" ]; then
+          PATH="/opt/homebrew/bin:${lib.makeBinPath [ pkgs.mas ]}:$PATH" \
+          sudo \
+            --preserve-env=PATH \
+            --user=${username} \
+            --set-home \
+            env \
+            brew bundle --file='${brewfileWithoutMasApps}' --cleanup --zap
+
+          PATH="/opt/homebrew/bin:${lib.makeBinPath [ pkgs.mas ]}:$PATH" \
+          sudo \
+            --preserve-env=PATH \
+            --user=${username} \
+            --set-home \
+            env \
+            bash -euc '${masInstallCommands}'
+        else
+          echo -e "\e[1;31merror: Homebrew is not installed, skipping...\e[0m" >&2
+        fi
+      '';
+
       homebrew = {
         enable = true;
         user = username;
@@ -314,18 +367,7 @@
         # put casks in ~/Applications so updates don't prompt for admin
         caskArgs = { appdir = "~/Applications"; };
 
-        masApps = {
-          # AdGuardForSafari = 1440147259; # replaced by adguard brew package
-          Amphetamine = 937984704;
-          Tailscale = 1475387142;
-          JsonPeep = 1458969831;
-          WhatsApp = 310633997;
-          VpnUnlimited = 694633015;
-          TestFlight = 899247664;
-          UnlimitedClipboardHistory = 6705136056;
-          Telegram = 747648890;
-          # Unblocked = 6736508661;
-        };
+        masApps = masApps;
       };
     };
   in
