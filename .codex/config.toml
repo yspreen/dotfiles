@@ -7,6 +7,7 @@ personality = "pragmatic"
 
 
 notify = ["/Users/user/dotfiles/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended", "--previous-notify", "[\"bash\",\"-lc\",\"afplay \\/System\\/Library\\/Sounds\\/Bottle.aiff\"]"]
+service_tier = "default"
 
 [sandbox_workspace_write]
 exclude_slash_tmp = false
@@ -110,6 +111,9 @@ trust_level = "trusted"
 [projects."/Users/user/.convex"]
 trust_level = "trusted"
 
+[projects."/Users/user/Documents/Codex/2026-06-05/safari-plugin-computer-use-openai-bundled"]
+trust_level = "trusted"
+
 [[skills.config]]
 path = "/Users/user/dotfiles/.codex/skills/.system/imagegen/SKILL.md"
 enabled = false
@@ -171,17 +175,14 @@ name = "figma:figma-create-design-system-rules"
 enabled = false
 
 [marketplaces.openai-bundled]
-last_updated = "2026-06-02T03:14:02Z"
+last_updated = "2026-06-10T03:43:49Z"
 source_type = "local"
 source = "/Users/user/dotfiles/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-06-01T18:09:11Z"
+last_updated = "2026-06-10T06:09:40Z"
 source_type = "local"
 source = "/Users/user/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
-
-[plugins."computer-use@openai-bundled"]
-enabled = true
 
 [plugins."spreadsheets@openai-primary-runtime"]
 enabled = false
@@ -195,6 +196,9 @@ enabled = false
 [plugins."gmail@openai-curated"]
 enabled = true
 
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
 [plugins."browser@openai-bundled"]
 enabled = true
 
@@ -206,28 +210,28 @@ enabled = false
 
 [mcp_servers.revenuecat]
 url = "https://mcp.revenuecat.ai/mcp"
-enabled = false
+enabled = true
 
 [mcp_servers.cloudflare]
 url = "https://mcp.cloudflare.com/mcp"
 
 [mcp_servers.node_repl]
 args = []
-command = "/Applications/Codex.app/Contents/Resources/node_repl"
+command = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node_repl"
 startup_timeout_sec = 120
 
 [mcp_servers.node_repl.env]
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
-NODE_REPL_NODE_MODULE_DIRS = ""
-NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/node"
+NODE_REPL_NODE_MODULE_DIRS = "/Applications/Codex.app/Contents/Resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node"
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/user/.codex"
 CODEX_HOME = "/Users/user/.codex"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "0b0d41e7a14a4903d2f95b0b3f427ed796b12c8edca2fa392a03df43997075ae"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "72614174f4dad67a58d46a3ac759cffb45c92fa48a293af4c4ea35102ba391ba"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-SKY_CUA_SERVICE_PATH = "/Users/user/.codex/plugins/cache/openai-bundled/computer-use/1.0.799/Codex Computer Use.app"
+BROWSER_USE_CODEX_APP_VERSION = "26.608.12217"
 CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
 
 [desktop]
@@ -242,8 +246,8 @@ show-context-window-usage = true
 global = "zed"
 
 [features]
-js_repl = false
 hooks = true
+js_repl = false
 
 [hooks.state]
 
