@@ -6,7 +6,17 @@
 workspace_letter="$1"
 app_name="$2"
 full_screen="$3"
-aerospace_bin="/usr/local/bin/aerospace"
+aerospace_bin="${AEROSPACE_BIN:-$(command -v aerospace || true)}"
+if [ -z "$aerospace_bin" ]; then
+    for candidate in /opt/homebrew/bin/aerospace /usr/local/bin/aerospace; do
+        [ -x "$candidate" ] && aerospace_bin="$candidate" && break
+    done
+fi
+
+if [ -z "$aerospace_bin" ]; then
+    echo "aerospace not found"
+    exit 1
+fi
 
 if [ -z "$workspace_letter" ] || [ -z "$app_name" ]; then
     echo "Usage: $0 <workspace_letter> <app_name>"

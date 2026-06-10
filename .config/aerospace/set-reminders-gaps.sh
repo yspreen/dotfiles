@@ -43,5 +43,11 @@ s/\\[gaps\\]\\ninner\\.horizontal = \\d+\\ninner\\.vertical = \\d+\\nouter\\.bot
 " "$config_file"
 
 if [ "$reload" != "--no-reload" ]; then
-    /usr/local/bin/aerospace reload-config --no-gui
+    aerospace_bin="${AEROSPACE_BIN:-$(command -v aerospace || true)}"
+    if [ -z "$aerospace_bin" ]; then
+        for candidate in /opt/homebrew/bin/aerospace /usr/local/bin/aerospace; do
+            [ -x "$candidate" ] && aerospace_bin="$candidate" && break
+        done
+    fi
+    [ -n "$aerospace_bin" ] && "$aerospace_bin" reload-config --no-gui
 fi
