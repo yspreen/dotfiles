@@ -7,7 +7,14 @@ set -o pipefail
 workspace_letter="U"
 app_name="Reminders"
 app_id="com.apple.reminders"
-aerospace_bin="/usr/local/bin/aerospace"
+aerospace_bin="${AEROSPACE_BIN:-$(command -v aerospace || true)}"
+if [ -z "$aerospace_bin" ]; then
+    for candidate in /opt/homebrew/bin/aerospace /usr/local/bin/aerospace; do
+        [ -x "$candidate" ] && aerospace_bin="$candidate" && break
+    done
+fi
+
+[ -n "$aerospace_bin" ] || exit 1
 
 /Users/user/dotfiles/.config/aerospace/set-reminders-gaps.sh "$workspace_letter"
 

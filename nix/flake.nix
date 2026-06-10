@@ -325,6 +325,9 @@
             # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
             enableRosetta = true;
 
+            # Automatically migrate existing Homebrew installations into nix-homebrew ownership.
+            autoMigrate = true;
+
             # User owning the Homebrew prefix
             user = username;
           };
