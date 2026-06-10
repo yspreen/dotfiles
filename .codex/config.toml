@@ -175,7 +175,7 @@ name = "figma:figma-create-design-system-rules"
 enabled = false
 
 [marketplaces.openai-bundled]
-last_updated = "2026-06-10T03:43:49Z"
+last_updated = "2026-06-10T07:22:05Z"
 source_type = "local"
 source = "/Users/user/dotfiles/.codex/.tmp/bundled-marketplaces/openai-bundled"
 

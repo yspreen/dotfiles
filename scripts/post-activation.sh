@@ -157,7 +157,8 @@ defaults write com.apple.inputsources AppleEnabledThirdPartyInputSources -array 
         <integer>-26430</integer>
         <key>KeyboardLayout Name</key>
         <string>U.S. qwerty + umlaut</string>
-    </dict>'
+    </dict>' ||
+    echo "Warning: could not write com.apple.inputsources AppleEnabledThirdPartyInputSources"
 
 # Step 2. Restart SystemUIServer so the changes are picked up.
 killall SystemUIServer
@@ -195,6 +196,8 @@ pnpm install >/dev/null 2>&1
 pnpm --silent run latest-issue "$@" --cwd="$OLD_WORKING_DIR"
 cd "$OLD_WORKING_DIR"' >/opt/homebrew/bin/sentry-latest
 
+rm -f /opt/homebrew/bin/flyctl /opt/homebrew/bin/fly /opt/homebrew/bin/but /opt/homebrew/bin/butmerge
+
 echo '#!/bin/bash
 raw_flyctl() {
   nix-shell -p flyctl --run "flyctl $(printf "%q " "$@")"
@@ -220,6 +223,7 @@ else
   raw_flyctl "$@"
 fi
 ' >/opt/homebrew/bin/flyctl
+
 echo '#!/bin/bash
 flyctl "$@"' >/opt/homebrew/bin/fly
 
