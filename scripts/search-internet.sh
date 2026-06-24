@@ -5,15 +5,22 @@ SEARCH_ENDPOINT="http://localhost:8888/search"
 SEARCH_LANGUAGE="en"
 SEARXNG_CONTAINER_NAME="searxng"
 SEARXNG_IMAGE="docker.io/searxng/searxng:latest"
-SEARXNG_WORKDIR="${HOME}/Documents/proj/searxng"
-SEARXNG_CONFIG_DIR="${SEARXNG_WORKDIR}/config"
-SEARXNG_DATA_DIR="${SEARXNG_WORKDIR}/data"
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/search-internet"
+RUNTIME_DIR="${STATE_DIR}/runtime"
+SEARXNG_WORKDIR="${RUNTIME_DIR}"
+SEARXNG_CONFIG_DIR="${RUNTIME_DIR}/config"
+SEARXNG_DATA_DIR="${RUNTIME_DIR}/data"
+SEARXNG_SETTINGS_PATH="/etc/searxng/search-internet.yml"
+MANAGED_SETTINGS_FILE="${SEARXNG_CONFIG_DIR}/search-internet.yml"
+MANAGED_SETTINGS_VERSION=1
 LAST_SEARCH_FILE="${STATE_DIR}/last-search-epoch"
 WATCHER_PID_FILE="${STATE_DIR}/watcher.pid"
+WATCHER_VERSION_FILE="${STATE_DIR}/watcher.version"
+WATCHER_LOG_FILE="${STATE_DIR}/watcher.log"
+WATCHER_VERSION=2
 CONTAINER_LOCK_DIR="${STATE_DIR}/container.lock"
 
-IDLE_TIMEOUT_SECONDS=$((10 * 60))
+IDLE_TIMEOUT_SECONDS=60
 WAIT_TIMEOUT_SECONDS=120
 POLL_INTERVAL_SECONDS=5
 
@@ -60,11 +67,11 @@ searxng_is_ready() {
 }
 
 container_is_running() {
-    docker ps --filter "name=^/${SEARXNG_CONTAINER_NAME}$" --format '{{.Names}}' | grep -qx "${SEARXNG_CONTAINER_NAME}"
+    docker ps --filter "name=^/${SEARXNG_CONTAINER_NAME}$" --format '{{.Names}}' 2>/dev/null | grep -qx "${SEARXNG_CONTAINER_NAME}"
 }
 
 container_exists() {
-    docker ps -a --filter "name=^/${SEARXNG_CONTAINER_NAME}$" --format '{{.Names}}' | grep -qx "${SEARXNG_CONTAINER_NAME}"
+    docker ps -a --filter "name=^/${SEARXNG_CONTAINER_NAME}$" --format '{{.Names}}' 2>/dev/null | grep -qx "${SEARXNG_CONTAINER_NAME}"
 }
 
 pull_latest_searxng_image() {
@@ -80,15 +87,111 @@ container_uses_current_image() {
 }
 
 container_matches_expected_config() {
-    local image mounts ports
+    local image mounts ports env
     image="$(docker inspect -f '{{.Config.Image}}' "${SEARXNG_CONTAINER_NAME}" 2>/dev/null || true)"
     mounts="$(docker inspect -f '{{range .Mounts}}{{println .Source "->" .Destination}}{{end}}' "${SEARXNG_CONTAINER_NAME}" 2>/dev/null || true)"
     ports="$(docker port "${SEARXNG_CONTAINER_NAME}" 8080/tcp 2>/dev/null || true)"
+    env="$(docker inspect -f '{{range .Config.Env}}{{println .}}{{end}}' "${SEARXNG_CONTAINER_NAME}" 2>/dev/null || true)"
 
     [[ "$image" == "${SEARXNG_IMAGE}" || "$image" == "searxng/searxng:latest" ]] || return 1
     grep -Fqx "${SEARXNG_CONFIG_DIR} -> /etc/searxng" <<<"$mounts" || return 1
     grep -Fqx "${SEARXNG_DATA_DIR} -> /var/cache/searxng" <<<"$mounts" || return 1
     grep -Eq ':8888$' <<<"$ports" || return 1
+    grep -Fqx "SEARXNG_SETTINGS_PATH=${SEARXNG_SETTINGS_PATH}" <<<"$env" || return 1
+}
+
+extract_secret_key_setting() {
+    local settings_file="$1"
+    [[ -f "$settings_file" ]] || return 1
+
+    awk '
+        /^[[:space:]]*secret_key:[[:space:]]*/ {
+            sub(/^[[:space:]]*secret_key:[[:space:]]*/, "")
+            print
+            exit
+        }
+    ' "$settings_file"
+}
+
+generate_secret_key_setting() {
+    if command -v openssl >/dev/null 2>&1; then
+        printf '"%s"\n' "$(openssl rand -hex 32)"
+    elif command -v uuidgen >/dev/null 2>&1; then
+        printf '"%s"\n' "$(uuidgen | tr -d '-')"
+    else
+        printf '"search-internet-%s"\n' "$(date +%s)"
+    fi
+}
+
+ensure_managed_settings_file() {
+    local secret_key tmp
+
+    if [[ -f "$MANAGED_SETTINGS_FILE" ]] &&
+        grep -Fqx "# search-internet-settings-version: ${MANAGED_SETTINGS_VERSION}" "$MANAGED_SETTINGS_FILE"; then
+        return
+    fi
+
+    secret_key="$(extract_secret_key_setting "$MANAGED_SETTINGS_FILE" || true)"
+    if [[ -z "$secret_key" ]]; then
+        secret_key="$(generate_secret_key_setting)"
+    fi
+
+    tmp="$(mktemp "${MANAGED_SETTINGS_FILE}.XXXXXX")"
+    cat >"$tmp" <<EOF
+# search-internet-settings-version: ${MANAGED_SETTINGS_VERSION}
+# Managed by search-internet.sh. Uses SearXNG defaults and only overrides command requirements.
+use_default_settings: true
+
+search:
+  default_lang: "${SEARCH_LANGUAGE}"
+  formats:
+    - html
+    - json
+
+server:
+  bind_address: "0.0.0.0"
+  secret_key: ${secret_key}
+  limiter: false
+  public_instance: false
+  method: "GET"
+EOF
+    mv "$tmp" "$MANAGED_SETTINGS_FILE"
+}
+
+cleanup_runtime_files() {
+    rm -rf "$RUNTIME_DIR"
+    rm -f "$LAST_SEARCH_FILE" "$WATCHER_PID_FILE" "$WATCHER_VERSION_FILE" "$WATCHER_LOG_FILE"
+}
+
+teardown_search_stack() {
+    local image_id
+    image_id=""
+
+    if docker info >/dev/null 2>&1; then
+        image_id="$(docker inspect -f '{{.Image}}' "${SEARXNG_CONTAINER_NAME}" 2>/dev/null || true)"
+        docker rm -f "${SEARXNG_CONTAINER_NAME}" >/dev/null 2>&1 || true
+
+        if [[ -n "$image_id" ]]; then
+            docker image rm "$image_id" >/dev/null 2>&1 || true
+        fi
+        docker image rm "${SEARXNG_IMAGE}" >/dev/null 2>&1 || true
+    fi
+
+    cleanup_runtime_files
+}
+
+print_container_failure_and_exit() {
+    local status
+    status="$(docker inspect -f '{{.State.Status}}{{if .State.ExitCode}} (exit {{.State.ExitCode}}){{end}}' "${SEARXNG_CONTAINER_NAME}" 2>/dev/null || true)"
+    if [[ -n "$status" ]]; then
+        echo "SearXNG container stopped before it became ready: ${status}" >&2
+    else
+        echo "SearXNG container stopped before it became ready." >&2
+    fi
+
+    docker logs --tail 80 "${SEARXNG_CONTAINER_NAME}" >&2 2>/dev/null || true
+    teardown_search_stack
+    exit 1
 }
 
 acquire_container_lock() {
@@ -120,11 +223,20 @@ release_container_lock() {
 }
 
 ensure_container_running_locked() {
+    ensure_managed_settings_file
     pull_latest_searxng_image
 
     if container_exists; then
-        if ! container_matches_expected_config || ! container_uses_current_image; then
+        local old_image_id uses_current
+        old_image_id="$(docker inspect -f '{{.Image}}' "${SEARXNG_CONTAINER_NAME}" 2>/dev/null || true)"
+        uses_current=1
+        container_uses_current_image || uses_current=0
+
+        if ! container_matches_expected_config || ((uses_current == 0)); then
             docker rm -f "${SEARXNG_CONTAINER_NAME}" >/dev/null 2>&1 || true
+            if ((uses_current == 0)) && [[ -n "$old_image_id" ]]; then
+                docker image rm "$old_image_id" >/dev/null 2>&1 || true
+            fi
         elif container_is_running; then
             return
         else
@@ -135,8 +247,9 @@ ensure_container_running_locked() {
 
     if (
         cd "${SEARXNG_WORKDIR}"
-        docker run --rm --name "${SEARXNG_CONTAINER_NAME}" -d \
+        docker run --name "${SEARXNG_CONTAINER_NAME}" -d \
             -p 8888:8080 \
+            -e "SEARXNG_SETTINGS_PATH=${SEARXNG_SETTINGS_PATH}" \
             -v "./config/:/etc/searxng/" \
             -v "./data/:/var/cache/searxng/" \
             "${SEARXNG_IMAGE}" >/dev/null
@@ -157,29 +270,23 @@ ensure_container_running_locked() {
 start_search_container_if_needed() {
     mkdir -p "${SEARXNG_CONFIG_DIR}" "${SEARXNG_DATA_DIR}" "${STATE_DIR}"
 
-    acquire_container_lock
-    trap release_container_lock RETURN
     ensure_container_running_locked
-    trap - RETURN
-    release_container_lock
 
     local waited=0
     until searxng_is_ready; do
+        if ! container_is_running; then
+            print_container_failure_and_exit
+        fi
+
         sleep "$POLL_INTERVAL_SECONDS"
         waited=$((waited + POLL_INTERVAL_SECONDS))
         if ((waited >= WAIT_TIMEOUT_SECONDS)); then
             echo "SearXNG is not reachable at ${SEARCH_ENDPOINT}." >&2
+            docker logs --tail 80 "${SEARXNG_CONTAINER_NAME}" >&2 2>/dev/null || true
+            teardown_search_stack
             exit 1
         fi
     done
-}
-
-kill_search_container() {
-    if ! docker info >/dev/null 2>&1; then
-        return
-    fi
-
-    docker kill "${SEARXNG_CONTAINER_NAME}" >/dev/null 2>&1 || true
 }
 
 run_search_query() {
@@ -197,13 +304,15 @@ run_search_query() {
                 return 0
             fi
         else
-            curl -fsS \
+            if curl -fsS \
                 --get \
                 --data-urlencode "q=${query}" \
                 --data "language=${SEARCH_LANGUAGE}" \
                 --data "format=json" \
-                "$SEARCH_ENDPOINT"
-            return 0
+                "$SEARCH_ENDPOINT"; then
+                return 0
+            fi
+            return 1
         fi
 
         attempt=$((attempt + 1))
@@ -214,6 +323,12 @@ run_search_query() {
 watch_for_idle_timeout() {
     while true; do
         if [[ ! -f "$LAST_SEARCH_FILE" ]]; then
+            if ! container_exists; then
+                cleanup_runtime_files
+                rmdir "$STATE_DIR" 2>/dev/null || true
+                exit 0
+            fi
+
             sleep "$POLL_INTERVAL_SECONDS"
             continue
         fi
@@ -223,9 +338,21 @@ watch_for_idle_timeout() {
         last="$(cat "$LAST_SEARCH_FILE" 2>/dev/null || echo 0)"
 
         if [[ "$last" =~ ^[0-9]+$ ]] && ((now - last >= IDLE_TIMEOUT_SECONDS)); then
-            kill_search_container
-            rm -f "$WATCHER_PID_FILE"
-            exit 0
+            acquire_container_lock
+            trap release_container_lock EXIT
+
+            now="$(date +%s)"
+            last="$(cat "$LAST_SEARCH_FILE" 2>/dev/null || echo 0)"
+            if [[ "$last" =~ ^[0-9]+$ ]] && ((now - last >= IDLE_TIMEOUT_SECONDS)); then
+                teardown_search_stack
+                release_container_lock
+                trap - EXIT
+                rmdir "$STATE_DIR" 2>/dev/null || true
+                exit 0
+            fi
+
+            release_container_lock
+            trap - EXIT
         fi
 
         sleep "$POLL_INTERVAL_SECONDS"
@@ -234,17 +361,23 @@ watch_for_idle_timeout() {
 
 ensure_watcher_running() {
     if [[ -f "$WATCHER_PID_FILE" ]]; then
-        local existing_pid
+        local existing_pid existing_version
         existing_pid="$(cat "$WATCHER_PID_FILE" 2>/dev/null || true)"
-        if [[ -n "$existing_pid" ]] && kill -0 "$existing_pid" 2>/dev/null; then
+        existing_version="$(cat "$WATCHER_VERSION_FILE" 2>/dev/null || true)"
+        if [[ -n "$existing_pid" ]] && kill -0 "$existing_pid" 2>/dev/null &&
+            [[ "$existing_version" == "$WATCHER_VERSION" ]]; then
             return
+        fi
+        if [[ -n "$existing_pid" ]] && kill -0 "$existing_pid" 2>/dev/null; then
+            kill "$existing_pid" 2>/dev/null || true
         fi
     fi
 
     local script_path
     script_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
-    nohup "$script_path" --watch >/dev/null 2>&1 &
+    nohup bash "$script_path" --watch >"$WATCHER_LOG_FILE" 2>&1 &
     echo "$!" >"$WATCHER_PID_FILE"
+    echo "$WATCHER_VERSION" >"$WATCHER_VERSION_FILE"
 }
 
 main() {
@@ -260,13 +393,22 @@ main() {
     fi
 
     local query="$1"
+    local search_status=0
+
+    acquire_container_lock
+    trap release_container_lock EXIT
+
     start_docker_if_needed
     start_search_container_if_needed
+    date +%s >"$LAST_SEARCH_FILE"
 
-    run_search_query "$query"
-
+    run_search_query "$query" || search_status=$?
     date +%s >"$LAST_SEARCH_FILE"
     ensure_watcher_running
+
+    release_container_lock
+    trap - EXIT
+    return "$search_status"
 }
 
 main "$@"
