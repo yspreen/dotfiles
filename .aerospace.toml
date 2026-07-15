@@ -1,6 +1,9 @@
 # Place a copy of this config to ~/.aerospace.toml
 # After that, you can edit ~/.aerospace.toml to your liking
 
+config-version = 2
+persistent-workspaces = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'Q', 'R', 'T', 'V', 'W', 'X', 'Z']
+
 # You can use it to add commands that run after login to macOS user session.
 # 'start-at-login' needs to be 'true' for 'after-login-command' to work
 # Available commands: https://nikitabobko.github.io/AeroSpace/commands
@@ -129,7 +132,7 @@ alt-shift-l = 'move right'
 # alt-7 = 'workspace 7'
 # alt-8 = 'workspace 8'
 # alt-9 = 'workspace 9'
-alt-a = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh A Safari'
+alt-a = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh A "Google Chrome"'
 alt-b = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh B Codex'
 alt-c = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh C "Zed"'
 alt-d = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh D Notion'
@@ -299,6 +302,10 @@ if.app-id = 'com.google.Chrome'
 run = ['move-node-to-workspace A']
 
 [[on-window-detected]]
+if.app-id = 'com.apple.LocalAuthentication.UIAgent'
+run = ['move-node-to-workspace A']
+
+[[on-window-detected]]
 if.app-id = 'com.apple.MobileSMS'
 run = ['move-node-to-workspace E']
 
@@ -355,6 +362,7 @@ if.app-id = 'com.openai.codex'
 run = ['move-node-to-workspace B']
 
 [[on-window-detected]]
+if = 'true'
 run = ['move-node-to-workspace Z']
 
 # osascript -e 'id of app "Notion"'
