@@ -52,3 +52,12 @@
 .codex/browser/
 .codex/computer-use/
 .codex/chrome-native-hosts-v2.json
+
+# Codex runtime state and generated installations
+.codex/.app-server-state-reconciled-v1
+.codex/mcp-oauth-locks/
+.codex/node_repl/active_execs/
+.codex/plugins/.plugin-appserver/
+.codex/skills/chrome-file-upload-unblock/
+.codex/sqlite/*.sqlite*
+.codex/worktrees/
