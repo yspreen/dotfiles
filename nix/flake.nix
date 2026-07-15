@@ -40,6 +40,13 @@
     configuration = { pkgs, lib, config, ... }: let
       # Get the directory containing this flake
       flakeDir = builtins.dirOf __curPos.file;
+      bunCanary = pkgs.bun.overrideAttrs (_: {
+        version = "1.4.0-canary.1+aa327ab81";
+        src = pkgs.fetchurl {
+          url = "https://github.com/oven-sh/bun/releases/download/canary/bun-darwin-aarch64.zip";
+          hash = "sha256-tIEmb3S7FaNmH0lgZBMV++h8SVV6P76bntpsjfRzvGg=";
+        };
+      });
       masApps = {
         # AdGuardForSafari = 1440147259; # replaced by adguard brew package
         Amphetamine = 937984704;
@@ -74,7 +81,7 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [
-          pkgs.bun
+          bunCanary
           pkgs.ffmpeg
           pkgs.git
           pkgs.gnupg
@@ -103,7 +110,6 @@
         pkgs.montserrat
         pkgs.geist-font
         pkgs.roboto-mono
-        (pkgs.callPackage "${flakeDir}/font/figtree.nix" { }).out
       ];
 
       system.defaults = {
@@ -266,13 +272,19 @@
         # Homebrew Bundle
         echo >&2 "Homebrew bundle..."
         if [ -f "/opt/homebrew/bin/brew" ]; then
+          sudo --user=${username} --set-home /opt/homebrew/bin/brew trust --tap \
+            nikitabobko/tap \
+            pakerwreah/calendr \
+            rudrankriyam/tap \
+            dl-alexandre/tap
+
           PATH="/opt/homebrew/bin:${lib.makeBinPath [ pkgs.mas ]}:$PATH" \
           sudo \
             --preserve-env=PATH \
             --user=${username} \
             --set-home \
             env \
-            brew bundle --file='${brewfileWithoutMasApps}' --cleanup --zap
+            brew bundle --file='${brewfileWithoutMasApps}' --no-upgrade
 
           PATH="/opt/homebrew/bin:${lib.makeBinPath [ pkgs.mas ]}:$PATH" \
           sudo \
@@ -289,9 +301,9 @@
       homebrew = {
         enable = true;
         user = username;
-        onActivation.cleanup = "zap";
+        onActivation.cleanup = "none";
         onActivation.autoUpdate = true;
-        onActivation.upgrade = true;
+        onActivation.upgrade = false;
         brews = [
           "coreutils"
           "bat"
