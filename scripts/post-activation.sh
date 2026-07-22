@@ -259,3 +259,25 @@ which xcodebuild || xcode-select --install
 command -v codex >/dev/null 2>&1 || {
   sh -c 'curl -fsSL https://chatgpt.com/codex/install.sh | CODEX_NON_INTERACTIVE=1 sh'
 } || true
+
+brew_prefix=$(/opt/homebrew/bin/brew --prefix)
+cp ~/dotfiles/cliproxyapi.conf "$brew_prefix/etc/cliproxyapi.conf"
+REPL='/Users/user/dotfiles/secrets/cliapiproxy.txt' \
+perl -0777 -i -pe '
+BEGIN {
+    $needle = q{$placeholder};
+
+    open my $fh, "<", $ENV{REPL}
+        or die "Cannot read replacement file: $!\n";
+
+    $replacement = do { local $/; <$fh> };
+    $replacement =~ s/\r?\n\z//;
+}
+
+$count += s/\Q$needle\E/$replacement/g;
+
+END {
+    die "No literal \$placeholder found\n" unless $count;
+    print STDERR "Replaced $count occurrence(s)\n";
+}
+' "$brew_prefix/etc/cliproxyapi.conf"

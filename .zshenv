@@ -564,6 +564,7 @@ midnight() {
 unfunction _zshenv_prepend_path _zshenv_append_path
 
 export ANTHROPIC_BASE_URL=http://127.0.0.1:8317
+export ANTHROPIC_AUTH_TOKEN=`cat /Users/user/dotfiles/secrets/cliapiproxy.txt`
 export ANTHROPIC_DEFAULT_OPUS_MODEL=gpt-5.6-sol
 # export ANTHROPIC_DEFAULT_OPUS_MODEL=gpt-5.6-sol(low)
 export ANTHROPIC_DEFAULT_SONNET_MODEL=gpt-5.6-terra
