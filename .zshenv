@@ -451,7 +451,6 @@ cx() {
 }
 
 cl() {
-    (brew upgrade --cask claude-code >/dev/null 2>&1 &)
     claude "$@" --dangerously-skip-permissions
 }
 
@@ -563,3 +562,13 @@ midnight() {
 
 
 unfunction _zshenv_prepend_path _zshenv_append_path
+
+export ANTHROPIC_BASE_URL=http://127.0.0.1:8317
+export ANTHROPIC_DEFAULT_OPUS_MODEL=gpt-5.6-sol
+# export ANTHROPIC_DEFAULT_OPUS_MODEL=gpt-5.6-sol(low)
+export ANTHROPIC_DEFAULT_SONNET_MODEL=gpt-5.6-terra
+# export ANTHROPIC_DEFAULT_SONNET_MODEL=gpt-5.6-terra(low)
+export ANTHROPIC_DEFAULT_HAIKU_MODEL=gpt-5.6-luna
+# export ANTHROPIC_DEFAULT_HAIKU_MODEL=gpt-5.6-luna(medium)
+export CLAUDE_CODE_DISABLE_1M_CONTEXT=1
+export CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=85
