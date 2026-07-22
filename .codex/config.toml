@@ -224,7 +224,7 @@ path = "/Users/user/dotfiles/.agents/skills/duolingo-lesson/SKILL.md"
 enabled = false
 
 [marketplaces.openai-bundled]
-last_updated = "2026-07-22T04:55:39Z"
+last_updated = "2026-07-22T05:56:43Z"
 source_type = "local"
 source = "/Users/user/dotfiles/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
@@ -276,7 +276,7 @@ enabled = true
 enabled = true
 
 [plugins."browser@openai-bundled"]
-enabled = false
+enabled = true
 
 [apps.connector_68df038e0ba48191908c8434991bbac2]
 enabled = false
@@ -299,7 +299,6 @@ enabled = false
 args = []
 command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
 startup_timeout_sec = 120
-enabled = false
 
 [mcp_servers.node_repl.env]
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
@@ -307,13 +306,13 @@ NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_n
 NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/user/.codex"
 CODEX_HOME = "/Users/user/.codex"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "2793c6809f8a4c90923435aa3a6d1e6f8cabb145212f06328b860b076b899525,6d25aa7656feac858f3a3bdaea5bcbab0dbfd426c9de8e6931ce90c399ee8e4f"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "6d25aa7656feac858f3a3bdaea5bcbab0dbfd426c9de8e6931ce90c399ee8e4f,f6a4312a0a663361556224da122fe509c001f3641aaeee81b402813ccbf63121"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.715.71837"
+BROWSER_USE_CODEX_APP_VERSION = "26.715.72028"
 SKY_CUA_SERVICE_PATH = "/Users/user/.codex/plugins/cache/openai-bundled/computer-use/1.0.1000451/Codex Computer Use.app"
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
 
@@ -321,7 +320,7 @@ CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
 command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
 args = ["mcp"]
 cwd = "."
-enabled = false
+enabled = true
 
 [desktop]
 appearanceTheme = "light"
@@ -351,5 +350,5 @@ trusted_hash = "sha256:ed711eebfc3013ff918d24e1cd83a4e3f7138925de540e06bd58f0040
 
 [shell_environment_policy.set]
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "2793c6809f8a4c90923435aa3a6d1e6f8cabb145212f06328b860b076b899525,6d25aa7656feac858f3a3bdaea5bcbab0dbfd426c9de8e6931ce90c399ee8e4f"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "6d25aa7656feac858f3a3bdaea5bcbab0dbfd426c9de8e6931ce90c399ee8e4f,f6a4312a0a663361556224da122fe509c001f3641aaeee81b402813ccbf63121"
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/user/.codex"

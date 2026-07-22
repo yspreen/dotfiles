@@ -328,6 +328,7 @@
           # "redis"
           "sqlite"
           "wget"
+          "cliproxyapi"
           # "cargo-lambda"
           # "zig" # for cargo lambda
           "mas"
@@ -365,7 +366,7 @@
           "calendr"
           # "codexbar"
           "ghostty"
-          # "claude-code"
+          "claude-code"
         ];
         taps = [
           "nikitabobko/tap" # aerospace
