@@ -1,19 +1,6 @@
 ---
 name: browser
-description: Automate web browser interactions using natural language via CLI commands. Use when the user asks to browse websites, navigate web pages, extract data from websites, take screenshots, fill forms, click buttons, or interact with web applications. Supports remote Browserbase sessions with Browserbase Identity, Verified browsers, automatic CAPTCHA solving, and residential proxies — ideal for protected websites and JavaScript-heavy pages.
-compatibility: "Requires the browse CLI (`npm install -g browse`). Remote Browserbase sessions need `BROWSERBASE_API_KEY`. Local mode uses Chrome/Chromium on your machine."
-license: MIT
-allowed-tools: Bash
-metadata:
-  openclaw:
-    requires:
-      bins:
-        - browse
-    install:
-      - kind: node
-        package: "browse"
-        bins: [browse]
-    homepage: https://github.com/browserbase/skills
+description: Automate web browser interactions using natural language via CLI commands. Use when the user asks to browse websites, navigate web pages, extract data from websites, take screenshots, fill forms, click buttons, or interact with web applications. Only use locally, never remote
 ---
 
 # Browser Automation
