@@ -138,6 +138,7 @@ alias randompw='LC_ALL=C tr -dc "A-Za-z0-9-_" </dev/urandom | head -c 20 ; echo'
 alias kraken='open -a "GitButler"'
 
 alias sentry-wizard='pnpm dlx @sentry/wizard@latest'
+alias browse='bunx browse'
 
 alias wifion='networksetup -setnetworkserviceenabled Wi-Fi on'
 alias wifioff='networksetup -setnetworkserviceenabled Wi-Fi off'
