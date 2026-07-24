@@ -14,6 +14,8 @@ and `Please list the user's open tabs` is an example action.
 
 Default to Luna. Terra is only intended for tricky tasks. Normal browsing, page reading, tab management, and form interaction should use Luna.
 
+There's no concept of past commands here. Each execution starts with a blank slate. So saying something like "Please re-open that url" won't make any sense to the chrome interface agent. Each command is stateless. Only the chrome browser itself has state.
+
 Tell Codex what to do with the `/chrome` prefix. The Chrome plugin controls the user's existing Chrome session and can use open tabs, logged-in sessions, and installed extensions.
 
 ## Browser connection

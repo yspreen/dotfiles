@@ -13,6 +13,8 @@ Available models:
 
 Use Luna by default. Use Terra only for genuinely tricky work. Every delegated request must begin with `/computer` and describe the requested action in natural language.
 
+There's no concept of past commands here. Each execution starts with a blank slate. So saying something like "Please re-open that url" won't make any sense to the chrome interface agent. Each command is stateless. Only the chrome browser itself has state.
+
 The computer plugin targets the local Mac and exposes 10 actions through a persistent JavaScript `sky` object.
 
 ## Target
