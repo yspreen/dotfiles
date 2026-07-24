@@ -127,6 +127,9 @@ trust_level = "trusted"
 [projects."/Users/user/Documents/proj/cantire"]
 trust_level = "trusted"
 
+[projects."/Users/user/Documents/proj/lovetalk"]
+trust_level = "trusted"
+
 [[skills.config]]
 path = "/Users/user/dotfiles/.codex/skills/.system/imagegen/SKILL.md"
 enabled = false
