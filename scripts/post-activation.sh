@@ -247,7 +247,9 @@ mkdir -p "$HOME/.local/bin"
 ln -sfn /opt/homebrew/bin/but "$HOME/.local/bin/but"
 ln -sfn /opt/homebrew/bin/butmerge "$HOME/.local/bin/butmerge"
 ln -sfn /opt/homebrew/bin/search-internet "$HOME/.local/bin/search-internet"
+ln -sfn "$HOME/dotfiles/scripts/git" /opt/homebrew/bin/git
 
+chmod +x "$HOME/dotfiles/scripts/git"
 chmod +x /opt/homebrew/bin/* 2>/dev/null || true
 
 [ $(find /Applications -maxdepth 1 -iname 'xcode*' | wc -l) -gt 0 ] || install_xcode

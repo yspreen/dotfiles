@@ -1,0 +1,57 @@
+#!/bin/bash
+
+real_git=/run/current-system/sw/bin/git
+[[ -x "$real_git" ]] || real_git=/usr/bin/git
+
+git_prefix=()
+subcommand=
+expect_global_value=false
+
+for arg in "$@"; do
+  if [[ "$expect_global_value" == true ]]; then
+    git_prefix+=("$arg")
+    expect_global_value=false
+    continue
+  fi
+
+  case "$arg" in
+    -C|-c|--git-dir|--work-tree|--namespace|--super-prefix|--config-env)
+      git_prefix+=("$arg")
+      expect_global_value=true
+      ;;
+    -C*|-c*|--git-dir=*|--work-tree=*|--namespace=*|--super-prefix=*|--config-env=*|--exec-path=*|--paginate|--no-pager|--no-replace-objects|--bare|--literal-pathspecs|--glob-pathspecs|--noglob-pathspecs|--icase-pathspecs|--no-optional-locks|--no-advice)
+      git_prefix+=("$arg")
+      ;;
+    --*)
+      git_prefix+=("$arg")
+      ;;
+    -*)
+      git_prefix+=("$arg")
+      ;;
+    *)
+      subcommand="$arg"
+      break
+      ;;
+  esac
+done
+
+"$real_git" "$@"
+git_status=$?
+
+if (( git_status == 0 )) && [[ "$subcommand" == commit ]]; then
+  message_file="$(mktemp "${TMPDIR:-/tmp}/git-message.XXXXXX")" || exit "$git_status"
+  cleaned_file="$(mktemp "${TMPDIR:-/tmp}/git-message-cleaned.XXXXXX")" || {
+    rm -f "$message_file"
+    exit "$git_status"
+  }
+  trap 'rm -f "$message_file" "$cleaned_file"' EXIT HUP INT TERM
+
+  "$real_git" "${git_prefix[@]}" log -1 --format=%B > "$message_file"
+  if grep -Eq '^Co-Authored-By: .*@anthropic\.com>$' "$message_file"; then
+    sed '/^Co-Authored-By: .*@anthropic\.com>$/d' "$message_file" > "$cleaned_file"
+    "$real_git" "${git_prefix[@]}" commit --amend --quiet --no-verify --no-post-rewrite -F "$cleaned_file"
+    git_status=$?
+  fi
+fi
+
+exit "$git_status"
