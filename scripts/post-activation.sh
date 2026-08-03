@@ -178,7 +178,10 @@ cat <<'EOF' >/opt/homebrew/bin/swift-format
 #!/usr/bin/env bash
 exec nix run nixpkgs#swift-format -- "$@"
 EOF
-echo 'nix-shell -p gh --run "gh $(printf "%q " "$@")"' >/opt/homebrew/bin/gh
+cat <<'EOF' >/opt/homebrew/bin/gh-real
+#!/usr/bin/env bash
+exec nix-shell -p gh --run "gh $(printf "%q " "$@")"
+EOF
 echo 'nix-shell -p ncdu --run "ncdu $(printf "%q " "$@")"' >/opt/homebrew/bin/ncdu
 echo 'nix-shell -p doppler --run "doppler $(printf "%q " "$@")"' >/opt/homebrew/bin/doppler
 echo 'nix-shell -p xcodes --run "xcodes $(printf "%q " "$@")"' >/opt/homebrew/bin/xcodes
@@ -248,8 +251,10 @@ ln -sfn /opt/homebrew/bin/but "$HOME/.local/bin/but"
 ln -sfn /opt/homebrew/bin/butmerge "$HOME/.local/bin/butmerge"
 ln -sfn /opt/homebrew/bin/search-internet "$HOME/.local/bin/search-internet"
 ln -sfn "$HOME/dotfiles/scripts/git" /opt/homebrew/bin/git
+ln -sfn "$HOME/dotfiles/scripts/gh" /opt/homebrew/bin/gh
 
 chmod +x "$HOME/dotfiles/scripts/git"
+chmod +x "$HOME/dotfiles/scripts/gh"
 chmod +x /opt/homebrew/bin/* 2>/dev/null || true
 
 [ $(find /Applications -maxdepth 1 -iname 'xcode*' | wc -l) -gt 0 ] || install_xcode
