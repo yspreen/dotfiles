@@ -101,7 +101,7 @@ restart-next() {
     lsof -ti:3000 | xargs kill -9
 }
 
-fork() { open -a "GitButler" "${1:-.}"; }
+alias fork=/Applications/Fork.app/Contents/MacOS/Fork
 
 function listall() {
     emulate -L zsh
