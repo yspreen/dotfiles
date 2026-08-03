@@ -49,7 +49,6 @@
       });
       masApps = {
         # AdGuardForSafari = 1440147259; # replaced by adguard brew package
-        Amphetamine = 937984704;
         Tailscale = 1475387142;
         JsonPeep = 1458969831;
         WhatsApp = 310633997;
