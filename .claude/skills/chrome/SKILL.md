@@ -7,12 +7,12 @@ You can run actions to interface with Chrome like this command:
 `codex --yolo --model=$model -c model_reasoning_effort="low" e "/chrome Please list the user's open tabs" 2>/dev/null`
 
 where `$model` can be one of:
-gpt-5.6-luna
 gpt-5.6-terra
+gpt-5.6-sol
 
 and `Please list the user's open tabs` is an example action.
 
-Default to Luna. Terra is only intended for tricky tasks. Normal browsing, page reading, tab management, and form interaction should use Luna.
+Default to Terra. Sol is only intended for tricky tasks. Normal browsing, page reading, tab management, and form interaction should use Terra.
 
 There's no concept of past commands here. Each execution starts with a blank slate. So saying something like "Please re-open that url" won't make any sense to the chrome interface agent. Each command is stateless. Only the chrome browser itself has state.
 

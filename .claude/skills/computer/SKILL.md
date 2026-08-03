@@ -8,10 +8,10 @@ You can run actions to interface with the computer like this command:
 
 Available models:
 
-- `gpt-5.6-luna`
 - `gpt-5.6-terra`
+- `gpt-5.6-sol`
 
-Use Luna by default. Use Terra only for genuinely tricky work. Every delegated request must begin with `/computer` and describe the requested action in natural language.
+Use Terra by default. Use Sol only for genuinely tricky work. Every delegated request must begin with `/computer` and describe the requested action in natural language.
 
 There's no concept of past commands here. Each execution starts with a blank slate. So saying something like "Please re-open that url" won't make any sense to the chrome interface agent. Each command is stateless. Only the chrome browser itself has state.
 

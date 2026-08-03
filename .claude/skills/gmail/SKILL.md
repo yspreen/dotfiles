@@ -7,12 +7,12 @@ You can run actions to interface with gmail like this command:
 `codex --yolo --model=$model -c model_reasoning_effort="low" e "/gmail Please read the user's latest email" 2>/dev/null`
 
 where `$model` can be one of:
-gpt-5.6-luna
 gpt-5.6-terra
+gpt-5.6-sol
 
 and `Please read the user's latest email` is an example action.
 
-You should default to luna. Terra is only intended for tricky tasks. But reading and writing emails isn't tricky. So Luna should be the default.
+You should default to terra. Sol is only intended for tricky tasks. But reading and writing emails isn't tricky. So Terra should be the default.
 
 You can tell codex to run any of these actions with the `/gmail` prefix:
 
