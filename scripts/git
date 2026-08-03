@@ -102,22 +102,71 @@ if [[ "$creates_branch" == true && "$user_asked_for_it" != true ]]; then
   exit 1
 fi
 
+message_file=
+if [[ "$subcommand" == commit ]]; then
+  if [[ ! -x /bin/rm ]]; then
+    echo "git shim: required cleanup tool /bin/rm is unavailable" >&2
+    exit 1
+  fi
+
+  temp_base="${TMPDIR:-/tmp}/git-message.$$"
+  for ((attempt = 0; attempt < 100; attempt++)); do
+    candidate="$temp_base.$attempt"
+    if (umask 077; set -o noclobber; : > "$candidate") 2>/dev/null; then
+      message_file="$candidate"
+      break
+    fi
+  done
+
+  if [[ -z "$message_file" ]]; then
+    echo "git shim: could not create commit-message workspace" >&2
+    exit 1
+  fi
+
+  trap '/bin/rm -f -- "$message_file"' EXIT HUP INT TERM
+fi
+
 "$real_git" "${forward_args[@]}"
 git_status=$?
 
 if (( git_status == 0 )) && [[ "$subcommand" == commit ]]; then
-  message_file="$(mktemp "${TMPDIR:-/tmp}/git-message.XXXXXX")" || exit "$git_status"
-  cleaned_file="$(mktemp "${TMPDIR:-/tmp}/git-message-cleaned.XXXXXX")" || {
-    rm -f "$message_file"
-    exit "$git_status"
-  }
-  trap 'rm -f "$message_file" "$cleaned_file"' EXIT HUP INT TERM
+  if ! "$real_git" "${git_prefix[@]}" log -1 --format=%B > "$message_file"; then
+    echo "git shim: could not inspect committed message" >&2
+    exit 1
+  fi
 
-  "$real_git" "${git_prefix[@]}" log -1 --format=%B > "$message_file"
-  if grep -Eq '^Co-Authored-By: .*@anthropic\.com>$' "$message_file"; then
-    sed '/^Co-Authored-By: .*@anthropic\.com>$/d' "$message_file" > "$cleaned_file"
-    "$real_git" "${git_prefix[@]}" commit --amend --quiet --no-verify --no-post-rewrite -F "$cleaned_file"
-    git_status=$?
+  anthropic_trailer_regex='^[[:space:]]*Co-Authored-By[[:space:]]*:[[:space:]]*.*@anthropic\.com>[[:space:]]*$'
+  cleaned_message=
+  found_anthropic_trailer=false
+  nocasematch_was_set=false
+  if shopt -q nocasematch; then
+    nocasematch_was_set=true
+  else
+    shopt -s nocasematch
+  fi
+
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    if [[ "$line" =~ $anthropic_trailer_regex ]]; then
+      found_anthropic_trailer=true
+    else
+      cleaned_message+="$line"$'\n'
+    fi
+  done < "$message_file"
+
+  if [[ "$nocasematch_was_set" != true ]]; then
+    shopt -u nocasematch
+  fi
+
+  if [[ "$found_anthropic_trailer" == true ]]; then
+    if ! printf '%s' "$cleaned_message" > "$message_file"; then
+      echo "git shim: could not rewrite committed message" >&2
+      exit 1
+    fi
+
+    if ! "$real_git" "${git_prefix[@]}" commit --amend --quiet --no-verify --no-post-rewrite -F "$message_file"; then
+      echo "git shim: could not remove Anthropic co-author trailer" >&2
+      exit 1
+    fi
   fi
 fi
 
