@@ -5,9 +5,25 @@ real_git=/run/current-system/sw/bin/git
 
 git_prefix=()
 subcommand=
+subcommand_args=()
+forward_args=()
 expect_global_value=false
+user_asked_for_it=false
 
 for arg in "$@"; do
+  if [[ "$arg" == --user-asked-for-it ]]; then
+    user_asked_for_it=true
+  else
+    forward_args+=("$arg")
+  fi
+done
+
+for arg in "${forward_args[@]}"; do
+  if [[ -n "$subcommand" ]]; then
+    subcommand_args+=("$arg")
+    continue
+  fi
+
   if [[ "$expect_global_value" == true ]]; then
     git_prefix+=("$arg")
     expect_global_value=false
@@ -30,12 +46,63 @@ for arg in "$@"; do
       ;;
     *)
       subcommand="$arg"
-      break
       ;;
   esac
 done
 
-"$real_git" "$@"
+creates_branch=false
+case "$subcommand" in
+  branch)
+    branch_mode=create
+    for arg in "${subcommand_args[@]}"; do
+      case "$arg" in
+        -d|-D|--delete|-m|-M|--move|-c|-C|--copy|-l|--list|-a|--all|-r|--remotes|--show-current|--edit-description|-u|--set-upstream-to|--set-upstream-to=*|--unset-upstream|--contains|--contains=*|--no-contains|--no-contains=*|--merged|--merged=*|--no-merged|--no-merged=*|--points-at|--points-at=*|--format|--format=*|--sort|--sort=*)
+          branch_mode=other
+          ;;
+        --)
+          ;;
+        -*)
+          ;;
+        *)
+          if [[ "$branch_mode" == create ]]; then
+            creates_branch=true
+          fi
+          break
+          ;;
+      esac
+    done
+    ;;
+  checkout)
+    for arg in "${subcommand_args[@]}"; do
+      case "$arg" in
+        -b|-B|--orphan|--orphan=*) creates_branch=true ;;
+      esac
+    done
+    ;;
+  switch)
+    for arg in "${subcommand_args[@]}"; do
+      case "$arg" in
+        -c|-C|--create|--create=*|--force-create|--force-create=*) creates_branch=true ;;
+      esac
+    done
+    ;;
+  worktree)
+    if [[ "${subcommand_args[0]}" == add ]]; then
+      for arg in "${subcommand_args[@]:1}"; do
+        case "$arg" in
+          -b|-B) creates_branch=true ;;
+        esac
+      done
+    fi
+    ;;
+esac
+
+if [[ "$creates_branch" == true && "$user_asked_for_it" != true ]]; then
+  echo "Please don't create a new branch until the user explicitly asks for it. If they did, retry with --user-asked-for-it." >&2
+  exit 1
+fi
+
+"$real_git" "${forward_args[@]}"
 git_status=$?
 
 if (( git_status == 0 )) && [[ "$subcommand" == commit ]]; then
