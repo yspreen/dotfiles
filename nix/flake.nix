@@ -242,6 +242,18 @@
       # Set the primary user for user-specific options
       system.primaryUser = username;
 
+      launchd.user.agents.daily-updates = {
+        command = "/Users/${username}/dotfiles/scripts/daily.sh";
+        serviceConfig = {
+          RunAtLoad = true;
+          StartCalendarInterval = [{ Hour = 4; Minute = 17; }];
+          ProcessType = "Background";
+          LowPriorityIO = true;
+          StandardOutPath = "/dev/null";
+          StandardErrorPath = "/dev/null";
+        };
+      };
+
       system.activationScripts.applications.text = lib.mkForce ''
         echo "setting up /Users/${username}/Applications/Nix Apps..." >&2
 
@@ -362,11 +374,10 @@
           "zed"
           "slack"
           "spotify"
-          "obs"
           "calendr"
           # "codexbar"
           "ghostty"
-          "claude-code"
+          "claude-code@latest"
         ];
         taps = [
           "nikitabobko/tap" # aerospace
