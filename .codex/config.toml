@@ -1,5 +1,5 @@
 model = "gpt-5.6-sol"
-model_reasoning_effort = "low"
+model_reasoning_effort = "high"
 sandbox_mode = "danger-full-access"
 personality = "pragmatic"
 
@@ -239,7 +239,7 @@ path = "/Users/user/dotfiles/.agents/skills/duolingo-lesson/SKILL.md"
 enabled = false
 
 [marketplaces.openai-bundled]
-last_updated = "2026-08-03T02:40:55Z"
+last_updated = "2026-08-03T05:52:39Z"
 source_type = "local"
 source = "/Users/user/dotfiles/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
