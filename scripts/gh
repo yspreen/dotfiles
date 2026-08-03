@@ -1,0 +1,197 @@
+#!/bin/bash
+
+set -u
+
+real_gh=${GH_SHIM_REAL_GH:-/opt/homebrew/bin/gh-real}
+forward_args=()
+user_approved_usage_of_ai_terms=false
+
+for arg in "$@"; do
+  if [[ "$arg" == --user-approved-usage-of-ai-terms ]]; then
+    user_approved_usage_of_ai_terms=true
+  else
+    forward_args+=("$arg")
+  fi
+done
+
+if [[ ! -x "$real_gh" ]]; then
+  printf 'gh shim: real GitHub CLI launcher is unavailable: %s\n' "$real_gh" >&2
+  exit 1
+fi
+
+command_name=
+subcommand_name=
+create_arg_index=-1
+index=0
+while (( index < ${#forward_args[@]} )); do
+  arg=${forward_args[$index]}
+
+  case "$arg" in
+    --help|-h|--version)
+      exec "$real_gh" "${forward_args[@]}"
+      ;;
+    -R|--repo|--hostname)
+      index=$((index + 2))
+      continue
+      ;;
+    -R?*|--repo=*|--hostname=*)
+      index=$((index + 1))
+      continue
+      ;;
+  esac
+
+  if [[ -z "$command_name" ]]; then
+    case "$arg" in
+      -*) ;;
+      *) command_name=$arg ;;
+    esac
+  elif [[ -z "$subcommand_name" ]]; then
+    case "$arg" in
+      -*) ;;
+      *)
+        subcommand_name=$arg
+        create_arg_index=$((index + 1))
+        break
+        ;;
+    esac
+  fi
+
+  index=$((index + 1))
+done
+
+if [[ "$command_name" != pr || ( "$subcommand_name" != create && "$subcommand_name" != new ) ]]; then
+  exec "$real_gh" "${forward_args[@]}"
+fi
+
+body=
+body_found=false
+unsupported_body_source=false
+ambiguous_arguments=false
+help_requested=false
+index=$create_arg_index
+
+while (( index < ${#forward_args[@]} )); do
+  arg=${forward_args[$index]}
+
+  case "$arg" in
+    --)
+      break
+      ;;
+    --help|-h)
+      help_requested=true
+      break
+      ;;
+    --body)
+      index=$((index + 1))
+      if (( index >= ${#forward_args[@]} )); then
+        ambiguous_arguments=true
+        break
+      fi
+      body=${forward_args[$index]}
+      body_found=true
+      ;;
+    --body=*)
+      body=${arg#--body=}
+      body_found=true
+      ;;
+    --body-file|--body-file=*|--editor|--editor=*|--fill|--fill=*|--fill-first|--fill-first=*|--fill-verbose|--fill-verbose=*|--recover|--recover=*|--template|--template=*|--web|--web=*)
+      unsupported_body_source=true
+      ;;
+    --assignee|--base|--head|--label|--milestone|--project|--repo|--reviewer|--title)
+      index=$((index + 1))
+      if (( index >= ${#forward_args[@]} )); then
+        ambiguous_arguments=true
+        break
+      fi
+      ;;
+    --assignee=*|--base=*|--head=*|--label=*|--milestone=*|--project=*|--repo=*|--reviewer=*|--title=*|--draft|--draft=*|--dry-run|--dry-run=*|--no-maintainer-edit|--no-maintainer-edit=*)
+      ;;
+    --*)
+      ambiguous_arguments=true
+      ;;
+    -?*)
+      short_index=1
+      while (( short_index < ${#arg} )); do
+        short_flag=${arg:$short_index:1}
+        case "$short_flag" in
+          b)
+            short_index=$((short_index + 1))
+            if (( short_index < ${#arg} )); then
+              body=${arg:$short_index}
+            else
+              index=$((index + 1))
+              if (( index >= ${#forward_args[@]} )); then
+                ambiguous_arguments=true
+                break
+              fi
+              body=${forward_args[$index]}
+            fi
+            body_found=true
+            break
+            ;;
+          F|T|e|f|w)
+            unsupported_body_source=true
+            break
+            ;;
+          a|B|H|l|m|p|r|t|R)
+            short_index=$((short_index + 1))
+            if (( short_index >= ${#arg} )); then
+              index=$((index + 1))
+              if (( index >= ${#forward_args[@]} )); then
+                ambiguous_arguments=true
+              fi
+            fi
+            break
+            ;;
+          d)
+            short_index=$((short_index + 1))
+            if (( short_index < ${#arg} )); then
+              short_value=${arg:$short_index}
+              if [[ "$short_value" == =true || "$short_value" == =false ]]; then
+                break
+              fi
+            fi
+            ;;
+          h)
+            help_requested=true
+            break
+            ;;
+          *)
+            ambiguous_arguments=true
+            break
+            ;;
+        esac
+      done
+      ;;
+  esac
+
+  if [[ "$help_requested" == true ]]; then
+    break
+  fi
+  index=$((index + 1))
+done
+
+if [[ "$help_requested" == true ]]; then
+  exec "$real_gh" "${forward_args[@]}"
+fi
+
+if [[ "$unsupported_body_source" == true || "$ambiguous_arguments" == true || "$body_found" != true ]]; then
+  printf 'gh shim: pull request creation requires an inline body via --body so it can be screened for prohibited coding-tool terms\n' >&2
+  exit 1
+fi
+
+if ! lowercase_body=$(printf '%s' "$body" | LC_ALL=C /usr/bin/tr '[:upper:]' '[:lower:]'); then
+  printf 'gh shim: could not inspect pull request body\n' >&2
+  exit 1
+fi
+
+if [[ "$user_approved_usage_of_ai_terms" != true ]] &&
+   [[ "$lowercase_body" == *claude* || "$lowercase_body" == *codex* ]]; then
+  printf '%s\n' \
+    'Unfortunately, this repository that we'"'"'re working with here has a strict policy against advertising coding tools So mentioning "Claude" or "Codex" is strictly prohibited Please try submitting a new version of this pull request that does not mention "Claude" or "Codex"' \
+    'ONLY If you do believe that the functionality that we add in this PR is about codex or claude itself, we might be able to grant an exception. In that case ask the user for resolution If the user approves it manually, you can add this flag: --user-approved-usage-of-ai-terms' \
+    'This is only an exception for pull requests that are about coding tools themselves, which should be a very very rare edge case. So in 99.9% of cases, please just reword your message to remove the advertisement for the AI coding tool.' >&2
+  exit 1
+fi
+
+exec "$real_gh" "${forward_args[@]}"
