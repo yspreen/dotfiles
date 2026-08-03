@@ -57,3 +57,4 @@
 .codex/*state.json.tmp*
 .codex/*state.json.bak*
 .codex/sqlite/codex-history-snapshots-dev.db
+.codex/thread-writer-locks/.coordination.lock

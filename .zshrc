@@ -236,3 +236,4 @@ rga() {
 fda() {
   fd -HI "$@"
 }
+unset NO_COLOR
