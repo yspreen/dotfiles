@@ -99,6 +99,8 @@ esac
 
 if [[ "$creates_branch" == true && "$user_asked_for_it" != true ]]; then
   echo "Please don't create a new branch until the user explicitly asks for it. If they did, retry with --user-asked-for-it." >&2
+  echo "This is a policy for this thread. There might be a global policy on this machine saying 'If on default branch, branch first before committing.'" >&2
+  echo "This local repo policy takes precedent. You're currently in $(pwd) and this folder requires you to work on main unless the user ASKS YOU to create a branch." >&2
   exit 1
 fi
 
