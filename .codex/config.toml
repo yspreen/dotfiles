@@ -1,5 +1,5 @@
-model = "gpt-5.6-sol"
-model_reasoning_effort = "high"
+model = "gpt-5.6-terra"
+model_reasoning_effort = "low"
 sandbox_mode = "danger-full-access"
 personality = "pragmatic"
 
@@ -239,18 +239,18 @@ path = "/Users/user/dotfiles/.agents/skills/duolingo-lesson/SKILL.md"
 enabled = false
 
 [marketplaces.openai-bundled]
-last_updated = "2026-08-03T05:52:39Z"
+last_updated = "2026-08-07T02:50:08Z"
 source_type = "local"
 source = "/Users/user/dotfiles/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-08-03T02:43:14Z"
+last_updated = "2026-08-06T03:09:25Z"
 source_type = "local"
 source = "/Users/user/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
 [marketplaces.claude-plugins-official]
-last_updated = "2026-08-03T02:40:58Z"
-last_revision = "909649d9b178d142201000c76715b5fc952818e3"
+last_updated = "2026-08-07T02:50:08Z"
+last_revision = "99dc284733dfbe91e778c123b091a4c0811d2ed2"
 source_type = "git"
 source = "https://github.com/anthropics/claude-plugins-official.git"
 
@@ -272,9 +272,6 @@ enabled = true
 [plugins."pdf@openai-primary-runtime"]
 enabled = false
 
-[plugins."chrome@openai-bundled"]
-enabled = true
-
 [plugins."sites@openai-bundled"]
 enabled = false
 
@@ -291,6 +288,9 @@ enabled = true
 enabled = true
 
 [plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
 enabled = true
 
 [apps.connector_68df038e0ba48191908c8434991bbac2]
@@ -319,15 +319,15 @@ startup_timeout_sec = 120
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
 NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
 NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
-NODE_REPL_TRUSTED_CODE_PATHS = "/Users/user/.codex"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/user/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
 CODEX_HOME = "/Users/user/.codex"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "028a14b6eaa6d98dac2aae00764345ab9f244801ed8493d42b9af3be5575006e,f204d340535055781952b10ed396de20b842f00a19e430852f7e121ad1ce91f6"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "323bc3e687e17d7e377238d9f4c69111c4d0e6219103b6316d8c52082489533b"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.727.51351"
+BROWSER_USE_CODEX_APP_VERSION = "26.803.41515"
 SKY_CUA_SERVICE_PATH = "/Users/user/.codex/computer-use/Codex Computer Use.app"
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
 
@@ -365,5 +365,5 @@ trusted_hash = "sha256:46147d6782a9a3a02e710678f7a5df41c2cd14918c8d11683c539646f
 
 [shell_environment_policy.set]
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "028a14b6eaa6d98dac2aae00764345ab9f244801ed8493d42b9af3be5575006e,f204d340535055781952b10ed396de20b842f00a19e430852f7e121ad1ce91f6"
-NODE_REPL_TRUSTED_CODE_PATHS = "/Users/user/.codex"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "323bc3e687e17d7e377238d9f4c69111c4d0e6219103b6316d8c52082489533b"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/user/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"

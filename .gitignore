@@ -58,3 +58,5 @@
 .codex/*state.json.bak*
 .codex/sqlite/codex-history-snapshots-dev.db
 .codex/thread-writer-locks/.coordination.lock
+.codex/automations/.run-jitter-salt
+.codex/automations/path-v2-shadow-gate/automation.toml
