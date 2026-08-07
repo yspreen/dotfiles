@@ -1,6 +1,6 @@
 ---
 name: review2
-description: Review your code with 2 adversarial review subagents
+description: Review your code with 2 adversarial review subagents. This is an expensive task, only run if user asks for it.
 ---
 
 Start two reviewer subagents. The reviewer's only job: find bugs & reasons why the code does not work.

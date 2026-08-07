@@ -1,12 +1,12 @@
 {
-	"autoMemoryEnabled": false,
-  "model": "opus",
+  "model": "fable",
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "medium",
+  "autoMemoryEnabled": false,
   "skipDangerousModePermissionPrompt": true,
   "theme": "light-daltonized",
   "voiceEnabled": true
