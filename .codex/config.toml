@@ -1,5 +1,5 @@
 model = "gpt-5.6-terra"
-model_reasoning_effort = "low"
+model_reasoning_effort = "medium"
 sandbox_mode = "danger-full-access"
 personality = "pragmatic"
 
@@ -130,6 +130,9 @@ trust_level = "trusted"
 [projects."/Users/user/Documents/proj/lovetalk"]
 trust_level = "trusted"
 
+[projects."/Users/user/Documents/proj/pacey"]
+trust_level = "trusted"
+
 [[skills.config]]
 path = "/Users/user/dotfiles/.codex/skills/.system/imagegen/SKILL.md"
 enabled = false
@@ -239,7 +242,7 @@ path = "/Users/user/dotfiles/.agents/skills/duolingo-lesson/SKILL.md"
 enabled = false
 
 [marketplaces.openai-bundled]
-last_updated = "2026-08-07T02:50:08Z"
+last_updated = "2026-08-08T13:43:11Z"
 source_type = "local"
 source = "/Users/user/dotfiles/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
@@ -247,12 +250,6 @@ source = "/Users/user/dotfiles/.codex/.tmp/bundled-marketplaces/openai-bundled"
 last_updated = "2026-08-06T03:09:25Z"
 source_type = "local"
 source = "/Users/user/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
-
-[marketplaces.claude-plugins-official]
-last_updated = "2026-08-07T02:50:08Z"
-last_revision = "99dc284733dfbe91e778c123b091a4c0811d2ed2"
-source_type = "git"
-source = "https://github.com/anthropics/claude-plugins-official.git"
 
 [plugins."spreadsheets@openai-primary-runtime"]
 enabled = false
@@ -281,9 +278,6 @@ enabled = false
 [plugins."template-creator@openai-primary-runtime"]
 enabled = false
 
-[plugins."frontend-design@claude-plugins-official"]
-enabled = true
-
 [plugins."swift-lsp@claude-plugins-official"]
 enabled = true
 
@@ -300,6 +294,12 @@ enabled = false
 enabled = false
 
 [apps.connector_20205bf7d4e99a89d7154bb849718324]
+enabled = false
+
+[apps.connector_openai_hotline]
+enabled = false
+
+[apps.connector_openai_codex_document_control]
 enabled = false
 
 [mcp_servers.revenuecat]

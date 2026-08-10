@@ -60,3 +60,6 @@
 .codex/thread-writer-locks/.coordination.lock
 .codex/automations/.run-jitter-salt
 .codex/automations/path-v2-shadow-gate/automation.toml
+.codex/dictation-history/*
+.codex/thread-writer-locks/*
+.codex/generated_images/*
