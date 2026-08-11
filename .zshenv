@@ -451,7 +451,40 @@ cx() {
 }
 
 cl() {
-    claude "$@" --dangerously-skip-permissions
+	export ANTHROPIC_BASE_URL=http://127.0.0.1:8317
+	export ANTHROPIC_AUTH_TOKEN=`cat /Users/user/dotfiles/secrets/cliapiproxy.txt`
+	export ANTHROPIC_DEFAULT_FABLE_MODEL=gpt-5.6-sol
+	export ANTHROPIC_DEFAULT_OPUS_MODEL=gpt-5.6-sol
+	# export ANTHROPIC_DEFAULT_OPUS_MODEL=gpt-5.6-sol(low)
+	export ANTHROPIC_DEFAULT_SONNET_MODEL=gpt-5.6-terra
+	# export ANTHROPIC_DEFAULT_SONNET_MODEL=gpt-5.6-terra(low)
+	export ANTHROPIC_DEFAULT_HAIKU_MODEL=gpt-5.6-luna
+	# export ANTHROPIC_DEFAULT_HAIKU_MODEL=gpt-5.6-luna(medium)
+	export CLAUDE_CODE_DISABLE_1M_CONTEXT=1
+	# export CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=85
+	export CLAUDE_CODE_AUTO_COMPACT_WINDOW=800000
+	export CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION=500
+
+
+	claude "$@" --dangerously-skip-permissions
+}
+
+grcl() {
+	export ANTHROPIC_BASE_URL='http://127.0.0.1:8317'
+	export ANTHROPIC_AUTH_TOKEN=`cat /Users/user/dotfiles/secrets/cliapiproxy.txt`
+	export ANTHROPIC_DEFAULT_FABLE_MODEL='grok-4.5(high)'
+	export ANTHROPIC_DEFAULT_OPUS_MODEL='grok-4.5(high)'
+	# export ANTHROPIC_DEFAULT_OPUS_MODEL='grok-4.5(high)'
+	export ANTHROPIC_DEFAULT_SONNET_MODEL='grok-4.5(medium)'
+	# export ANTHROPIC_DEFAULT_SONNET_MODEL='grok-4.5(medium)'
+	export ANTHROPIC_DEFAULT_HAIKU_MODEL='grok-4.5(low)'
+	# export ANTHROPIC_DEFAULT_HAIKU_MODEL='grok-4.5(low)'
+	export CLAUDE_CODE_DISABLE_1M_CONTEXT='1'
+	# export CLAUDE_AUTOCOMPACT_PCT_OVERRIDE='85'
+	export CLAUDE_CODE_AUTO_COMPACT_WINDOW='800000'
+	export CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION='500'
+
+	claude "$@" --dangerously-skip-permissions
 }
 
 openscad() {
@@ -562,17 +595,3 @@ midnight() {
 
 
 unfunction _zshenv_prepend_path _zshenv_append_path
-
-export ANTHROPIC_BASE_URL=http://127.0.0.1:8317
-export ANTHROPIC_AUTH_TOKEN=`cat /Users/user/dotfiles/secrets/cliapiproxy.txt`
-export ANTHROPIC_DEFAULT_FABLE_MODEL=gpt-5.6-sol
-export ANTHROPIC_DEFAULT_OPUS_MODEL=gpt-5.6-sol
-# export ANTHROPIC_DEFAULT_OPUS_MODEL=gpt-5.6-sol(low)
-export ANTHROPIC_DEFAULT_SONNET_MODEL=gpt-5.6-terra
-# export ANTHROPIC_DEFAULT_SONNET_MODEL=gpt-5.6-terra(low)
-export ANTHROPIC_DEFAULT_HAIKU_MODEL=gpt-5.6-luna
-# export ANTHROPIC_DEFAULT_HAIKU_MODEL=gpt-5.6-luna(medium)
-export CLAUDE_CODE_DISABLE_1M_CONTEXT=1
-# export CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=85
-export CLAUDE_CODE_AUTO_COMPACT_WINDOW=800000
-export CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION=500
