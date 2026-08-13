@@ -63,3 +63,10 @@
 .codex/dictation-history/*
 .codex/thread-writer-locks/*
 .codex/generated_images/*
+.codex/visualizations/
+.codex/queue_1.sqlite
+.codex/queue_1.sqlite-shm
+.codex/queue_1.sqlite-wal
+.codex/thread_history_1.sqlite
+.codex/thread_history_1.sqlite-shm
+.codex/thread_history_1.sqlite-wal
