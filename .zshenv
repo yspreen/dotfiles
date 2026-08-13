@@ -516,9 +516,16 @@ gacpg() {
     fi
 
     fallback=$(petname 1)
-    nix run nixpkgs#gh -- repo create "$(basename "$PWD")" --source=. --remote=origin --private --push && return 0
-    nix run nixpkgs#gh -- repo create "$(basename "$PWD")-$(date +%Y)" --source=. --remote=origin --private --push && return 0
-    nix run nixpkgs#gh -- repo create "$(basename "$PWD")-$fallback" --source=. --remote=origin --private --push && return 0
+    for name in "$(basename "$PWD")" "$(basename "$PWD")-$(date +%Y)" "$(basename "$PWD")-$fallback"; do
+        if nix run nixpkgs#gh -- repo create "$name" --source=. --remote=origin --private; then
+            remote=$(git remote get-url origin)
+            remote="${remote/http:\/\/github.com\//git@github.com:}"
+            git remote set-url origin "${remote/https:\/\/github.com\//git@github.com:}" || return
+            git push -u origin HEAD
+            return
+        fi
+    done
+    return 1
 }
 
 killfly() {
