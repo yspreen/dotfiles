@@ -70,3 +70,4 @@
 .codex/thread_history_1.sqlite
 .codex/thread_history_1.sqlite-shm
 .codex/thread_history_1.sqlite-wal
+.codex/sqlite/codex-thread-summaries-dev.db

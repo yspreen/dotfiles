@@ -242,12 +242,12 @@ path = "/Users/user/dotfiles/.agents/skills/duolingo-lesson/SKILL.md"
 enabled = false
 
 [marketplaces.openai-bundled]
-last_updated = "2026-08-12T03:08:42Z"
+last_updated = "2026-08-17T01:44:07Z"
 source_type = "local"
 source = "/Users/user/dotfiles/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-08-13T02:10:32Z"
+last_updated = "2026-08-14T08:08:43Z"
 source_type = "local"
 source = "/Users/user/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
@@ -347,6 +347,7 @@ show-context-window-usage = true
 followUpQueueMode = "queue"
 dock-icon-preference = "codex-system"
 conversationDetailMode = "STEPS_COMMANDS"
+mac-menu-bar-enabled = false
 
 [desktop.open-in-target-preferences]
 global = "zed"
