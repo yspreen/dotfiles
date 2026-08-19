@@ -44,7 +44,7 @@
         version = "1.4.0-canary.1+aa327ab81";
         src = pkgs.fetchurl {
           url = "https://github.com/oven-sh/bun/releases/download/canary/bun-darwin-aarch64.zip";
-          hash = "sha256-tIEmb3S7FaNmH0lgZBMV++h8SVV6P76bntpsjfRzvGg=";
+          hash = "sha256-MDaKm++kIYzSsE25aO6ffalEuWiSO9FXJBhxcjsmpF0=";
         };
       });
       masApps = {
@@ -90,7 +90,6 @@
           pkgs.pnpm
           pkgs.stow
           pkgs.lazygit
-          pkgs.zoom-us
           pkgs.cocoapods
           pkgs.fastlane
           pkgs.uv
