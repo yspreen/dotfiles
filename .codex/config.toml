@@ -348,6 +348,7 @@ followUpQueueMode = "queue"
 dock-icon-preference = "codex-system"
 conversationDetailMode = "STEPS_COMMANDS"
 mac-menu-bar-enabled = false
+notifications-turn-mode = "always"
 
 [desktop.open-in-target-preferences]
 global = "zed"
