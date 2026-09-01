@@ -5,7 +5,7 @@ version: 4.0.514
 ---
 
 These are instructions for making a new Remotion project and composition.  
-If this is not the next task, see [Remotion Best Practices](../remotion-best-practices/SKILL.md)
+If this is not the next task, see [Remotion Best Practices](../remotion-best-practices/linked.skill.md)
 
 ## Scaffold a project
 
@@ -25,7 +25,7 @@ Replace `my-video` with a suitable project name.
 ## Designing a video
 
 Keep the scaffold and add React Markup.
-Follow [Remotion React Markup Best Practices](../remotion-markup/SKILL.md) and [Video Layout Rules](video-layout.md) for video-first layout and text sizing guidance.
+Follow [Remotion React Markup Best Practices](../remotion-markup/linked.skill.md) and [Video Layout Rules](video-layout.md) for video-first layout and text sizing guidance.
 
 ## Is this a multi-scene video?
 
@@ -33,7 +33,7 @@ If this is a video with multiple subsequence videos, follow guidance at [Multi-s
 
 ## Interactivity Best Practices
 
-By structuring the React Markup following [Remotion Interactivity Best Practices](../remotion-interactivity/SKILL.md), you allow the user to make edits in the Studio which write back to code.
+By structuring the React Markup following [Remotion Interactivity Best Practices](../remotion-interactivity/linked.skill.md), you allow the user to make edits in the Studio which write back to code.
 
 ## TailwindCSS
 
@@ -60,9 +60,9 @@ Only render if the user explicitly asks for it.
 npx remotion render
 ```
 
-For more options, see [Rendering](../remotion-render/SKILL.md).
+For more options, see [Rendering](../remotion-render/linked.skill.md).
 
 ## Follow-up
 
 The video creation process has finished.
-For follow-up prompts, use [Remotion Best Practices](../remotion-best-practices/SKILL.md)
+For follow-up prompts, use [Remotion Best Practices](../remotion-best-practices/linked.skill.md)

@@ -5,7 +5,7 @@ version: 4.0.514
 ---
 
 This skill teaches you how to discover and read current Remotion documentation.
-If this is not relevant, load [Remotion Best Practices](../remotion-best-practices/SKILL.md) instead.
+If this is not relevant, load [Remotion Best Practices](../remotion-best-practices/linked.skill.md) instead.
 
 ## Searching the docs
 

@@ -5,7 +5,7 @@ version: 4.0.514
 ---
 
 These are instructions for making a new Remotion project and composition.  
-If this is not the next task, see [Remotion Best Practices](../SKILL.md)
+If this is not the next task, see [Remotion Best Practices](../linked.skill.md)
 
 ## Scaffold a project
 
@@ -65,4 +65,4 @@ For more options, see [Rendering](../remotion-render/REFERENCE.md).
 ## Follow-up
 
 The video creation process has finished.
-For follow-up prompts, use [Remotion Best Practices](../SKILL.md)
+For follow-up prompts, use [Remotion Best Practices](../linked.skill.md)
