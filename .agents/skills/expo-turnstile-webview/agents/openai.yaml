@@ -1,0 +1,4 @@
+interface:
+  display_name: "Expo Turnstile WebView"
+  short_description: "Fix Cloudflare Turnstile in Expo WebViews"
+  default_prompt: "Use $expo-turnstile-webview when embedding or debugging Cloudflare Turnstile in an Expo app."
