@@ -34,4 +34,4 @@ export const StaticMap: React.FC = () => {
 
 ## Overlays and Interactivity
 
-Follow [Remotion Interactivity](../../../../remotion-interactivity/SKILL.md) best practices and [Remotion Markup Best practices](../../../SKILL.md) for elements.
+Follow [Remotion Interactivity](../../../../remotion-interactivity/linked.skill.md) best practices and [Remotion Markup Best practices](../../../linked.skill.md) for elements.

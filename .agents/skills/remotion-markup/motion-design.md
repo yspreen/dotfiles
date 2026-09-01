@@ -34,7 +34,7 @@ Choose patterns based on the shot instead of applying all of them:
 - Image move: use a slow crop, pan, or scale for a still when it improves composition. Static images are valid.
 - Transition: hide a cut with motion, masking, or matched geometry when a direct cut is not stronger.
 
-Keep `interpolate()` calls and editable values inline. Use `scale`, `translate`, and `rotate` instead of a combined `transform` when Studio interactivity matters. Follow [Remotion Interactivity](../remotion-interactivity/SKILL.md).
+Keep `interpolate()` calls and editable values inline. Use `scale`, `translate`, and `rotate` instead of a combined `transform` when Studio interactivity matters. Follow [Remotion Interactivity](../remotion-interactivity/linked.skill.md).
 
 ## Theme template
 
@@ -51,4 +51,4 @@ Follow [video layout rules](../remotion-create/video-layout.md). Use [text measu
 3. Inspect hierarchy, margins, overflow, wrapping, contrast, crop, layer order, and animation endpoints.
 4. Fix problems and repeat the same checks.
 
-Render the full video only when the user requested an export. Follow [Remotion Render](../remotion-render/SKILL.md) for final-output verification.
+Render the full video only when the user requested an export. Follow [Remotion Render](../remotion-render/linked.skill.md) for final-output verification.

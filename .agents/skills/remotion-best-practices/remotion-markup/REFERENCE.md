@@ -5,7 +5,7 @@ version: 4.0.514
 ---
 
 This is guidance for writing Remotion React Markup.
-If this is not relevant, load [Remotion Best Practices](../SKILL.md) instead.
+If this is not relevant, load [Remotion Best Practices](../linked.skill.md) instead.
 
 ## Preserve user changes
 
