@@ -130,3 +130,6 @@ enabled = false
 
 [hooks.state."/Users/user/.codex/hooks.json:pre_compact:0:0"]
 trusted_hash = "sha256:46147d6782a9a3a02e710678f7a5df41c2cd14918c8d11683c539646f4e6fdb8"
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
