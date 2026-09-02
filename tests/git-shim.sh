@@ -57,6 +57,15 @@ message=$(commit_message)
 assert_contains "$message" 'strip trailer' 'commit subject disappeared with trailer cleanup'
 assert_not_contains "$message" 'anthropic.com' 'Anthropic co-author trailer survived cleanup'
 
+new_repo claude-session
+printf 'claude session\n' >> "$test_repo/file"
+"$shim" -C "$test_repo" add file
+"$shim" -C "$test_repo" commit -qm 'strip session' -m 'body stays' -m 'Claude-Session: session-id'
+message=$(commit_message)
+assert_contains "$message" 'strip session' 'commit subject disappeared with session cleanup'
+assert_contains "$message" 'body stays' 'commit body disappeared with session cleanup'
+assert_not_contains "$message" 'Claude-Session:' 'Claude session metadata survived cleanup'
+
 new_repo other-trailer
 printf 'other\n' >> "$test_repo/file"
 "$shim" -C "$test_repo" add file
