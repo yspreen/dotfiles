@@ -187,6 +187,9 @@ enabled = false
 [plugins."visualize@openai-bundled"]
 enabled = false
 
+[plugins."chrome@openai-bundled"]
+enabled = true
+
 [marketplaces.openai-primary-runtime]
 source_type = "local"
 source = "/Users/user/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
