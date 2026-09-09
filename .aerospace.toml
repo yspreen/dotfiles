@@ -148,7 +148,7 @@ alt-q = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh Q 
 alt-r = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh R Gmail'
 # alt-s = 'workspace S'
 alt-t = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh T ChatGPT'
-ctrl-space = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-reminders-focused.sh'
+# Ctrl+Space is handled by Karabiner so it passes through in Minecraft (java).
 # alt-u = 'workspace U'
 alt-v = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh V Spotify'
 alt-w = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh W Calendar'
