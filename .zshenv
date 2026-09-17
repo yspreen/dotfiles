@@ -250,6 +250,7 @@ nu() {
 }
 
 ns() {
+    export MAS_NO_AUTO_INDEX=1
     sudo darwin-rebuild switch --impure --flake ~/dotfiles/nix#spreen
 }
 
