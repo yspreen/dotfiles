@@ -288,4 +288,5 @@ END {
     print STDERR "Replaced $count occurrence(s)\n";
 }
 ' "$brew_prefix/etc/cliproxyapi.conf"
-cd; ln -s dotfiles/CLAUDE-home.md CLAUDE.md
+cd
+[ "$(readlink CLAUDE.md)" = "dotfiles/CLAUDE-home.md" ] || ln -s dotfiles/CLAUDE-home.md CLAUDE.md

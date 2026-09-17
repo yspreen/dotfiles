@@ -7,6 +7,8 @@
 ^/.claude/debug/.*$
 ^/.claude/projects/.*$
 ^/readme.md$
+^/CLAUDE\.md$
+^/AGENTS\.md$
 ^/.ssh_pw$
 ^/.ssh_enc$
 ^/Library/Developer/Xcode/UserData/(?!IDETemplateMacros\.plist$).+$
