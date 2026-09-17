@@ -331,7 +331,7 @@ cleancaches() {
 
     # Development tool caches
     bash -c 'sudo rm -rf ~/.cache/pip'
-    bash -c 'sudo rm -rf ~/.gradle/caches'
+    bash -c 'sudo rm -rf ~/.gradle/*'
     bash -c 'sudo rm -rf ~/.m2/repository/.cache'
     bash -c 'sudo rm -rf ~/.docker/desktop/vms/*/log.log'
     bash -c 'sudo rm -rf ~/.cache/composer'
@@ -347,8 +347,6 @@ cleancaches() {
     bash -c 'sudo rm -rf ~/Library/Logs/Google/AndroidStudio*'
     bash -c 'sudo rm -rf ~/.android/cache'
     bash -c 'sudo rm -rf ~/.android/avd/*.avd/cache'
-    bash -c 'sudo rm -rf ~/.gradle/daemon'
-
     # VS Code caches
     bash -c 'sudo rm -rf ~/Library/Application\ Support/Code/CachedExtensions'
     bash -c 'sudo rm -rf ~/Library/Application\ Support/Code/logs'
@@ -391,7 +389,9 @@ cleancaches() {
         rm -rf "${manifest%/*}/target"
     done
     go clean --modcache
-    find "$HOME/Library/Developer/Xcode/Archives" -type d -name "*.xcarchive" -print -exec rm -rf {} +
+    if [ -d "$HOME/Library/Developer/Xcode/Archives" ]; then
+        find "$HOME/Library/Developer/Xcode/Archives" -type d -name "*.xcarchive" -print -exec rm -rf {} +
+    fi
 }
 
 androidemulator() {
