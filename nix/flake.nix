@@ -40,13 +40,6 @@
     configuration = { pkgs, lib, config, ... }: let
       # Get the directory containing this flake
       flakeDir = builtins.dirOf __curPos.file;
-      bunCanary = pkgs.bun.overrideAttrs (_: {
-        version = "1.4.0-canary.1+aa327ab81";
-        src = pkgs.fetchurl {
-          url = "https://github.com/oven-sh/bun/releases/download/canary/bun-darwin-aarch64.zip";
-          hash = "sha256-MDaKm++kIYzSsE25aO6ffalEuWiSO9FXJBhxcjsmpF0=";
-        };
-      });
       masApps = {
         # AdGuardForSafari = 1440147259; # replaced by adguard brew package
         Tailscale = 1475387142;
@@ -80,7 +73,7 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [
-          bunCanary
+          pkgs.bun
           pkgs.ffmpeg
           pkgs.git
           pkgs.gnupg
