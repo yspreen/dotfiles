@@ -54,6 +54,9 @@ DOTFILES_ROOT="$(git rev-parse --show-toplevel)"
 if git status --porcelain | grep -q ".ssh_enc"; then
     git add .ssh_enc
 fi
+
+# Claude rewrites its settings.json, so it is copied (not linked); sync it back
+cp ~/.claude/settings.json "$DOTFILES_ROOT/.claude/settings.json" 2>/dev/null && git add .claude/settings.json
 EOL
 
 chmod +x "$PRE_COMMIT"
