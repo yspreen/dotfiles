@@ -451,7 +451,7 @@ cx() {
     codex --yolo "$@"
 }
 
-cl() {
+chcl() {
 	export ANTHROPIC_BASE_URL=http://127.0.0.1:8317
 	export ANTHROPIC_AUTH_TOKEN=`cat /Users/user/dotfiles/secrets/cliapiproxy.txt`
 	export ANTHROPIC_DEFAULT_FABLE_MODEL=gpt-5.6-sol
@@ -467,6 +467,10 @@ cl() {
 	export CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION=500
 
 
+	cl
+}
+
+cl() {
 	claude "$@" --dangerously-skip-permissions
 }
 
