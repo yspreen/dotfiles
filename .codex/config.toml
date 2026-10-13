@@ -1,164 +1,54 @@
-
-notify = ["/Users/user/dotfiles/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
-model = "gpt-6-astra"
-model_reasoning_effort = "medium"
-approval_policy = "never"
-approvals_reviewer = "user"
-sandbox_mode = "danger-full-access"
+notify = ["/Users/user/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
 service_tier = "default"
 
 [desktop]
-appearanceTheme = "light"
-usePointerCursors = true
-preventSleepWhileRunning = true
-git-branch-prefix = ""
-show-context-window-usage = true
 followUpQueueMode = "queue"
-dock-icon-preference = "codex-system"
-conversationDetailMode = "STEPS_COMMANDS"
-mac-menu-bar-enabled = false
-notifications-turn-mode = "always"
-"browser-family-enabled:chrome" = true
-keepRemoteControlAwakeWhilePluggedIn = false
-browser-show-full-url = true
-open-local-url-in-target-preference = "external-browser"
+appearanceLightCodeThemeId = "linear"
+show-context-window-usage = true
+composerPlainTextMode = true
 
-[desktop.open-in-target-preferences]
-global = "zed"
+[desktop.appearanceLightChromeTheme]
+accent = "#5e6ad2"
+accentSource = "custom"
+contrast = 45
+ink = "#1b1b1b"
+opaqueWindows = true
+surface = "#fcfcfd"
 
-[mcp_servers.cua_repl]
-command = "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT"
+[desktop.appearanceLightChromeTheme.fonts]
+code = '"Jetbrains Mono"'
+ui = '"Geist"'
+
+[desktop.appearanceLightChromeTheme.semanticColors]
+diffAdded = "#52a450"
+diffRemoved = "#c94446"
+skill = "#8160d8"
+
+[marketplaces.openai-bundled]
+source_type = "local"
+source = "/Users/user/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+source_type = "local"
+source = "/Users/user/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+
+[plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
 enabled = false
 
-[mcp_servers.node_repl]
-args = []
-command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
-startup_timeout_sec = 120
+[plugins."unified-computer-use@openai-bundled"]
+enabled = true
 
-[mcp_servers.node_repl.env]
-NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
-NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
-NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
-NODE_REPL_TRUSTED_CODE_PATHS = "/Users/user/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
-CODEX_HOME = "/Users/user/.codex"
-BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
-BROWSER_USE_TINYSKY_ENABLED = "1"
-NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
-NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
-NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
-BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.901.51231"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/user/.codex/plugins/cache/openai-bundled/browser/26.901.51231/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
-SKY_CUA_SERVICE_PATH = "/Users/user/.codex/computer-use/Codex Computer Use.app"
-CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
+[plugins."chrome@openai-bundled"]
+enabled = true
 
-[mcp_servers.computer-use]
-command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
-args = ["mcp"]
-cwd = "."
+[plugins."code-review@openai-bundled"]
+enabled = true
+
+[plugins."visualize@openai-bundled"]
 enabled = false
-
-[projects."/Users/user/Documents/proj/pacey"]
-trust_level = "trusted"
-
-[projects."/Users/user/dotfiles"]
-trust_level = "trusted"
-
-[projects."/Users/user/Documents/proj/paceyclone"]
-trust_level = "trusted"
-
-[projects."/Users/user/Documents/proj/lovetalk"]
-trust_level = "trusted"
-
-[projects."/Users/user/Documents/proj/xprem"]
-trust_level = "trusted"
-
-[projects."/Users/user/Documents/Codex/2026-09-05/computer-use-computer-use-users-user"]
-trust_level = "trusted"
-
-[projects."/Users/user/Documents/Codex/2026-09-05/please-read-the-most-recent-email"]
-trust_level = "trusted"
-
-[projects."/Users/user/Documents/proj/ayakastripe"]
-trust_level = "trusted"
-
-[projects."/Users/user/Documents/proj/tokyo-todo"]
-trust_level = "trusted"
-
-[apps.connector_20205bf7d4e99a89d7154bb849718324]
-enabled = false
-
-[apps.connector_c0f748249d6a42aea4b00fd375570ded]
-enabled = false
-
-[apps.connector_openai_codex_document_control]
-enabled = false
-
-[apps.connector_openai_hotline]
-enabled = false
-
-[apps.connector_openai_plugin_management]
-enabled = false
-
-[apps.connector_openai_safety_settings]
-enabled = false
-
-[[skills.config]]
-path = "/Users/user/dotfiles/.agents/skills/agents-sdk/SKILL.md"
-enabled = false
-
-[[skills.config]]
-path = "/Users/user/dotfiles/.codex/skills/chrome-file-upload-unblock/SKILL.md"
-enabled = false
-
-[[skills.config]]
-path = "/Users/user/dotfiles/.agents/skills/cloudflare/SKILL.md"
-enabled = false
-
-[[skills.config]]
-path = "/Users/user/dotfiles/.agents/skills/cloudflare-email-service/SKILL.md"
-enabled = false
-
-[[skills.config]]
-path = "/Users/user/dotfiles/.agents/skills/duolingo-lesson/SKILL.md"
-enabled = false
-
-[[skills.config]]
-path = "/Users/user/dotfiles/.agents/skills/durable-objects/SKILL.md"
-enabled = false
-
-[[skills.config]]
-path = "/Users/user/dotfiles/.agents/skills/png-to-svg/SKILL.md"
-enabled = false
-
-[[skills.config]]
-path = "/Users/user/dotfiles/.agents/skills/sandbox-sdk/SKILL.md"
-enabled = false
-
-[[skills.config]]
-path = "/Users/user/dotfiles/.agents/skills/searxng/SKILL.md"
-enabled = false
-
-[[skills.config]]
-path = "/Users/user/dotfiles/.agents/skills/web-perf/SKILL.md"
-enabled = false
-
-[[skills.config]]
-path = "/Users/user/dotfiles/.agents/skills/webreading/SKILL.md"
-enabled = false
-
-[[skills.config]]
-path = "/Users/user/dotfiles/.agents/skills/workers-best-practices/SKILL.md"
-enabled = false
-
-[[skills.config]]
-path = "/Users/user/dotfiles/.agents/skills/wrangler/SKILL.md"
-enabled = false
-
-[hooks.state]
-
-[hooks.state."/Users/user/.codex/hooks.json:pre_compact:0:0"]
-trusted_hash = "sha256:46147d6782a9a3a02e710678f7a5df41c2cd14918c8d11683c539646f4e6fdb8"
 
 [plugins."computer-use@openai-bundled"]
 enabled = true
@@ -181,26 +71,36 @@ enabled = false
 [plugins."sites@openai-bundled"]
 enabled = false
 
-[plugins."browser@openai-bundled"]
-enabled = false
+[mcp_servers.node_repl]
+args = []
+command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
+startup_timeout_sec = 120
 
-[plugins."visualize@openai-bundled"]
-enabled = false
+[mcp_servers.node_repl.env]
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/user/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
+CODEX_HOME = "/Users/user/.codex"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab,mcpapps"
+BROWSER_USE_TINYSKY_ENABLED = "1"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
+NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = ""
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.1007.21159"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/user/.codex/plugins/cache/openai-bundled/browser/26.1007.21159/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+SKY_CUA_SERVICE_PATH = "/Users/user/.codex/computer-use/Codex Computer Use.app"
+CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
 
-[plugins."chrome@openai-bundled"]
-enabled = true
+[tui]
+screen_reader_detection_done = true
 
-[marketplaces.openai-primary-runtime]
-source_type = "local"
-source = "/Users/user/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+[tui.model_availability_nux]
+"gpt-6.1-sol" = 2
 
-[marketplaces.openai-bundled]
-last_updated = "2026-09-06T12:40:40Z"
-source_type = "local"
-source = "/Users/user/.codex/.tmp/bundled-marketplaces/openai-bundled"
+[projects."/Users/user/Documents/proj/apt"]
+trust_level = "trusted"
 
-[features]
-js_repl = false
-
-[shell_environment_policy.set]
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "8e86beb821b9afc846211798e0113bd4b9e79312dfcd135eb447bdb154f64071"
+[projects."/Users/user/dotfiles"]
+trust_level = "trusted"
