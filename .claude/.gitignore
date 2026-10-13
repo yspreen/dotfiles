@@ -1,7 +1,0 @@
-*
-!.gitignore
-!settings.json
-!keybindings.json
-!skills/
-!skills/**
-.git/

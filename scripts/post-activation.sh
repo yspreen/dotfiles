@@ -290,3 +290,9 @@ END {
 ' "$brew_prefix/etc/cliproxyapi.conf"
 cd
 [ "$(readlink CLAUDE.md)" = "dotfiles/CLAUDE-home.md" ] || ln -s dotfiles/CLAUDE-home.md CLAUDE.md
+
+# Agent homes stay real dirs (runtime state); only configs link into dotfiles.
+mkdir -p ~/.claude ~/.codex
+for f in settings.json keybindings.json; do ln -sfn ~/dotfiles/.claude/$f ~/.claude/$f; done
+for f in config.toml keybindings.json AGENTS.md hooks.json; do ln -sfn ~/dotfiles/.codex/$f ~/.codex/$f; done
+[ -L ~/.claude/skills ] || { rm -rf ~/.claude/skills; ln -s ../.agents/skills ~/.claude/skills; }
