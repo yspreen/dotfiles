@@ -133,7 +133,7 @@ alt-shift-l = 'move right'
 # alt-8 = 'workspace 8'
 # alt-9 = 'workspace 9'
 alt-a = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh A "Google Chrome"'
-alt-b = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh B Codex'
+alt-b = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh B "T3 Code (Nightly)"'
 alt-c = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh C "Zed"'
 alt-d = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh D Notion'
 alt-e = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh E "Messages"'
@@ -256,6 +256,10 @@ shift-down = [
   'mode main',
 ]
 up = 'volume up'
+
+[[on-window-detected]]
+if.app-id = 'com.t3tools.t3code'
+run = ['move-node-to-workspace B']
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.VSCode'

@@ -1,25 +1,48 @@
 {
+  "env": {
+    "COMPUTER_USE_CODEX_LAUNCHER_PATH": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex"
+  },
   "permissions": {
     "defaultMode": "dontAsk"
   },
-  "model": "opus",
+  "model": "opus[1m]",
   "workflowKeywordTriggerEnabled": false,
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,
-    "swift-lsp@claude-plugins-official": true
+    "swift-lsp@claude-plugins-official": true,
+    "claude-codex-computer-use@songkeys": true
+  },
+  "extraKnownMarketplaces": {
+    "songkeys": {
+      "source": {
+        "source": "github",
+        "repo": "songkeys/claude-codex-computer-use"
+      }
+    }
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "medium",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    },
+    "grok-4.7(low)": {
+      "effortLevel": "low"
+    },
+    "claude-haiku-5-5": {
+      "effortLevel": "xhigh"
+    }
+  },
   "promptSuggestionEnabled": false,
   "awaySummaryEnabled": false,
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
   "autoMemoryEnabled": false,
   "skipDangerousModePermissionPrompt": true,
   "theme": "light-daltonized",
   "fileCheckpointingEnabled": false,
   "voiceEnabled": true,
-  "modelSettings": {
-    "claude-opus-5-5": {
-      "effortLevel": "medium"
-    }
-  }
+  "switchModelsOnFlag": false
 }
