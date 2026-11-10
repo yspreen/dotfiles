@@ -12,3 +12,4 @@
 ^/Library/Developer/Xcode/UserData/(?!IDETemplateMacros\.plist$).+$
 ^/\.claude(/.*)?$
 ^/\.codex2?(/.*)?$
+\.DS_Store
