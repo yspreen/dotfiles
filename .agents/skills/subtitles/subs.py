@@ -11,6 +11,8 @@ AD = re.compile(r"subtitles? by|subbed by|sync(ed)? (by|and|&)|correct(ed|ions) 
                 r"|\byts\b|yify|osdb|opensub|addic7ed|explosiveskull|rip(ped)? by|encoded by", re.I)
 MARKS, WIN, TOL = (.10, .50, .80), 60, 400  # windows past the intro, mid, before credits; 1 min each; ms accepted after sync
 NUDGE, MIN_WORDS = (0, .05, -.05, .10, -.10, .15), 30  # quiet window (silence, music, montage): try nearby ones
+EXTRA = (.30, .65, .88)  # 3 more windows, only for files where the first 3 sync no candidate
+TEXT_SUBS = {"subrip", "ass", "ssa", "mov_text", "webvtt"}  # embedded tracks we can read as text
 PROVIDERS = ["opensubtitles", "podnapisi", "addic7ed", "tvsubtitles", "gestdown"]
 model, cache_dir, videos = Model(sys.argv[1], print_progress=False, redirect_whispercpp_logs_to=None), sys.argv[2], sys.argv[3:]
 tmp = tempfile.mkdtemp()
@@ -70,15 +72,46 @@ def evaluate(cues, segs, wins):  # -> {window: (center_in_sub_time, offset)}, qu
         if o is not None: pts[i] = ((lo + hi) / 2 - o, o)
     return pts, q
 
-def retime(cues, pts):  # least-squares line offset(t) through the window anchors
-    pts = list(pts.values())
-    if len(pts) == 1: a, b = 0.0, pts[0][1]
+def retime(cues, pts, piecewise=False):  # offset(t): least-squares line through the window anchors,
+    pts = sorted(pts.values())             # or (piecewise, for fallbacks with cut differences) linear between anchors
+    if piecewise and len(pts) > 1:
+        def g(t):
+            for (t0, o0), (t1, o1) in zip(pts, pts[1:]):
+                if t <= t1: return o0 + (o1 - o0) * max(0, t - t0) / ((t1 - t0) or 1)
+            return pts[-1][1]
+        f = lambda t: t + g(t)
     else:
-        mt, mo = st.mean(t for t, _ in pts), st.mean(o for _, o in pts)
-        a = sum((t - mt) * (o - mo) for t, o in pts) / sum((t - mt) ** 2 for t, _ in pts); b = mo - a * mt
-    f = lambda t: t + a * t + b
+        if len(pts) == 1: a, b = 0.0, pts[0][1]
+        else:
+            mt, mo = st.mean(t for t, _ in pts), st.mean(o for _, o in pts)
+            a = sum((t - mt) * (o - mo) for t, o in pts) / sum((t - mt) ** 2 for t, _ in pts); b = mo - a * mt
+        f = lambda t: t + a * t + b
     kept = [(f(s), f(e), x) for s, e, x in cues if f(e) > 0]
     return "\n".join(f"{i}\n{fmt(s)} --> {fmt(e)}\n{x}\n" for i, (s, e, x) in enumerate(kept, 1))
+
+def embedded(video):  # English or untagged text subtitle tracks inside the file: usually cut for this exact release
+    out = []
+    for s in json.loads(run("ffprobe", "-v", "error", "-select_streams", "s", "-show_entries",
+                            "stream=index,codec_name:stream_tags=language,title", "-of", "json", video)).get("streams", []):
+        tags = s.get("tags", {})
+        if s.get("codec_name") in TEXT_SUBS and tags.get("language", "und") in ("eng", "en", "und"):
+            text = run("ffmpeg", "-v", "error", "-i", video, "-map", f"0:{s['index']}", "-f", "srt", "-")
+            out.append((f"embedded:{s['index']}", bool(re.search(r"sdh|\bhi\b|hearing", tags.get("title", ""), re.I)), parse(text)))
+    return out
+
+def select(cands, segs, wins):  # -> (clean syncs, partial fits) as (quality, name, hi, srt_text, shifts_ms)
+    good, partial = [], []  # good: retimed output lands within TOL in at least 2 windows and fails none
+    for n, hi, c in cands:
+        if len(c) < 50: continue
+        pts, q = evaluate(c, segs, wins)
+        if not pts: continue  # matched no window: different film or cut, never written
+        partial.append((q, n, hi, retime(c, pts, piecewise=True), [round(o) for _, o in pts.values()]))
+        fits = [pts] + ([{k: v for k, v in pts.items() if k != i} for i in pts] if len(pts) > 2 else [])  # noisy window: refit without it
+        for fit in fits:
+            out = retime(c, fit); chk, _ = evaluate(parse(out), segs, wins)
+            if sum(abs(o) < TOL for _, o in chk.values()) >= 2 and all(i in chk and abs(chk[i][1]) <= max(TOL, abs(pts[i][1])) for i in pts):
+                good.append((q, n, hi, out, [round(o) for _, o in pts.values()])); break
+    return sorted(good, key=lambda g: -g[0]), partial
 
 for video in videos:
     r = dict(video=video)
@@ -91,6 +124,7 @@ for video in videos:
         base = os.path.splitext(video)[0]
         existing = [p for p in (base + ".en.srt", base + ".srt") if os.path.exists(p)]
         cands = [("existing", False, parse(open(existing[0], encoding="utf-8", errors="replace").read()))] if existing else []
+        cands += embedded(video)
         if os.path.exists(key + ".cands.json"): cands += [tuple(c) for c in json.load(open(key + ".cands.json"))]
         else:
             v = scan_video(video)
@@ -99,23 +133,16 @@ for video in videos:
             found = [(f"{s.provider_name}:{s.id}", bool(s.hearing_impaired), parse(s.text)) for s in subs if s.content]
             if found: json.dump(found, open(key + ".cands.json", "w"))  # empty = rate limited; retry next run
             cands += found
-        good = []  # candidates whose retimed output lands within TOL in at least 2 windows and fails none
-        fallback = [(-1.0, n, hi, retime(c, {0: (0, 0)}), []) for n, hi, c in cands if len(c) >= 50][:1]  # top candidate as-is
-        for n, hi, c in cands:
-            if len(c) < 50: continue
-            pts, q = evaluate(c, segs, wins)
-            if not pts: continue
-            fallback.append((q, n, hi, retime(c, pts), [round(o) for _, o in pts.values()]))  # partial fit
-            fits = [pts] + ([{k: v for k, v in pts.items() if k != i} for i in pts] if len(pts) > 2 else [])  # noisy window: refit without it
-            for fit in fits:
-                out = retime(c, fit); chk, _ = evaluate(parse(out), segs, wins)
-                if sum(abs(o) < TOL for _, o in chk.values()) >= 2 and all(i in chk and abs(chk[i][1]) <= max(TOL, abs(pts[i][1])) for i in pts):
-                    good.append((q, n, hi, out, [round(o) for _, o in pts.values()])); break
-        good.sort(key=lambda g: -g[0])
+        good, partial = select(cands, segs, wins)
+        if not good and cands:  # nothing syncs on 3 windows: transcribe 3 more, only for these files
+            if os.path.exists(key + ".tx2.json"): w2, s2 = json.load(open(key + ".tx2.json"))
+            else: w2, s2 = zip(*[sample(video, dur, m) for m in EXTRA]); json.dump([w2, s2], open(key + ".tx2.json", "w"))
+            wins, segs = list(wins) + list(w2), list(segs) + list(s2)
+            good, partial = select(cands, segs, wins)
         r["candidates"] = [(n, hi, round(q, 2)) for q, n, hi, _, _ in good]
-        if not good and not fallback: raise RuntimeError("no candidate syncs cleanly" if cands else "no subtitles found")
-        if not good:  # an okay subtitle beats none: best partial fit, else top candidate unchanged
-            good, r["fallback"] = [max(fallback, key=lambda g: g[0])], True
+        if not good and not partial: raise RuntimeError("no candidate matches this video" if cands else "no subtitles found")
+        if not good:  # an okay subtitle beats none: best partial fit, retimed piecewise between matched windows
+            good, r["fallback"] = [max(partial, key=lambda g: g[0])], True
         for want_hi, suffix in ((False, ".en.srt"), (True, ".en.sdh.srt")):
             pick = next((g for g in good if g[2] == want_hi and g[0] >= good[0][0] - .08), None)
             if pick is None and not want_hi: pick = good[0]  # only HI exists: still use it as the main track

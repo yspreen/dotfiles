@@ -49,8 +49,10 @@ uvx -q --from subliminal --with pywhispercpp python $SK/subs.py "$M" "$C" VIDEO.
 ## Errors
 
 - `no subtitles found`: providers returned nothing. Empty results are not cached, so rerun later (addic7ed and opensubtitles rate-limit big batches). Brand-new releases may have no real subs yet. Check that candidates are the right film, not commentary tracks.
-- `"fallback": true` in the result: no candidate synced cleanly (different cut, TV recap, extended edition). An okay sub beats none, so subs.py still writes the best partial fit (highest match share, retimed on the windows that matched), or the top candidate unchanged if no window matched. Report these so the user knows sync may drift.
-- `no candidate syncs cleanly`: only when no candidate has at least 50 usable cues.
+- Candidates also include English or untagged text subtitle tracks embedded in the file (`embedded:<idx>`). They are usually cut for this exact release.
+- If no candidate syncs cleanly on the 3 windows, subs.py transcribes 3 more (30%, 65%, 88%) for that file only, then tries again.
+- `"fallback": true`: still nothing synced cleanly (different cut, TV recap). An okay sub beats none, so subs.py writes the best partial fit, retimed piecewise between the windows that matched. Report these so the user knows sync may drift.
+- `no candidate matches this video`: candidates matched zero windows. That means the wrong film (sequels, commentary tracks) or subs for a new release are not out yet. Nothing is written. Retry later.
 
 ## Embedded subtitle tracks
 
