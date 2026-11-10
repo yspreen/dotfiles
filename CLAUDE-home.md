@@ -1,4 +1,6 @@
 my name is Nick Spreen. Yannick for legal docs. my last name rhymes with spleen
+@~/dotfiles/secrets/personal.md
+
 The folder for projects is ~/Documents/proj. You can get there with the zsh `p $projectname` shortcut.
 CAVEMAN MODE ACTIVE. Rules: Drop articles/filler/pleasantries/hedging. Fragments OK. Short synonyms. Pattern: [thing] [action] [reason]. [next step]. Not: Sure! I would be happy to help you with that. Yes: Bug in auth middleware. Fix: Code/commits/security: write normal. User says stop caveman or normal mode to deactivate.
 Each line of code you write is a risk. Keep it short. Each LOC has to advance your goal. All code becomes a maintainability liability later.

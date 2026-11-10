@@ -42,14 +42,38 @@
       flakeDir = builtins.dirOf __curPos.file;
       masApps = {
         # AdGuardForSafari = 1440147259; # replaced by adguard brew package
-        Tailscale = 1475387142;
-        JsonPeep = 1458969831;
-        WhatsApp = 310633997;
-        VpnUnlimited = 694633015;
-        TestFlight = 899247664;
-        UnlimitedClipboardHistory = 6705136056;
-        Telegram = 747648890;
         # Unblocked = 6736508661;
+        "Backtrack" = 1477089520;
+        "Battery Monitor" = 836505650;
+        "Blackmagic Disk Speed Test" = 425264550;
+        "CSE" = 6445840140;
+        "Dark Noise" = 1465439395;
+        "DevCleaner" = 1388020431;
+        "Developer" = 640199958;
+        "Endurance" = 1590043284;
+        "Framous" = 6636520519;
+        "Gifski" = 1351639930;
+        "Helm" = 6479357934;
+        "JSON Peep" = 1458969831;
+        "Keynote" = 409183694;
+        "Kindle" = 302584613;
+        "LINE" = 539883307;
+        "MeetingBar" = 1532419400;
+        "Mockview" = 1592728145;
+        "Numbers" = 409203825;
+        "OneDrive" = 823766827;
+        "Pages" = 409201541;
+        "Pasty" = 1544620654;
+        "Poolsuite FM" = 1514817810;
+        "PriceLocalize" = 6742507734;
+        "Refined GitHub" = 1519867270;
+        "reMarkable" = 1276493162;
+        "Tailscale" = 1475387142;
+        "Telegram" = 747648890;
+        "TestFlight" = 899247664;
+        "Unlimited Clipboard History" = 6705136056;
+        "VPN Unlimited" = 694633015;
+        "WhatsApp" = 310633997;
       };
       brewfileWithoutMasApps = pkgs.writeText "Brewfile-without-mas-apps" (
         builtins.concatStringsSep "\n" (
@@ -266,6 +290,15 @@
       '';
 
       system.activationScripts.postActivation.text = ''
+        # Exclude dirs from Spotlight (System Settings > Spotlight > Privacy)
+        spotlightPlist=/System/Volumes/Data/.Spotlight-V100/VolumeConfiguration.plist
+        for dir in /Users/${username}/Documents/proj; do
+          if ! /usr/libexec/PlistBuddy -c "Print :Exclusions" "$spotlightPlist" 2>/dev/null | grep -qx " *$dir"; then
+            /usr/libexec/PlistBuddy -c "Add :Exclusions array" "$spotlightPlist" 2>/dev/null || true
+            /usr/libexec/PlistBuddy -c "Add :Exclusions: string $dir" "$spotlightPlist" && killall mds || true
+          fi
+        done
+
         sudo -u ${username} bash -c "cd /Users/${username}/dotfiles/scripts; ./post-activation.sh ${username}"
       '';
 
@@ -279,7 +312,8 @@
             nikitabobko/tap \
             pakerwreah/calendr \
             rudrankriyam/tap \
-            dl-alexandre/tap
+            dl-alexandre/tap \
+            cameroncooke/axe
 
           PATH="/opt/homebrew/bin:${lib.makeBinPath [ pkgs.mas ]}:$PATH" \
           sudo \
@@ -287,7 +321,7 @@
             --user=${username} \
             --set-home \
             env \
-            brew bundle --file='${brewfileWithoutMasApps}' --no-upgrade
+            brew bundle --file='${brewfileWithoutMasApps}' --no-upgrade --cleanup
 
           PATH="/opt/homebrew/bin:${lib.makeBinPath [ pkgs.mas ]}:$PATH" \
           sudo \
@@ -304,7 +338,7 @@
       homebrew = {
         enable = true;
         user = username;
-        onActivation.cleanup = "none";
+        onActivation.cleanup = "uninstall"; # applied by --cleanup in the bundle call above
         onActivation.autoUpdate = true;
         onActivation.upgrade = false;
         brews = [
@@ -327,7 +361,7 @@
           # "node"
           # "pandoc"
           # "protobuf"
-          "python"
+          "python@3.14"
           # "redis"
           "sqlite"
           "wget"
@@ -335,9 +369,19 @@
           # "cargo-lambda"
           # "zig" # for cargo lambda
           "mas"
-          "rudrankriyam/tap/asc"
+          "asc"
           "dl-alexandre/tap/gpd"
-          # "openjdk@17"
+          "openjdk@17"
+          "age"
+          "aria2"
+          "doctl"
+          "ghidra"
+          "potrace"
+          "protobuf"
+          "sshpass"
+          "switchaudio-osx"
+          "xcodes"
+          "cameroncooke/axe/axe"
         ];
         casks = [
           "fork"
@@ -345,7 +389,7 @@
           "orbstack"
           "aerospace"
           "hammerspoon"
-          # "firefox"
+          "firefox"
           "iina"
           # "google-cloud-sdk"
           # "inkscape"
@@ -366,9 +410,54 @@
           "slack"
           "spotify"
           "calendr"
-          # "codexbar"
+          "codexbar"
           "ghostty"
-          "claude-code@latest"
+          "audacity@3"
+          "blackhole-2ch"
+          "blender"
+          "vorssaint"
+          "android-studio"
+          "antigravity"
+          "audio-hijack"
+          "bambu-studio"
+          "beeper"
+          "capcut"
+          "chatgpt"
+          "claude"
+          "coconutbattery"
+          "crossover"
+          "cursor"
+          "daisydisk"
+          "figma"
+          "google-chrome"
+          "hopper-disassembler"
+          "imageoptim"
+          "iterm2"
+          "keysmith"
+          "kiro"
+          "launchcontrol"
+          "legcord"
+          "michaelvillar-timer"
+          "minecraft"
+          "mymonero"
+          "notion"
+          "notion-mail"
+          "obs"
+          "pdf-expert"
+          "prismlauncher"
+          "qmk-toolbox"
+          "rive"
+          "rotato"
+          "rustdesk"
+          "steam"
+          "superwhisper"
+          "t3-code@nightly"
+          "tabtab"
+          "ultimaker-cura"
+          "upscayl"
+          "voiceink"
+          "whisky"
+          "zoom"
         ];
         taps = [
           "nikitabobko/tap" # aerospace
@@ -377,6 +466,7 @@
           # "steipete/tap"
           "rudrankriyam/tap"
           "dl-alexandre/tap"
+          "cameroncooke/axe"
         ];
 
         # put casks in ~/Applications so updates don't prompt for admin

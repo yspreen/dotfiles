@@ -1,0 +1,7 @@
+# Apps rewrite these files, which breaks symlinks, so the repo keeps copies.
+# scripts/pre-commit.sh pulls them in; post-activation.sh restores missing ones.
+# live path (relative to ~)        repo path
+.claude/settings.json              .claude/settings.json
+.t3/userdata/client-settings.json  .t3/client-settings.json
+.t3/userdata/keybindings.json      .t3/keybindings.json
+.t3/userdata/settings.json         secrets/t3-settings.json

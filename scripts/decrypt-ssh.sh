@@ -8,6 +8,12 @@ gpg() {
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 cd "$SCRIPT_DIR/.." || exit 1
 
+# Setup pre-commit hook
+HOOKS_DIR=.git/hooks
+mkdir -p "$HOOKS_DIR"
+printf '#!/bin/bash\nexec "$(git rev-parse --show-toplevel)/scripts/pre-commit.sh"\n' >"$HOOKS_DIR/pre-commit"
+chmod +x "$HOOKS_DIR/pre-commit"
+
 # Skip if all managed secret files/directories already exist
 managed_items=(.ssh .aws .doppler .npmrc .gnupg scriptswithsecrets secrets .sentryclirc .appstoreconnect)
 missing_items=()
@@ -39,27 +45,5 @@ fi
 # Decrypt and extract
 gpg --batch --yes --decrypt --passphrase "$PASSWORD" .ssh_enc | tar xzf -
 
-# Setup pre-commit hook
-HOOKS_DIR="$(git rev-parse --git-dir)/hooks"
-PRE_COMMIT="$HOOKS_DIR/pre-commit"
-
-mkdir -p "$HOOKS_DIR"
-cat >"$PRE_COMMIT" <<'EOL'
-#!/bin/bash
-
-DOTFILES_ROOT="$(git rev-parse --show-toplevel)"
-"$DOTFILES_ROOT/scripts/encrypt-ssh.sh"
-
-# Add the encrypted file to the commit if it changed
-if git status --porcelain | grep -q ".ssh_enc"; then
-    git add .ssh_enc
-fi
-
-# Claude rewrites its settings.json, so it is copied (not linked); sync it back
-cp ~/.claude/settings.json "$DOTFILES_ROOT/.claude/settings.json" 2>/dev/null && git add .claude/settings.json
-EOL
-
-chmod +x "$PRE_COMMIT"
 
 echo "Managed secret files/directories decrypted successfully"
-echo "Pre-commit hook installed"

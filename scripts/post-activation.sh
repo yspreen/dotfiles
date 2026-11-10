@@ -294,6 +294,13 @@ cd
 # Agent homes stay real dirs (runtime state); only configs link into dotfiles.
 mkdir -p ~/.claude ~/.codex
 ln -sfn ~/dotfiles/.claude/keybindings.json ~/.claude/keybindings.json
-[ -e ~/.claude/settings.json ] || cp ~/dotfiles/.claude/settings.json ~/.claude/
 for f in config.toml keybindings.json AGENTS.md hooks.json; do ln -sfn ~/dotfiles/.codex/$f ~/.codex/$f; done
 [ -L ~/.claude/skills ] || { rm -rf ~/.claude/skills; ln -s ../.agents/skills ~/.claude/skills; }
+
+# Copied configs (scripts/copied-files.txt): restore only if the app hasn't written its own yet.
+grep -v '^#' ~/dotfiles/scripts/copied-files.txt | while read -r live repo; do
+    [ -e ~/"$live" ] || { mkdir -p "$(dirname ~/"$live")" && cp ~/dotfiles/"$repo" ~/"$live"; }
+done
+# Merge saved Claude user MCP servers into ~/.claude.json; servers already there win.
+[ -e ~/.claude.json ] || echo '{}' >~/.claude.json
+/opt/homebrew/bin/jq --slurpfile m ~/dotfiles/secrets/claude-mcp-servers.json '.mcpServers = $m[0] + (.mcpServers // {})' ~/.claude.json >~/.claude.json.tmp && mv ~/.claude.json.tmp ~/.claude.json

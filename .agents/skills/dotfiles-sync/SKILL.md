@@ -11,13 +11,9 @@ description: Use when asked to sync, persist, back up or check ~/dotfiles, or wh
 
 - **Stow links** (default): every repo path not matched by `.stow-local-ignore` is symlinked into `$HOME` at the same path. `~/.agents` links to the repo, so new skills land in the repo automatically (`~/.claude/skills` points at `~/.agents/skills`).
 - **Explicit links** in `post-activation.sh`: `~/CLAUDE.md`, `~/.claude/keybindings.json`, `~/.codex/{config.toml,keybindings.json,AGENTS.md,hooks.json}`.
-- **Copies.** These apps rewrite the file and would break a symlink, so the repo holds a copy that must be pulled back:
-
-| Live file | Repo copy | Pulled back by |
-|---|---|---|
-| `~/.claude/settings.json` | `.claude/settings.json` | pre-commit hook |
-
-When you add a new copied file, add a row here, a copy line to the pre-commit hook (`scripts/decrypt-ssh.sh` writes the hook, so edit it there too), and a restore line to `post-activation.sh`.
+- **Copies.** These apps rewrite their files, which breaks symlinks, so the repo keeps copies. `scripts/copied-files.txt` lists live path and repo path. The pre-commit hook (`scripts/pre-commit.sh`) pulls them in, and `post-activation.sh` restores any that are missing. To track a new rewritten file, add a line there. If it can hold tokens, set its repo path under `secrets/`.
+- **Claude user MCP servers** sit inside `~/.claude.json`, which is otherwise runtime state. The hook saves `.mcpServers` to `secrets/claude-mcp-servers.json`, and `post-activation.sh` merges them back.
+- **Apps** come from `homebrew.casks`, `homebrew.brews` and `masApps` in `nix/flake.nix`. Activation runs `brew bundle --cleanup`, so a brew package missing from the flake gets **uninstalled** on the next rebuild. Add packages before rebuilding.
 
 ## Steps
 
@@ -25,7 +21,7 @@ When you add a new copied file, add a row here, a copy line to the pre-commit ho
 2. **Link drift.** `stow -n -v --ignore='\.DS_Store' .`
    - `LINK:` means a repo file with no link in `$HOME`. Usually that's junk that belongs in `.stow-local-ignore` or should leave the repo.
    - A conflict means an app replaced the symlink with a real file. Run `diff` against the repo copy, then `stow --adopt --ignore='\.DS_Store' .`. That moves the live file into the repo and relinks it. Review the result with `git diff`.
-3. **Copies.** Copy every live file in the table above into the repo. Run `git diff` on them.
+3. **Copies.** Run `scripts/pre-commit.sh`. It copies every file in `copied-files.txt`, saves the MCP servers and re-encrypts secrets. Then run `git diff`.
 4. **Config living outside the repo.** Check each of these and report what's missing:
    - Apps: `ls /Applications ~/Applications | grep '\.app$'` vs `casks` and `masApps` in `nix/flake.nix`. Use `brew search --cask <name>` or `mas search <name>` to find a source. Apps with no source get listed for the user, not added.
    - Claude plugins: keys of `~/.claude/plugins/installed_plugins.json` vs `enabledPlugins` and `extraKnownMarketplaces` in `.claude/settings.json`.

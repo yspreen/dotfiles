@@ -9,7 +9,8 @@ Scripts in this folder:
 - `make_looks.py <outdir>`: builds 65^3 `.cube` LUTs. Contains reusable building blocks
   (`primaries` lift/gamma/gain/offset, `tones` contrast/brilliance/highlights/shadows/whites/blacks/tint,
   `hsl` CapCut-style 8-band HSL in +-100 units, `curves` midpoint curves on 0-255, `skin_mask`)
-  and four example looks: `night`, `walkway`, `platform` (NeoTokyo at 90/45/45%), `omoide` (warm orange skin + contrast).
+  and three looks: `night` (NeoTokyo 90%, no faces), `day` (skin-safe daylight: teal shadows only, green/yellow/cyan pop,
+  skin hues untouched), `omoide` (warm orange skin + contrast).
   Edit `LOOKS` to add looks: `name: (fn, strength, skin_protect, highlight_protect)`.
 - `grade.sh <in> <out> <look.cube> [ffmpeg input args]`: one file, HDR kept (10-bit HLG BT.2020).
 
@@ -37,6 +38,9 @@ Run python with numpy via `uvx -q --with numpy python -I make_looks.py <dir>` (s
 - Judge the final look in SDR (after hdr-to-sdr), not on the HDR signal: teal reads stronger in SDR.
 
 ## Pitfalls
+- Skin protection backfires under hard top light: `skin_mask` only catches saturated skin, so the nose stays orange
+  while the rest of the face goes teal. The user likes a uniformly teal face; use protect=0 there (station look).
+- Missing raw? Pull from the iPhone over USB with ImageCaptureCore (Photos export stalls on iCloud-optimized originals).
 - zsh scripts: `jobs -r` does not work non-interactively, so `while jobs -r ...` throttling launches EVERYTHING at
   once (fills disk, VideoToolbox "-12903 encoder busy"). Use `xargs -P`.
 - In zsh, quote `'0:a?'` (glob). Use `-noautorotate` so the rotation display matrix is copied, not baked in.

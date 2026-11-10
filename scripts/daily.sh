@@ -18,7 +18,7 @@ trap '/bin/rmdir "$lock" 2>/dev/null || true' EXIT
 # Recheck after acquiring the lock in case another invocation just completed.
 [ "$(/bin/cat "$stamp" 2>/dev/null)" = "$today" ] && exit 0
 
-/opt/homebrew/bin/brew upgrade claude-code@latest || true
+/usr/bin/curl -fsSL https://claude.ai/install.sh | bash || true
 /usr/bin/curl -fsSL https://chatgpt.com/codex/install.sh | CODEX_NON_INTERACTIVE=1 /bin/sh || true
 /opt/homebrew/bin/brew upgrade cliproxyapi || true
 

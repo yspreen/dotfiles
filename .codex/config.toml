@@ -6,6 +6,8 @@ followUpQueueMode = "queue"
 appearanceLightCodeThemeId = "linear"
 show-context-window-usage = true
 composerPlainTextMode = true
+conversationDetailMode = "STEPS_PROSE"
+"browser-family-enabled:chrome" = true
 
 [desktop.appearanceLightChromeTheme]
 accent = "#5e6ad2"
@@ -36,15 +38,12 @@ source = "/Users/user/.cache/codex-runtimes/codex-primary-runtime/plugins/openai
 enabled = true
 
 [plugins."browser@openai-bundled"]
-enabled = false
+enabled = true
 
 [plugins."unified-computer-use@openai-bundled"]
 enabled = true
 
 [plugins."chrome@openai-bundled"]
-enabled = true
-
-[plugins."code-review@openai-bundled"]
 enabled = true
 
 [plugins."visualize@openai-bundled"]
@@ -68,9 +67,6 @@ enabled = false
 [plugins."template-creator@openai-primary-runtime"]
 enabled = false
 
-[plugins."sites@openai-bundled"]
-enabled = false
-
 [mcp_servers.node_repl]
 args = []
 command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
@@ -88,8 +84,8 @@ NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = ""
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.1007.21159"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/user/.codex/plugins/cache/openai-bundled/browser/26.1007.21159/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+BROWSER_USE_CODEX_APP_VERSION = "26.1013.40934"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/user/.codex/plugins/cache/openai-bundled/browser/26.1013.40934/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
 SKY_CUA_SERVICE_PATH = "/Users/user/.codex/computer-use/Codex Computer Use.app"
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
 
@@ -104,3 +100,8 @@ trust_level = "trusted"
 
 [projects."/Users/user/dotfiles"]
 trust_level = "trusted"
+
+[hooks.state]
+
+[hooks.state."/Users/user/.codex/hooks.json:pre_compact:0:0"]
+trusted_hash = "sha256:46147d6782a9a3a02e710678f7a5df41c2cd14918c8d11683c539646f4e6fdb8"

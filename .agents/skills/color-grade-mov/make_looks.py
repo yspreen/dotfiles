@@ -73,13 +73,22 @@ def omoide(c):
     c = hsl(np.clip(c, 0, 1), H=[0, 0, 8, 25, 20, -15, 0, 0], S=[14, 8, 16, 12, 15, 20, 0, 0], L=[8, 0, 10, 0, 10, 8, 0, 0])
     return c
 
+def day(c):                                                # daylight station: skin untouched, teal only in shadows
+    c = tones(c, contrast=8, shadows=6, highlights=-6)
+    h, s, v = rgb2hsv(np.clip(c, 0, 1)).T
+    warm = np.clip(1 - np.abs(((h + 180) % 360 - 180) - 25) / 40, 0, 1) * ss(0.03, 0.1, s)   # all skin, any saturation
+    y = (np.clip(c, 0, 1) * LUMA).sum(1)
+    c = c + ((1 - ss(0.05, 0.4, y)) * (1 - warm))[:, None] * np.array([-0.012, 0.003, 0.012])
+    c = c + ss(0.6, 1.0, y)[:, None] * np.array([0.006, 0.003, -0.006])
+    return hsl(np.clip(c, 0, 1), H=[0, 0, 8, 12, 10, -8, 0, 0], S=[0, -4, 14, 16, 12, 14, 0, 0], L=[0, 0, 6, 4, 6, 0, 0, 0])
+
 def build(fn, strength, protect, hi_protect=0.0):
     out = fn(RGB0.copy())
     y = (RGB0 * LUMA).sum(1)
     m = (strength * (1 - protect * skin_mask(RGB0)) * (1 - hi_protect * ss(0.8, 1.0, y)))[:, None]
     return np.clip(RGB0 + (np.clip(out, 0, 1) - RGB0) * m, 0, 1)
 
-LOOKS = {"night": (neo, 0.9, 0.3, 0.5), "walkway": (neo, 0.45, 0.75, 0.5), "platform": (neo, 0.45, 0.75, 0.5), "omoide": (omoide, 1.0, 0.0, 0.0)}
+LOOKS = {"night": (neo, 0.9, 0.3, 0.5), "walkway": (neo, 0.45, 0.75, 0.5), "station": (neo, 0.45, 0.0, 0.5), "day": (day, 1.0, 0.0, 0.0), "omoide": (omoide, 1.0, 0.0, 0.0)}
 for name, (fn, st, pr, hp) in LOOKS.items():
     x = build(fn, st, pr, hp)
     with open(f"{sys.argv[1]}/{name}.cube", "w") as f:
