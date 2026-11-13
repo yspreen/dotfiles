@@ -382,6 +382,7 @@
           "switchaudio-osx"
           "xcodes"
           "cameroncooke/axe/axe"
+          "duti"
         ];
         casks = [
           "fork"

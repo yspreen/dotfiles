@@ -304,3 +304,12 @@ done
 # Merge saved Claude user MCP servers into ~/.claude.json; servers already there win.
 [ -e ~/.claude.json ] || echo '{}' >~/.claude.json
 /opt/homebrew/bin/jq --slurpfile m ~/dotfiles/secrets/claude-mcp-servers.json '.mcpServers = $m[0] + (.mcpServers // {})' ~/.claude.json >~/.claude.json.tmp && mv ~/.claude.json.tmp ~/.claude.json
+
+# IINA is the default player for all video files (every UTI each video extension maps to).
+for uti in public.movie public.video public.mpeg-4 com.apple.m4v-video com.apple.quicktime-movie \
+    org.webmproject.webm public.avi com.adobe.flash.video com.microsoft.windows-media-wmv public.mpeg \
+    public.mpeg-2-transport-stream public.avchd-mpeg-2-transport-stream public.3gpp org.xiph.ogv \
+    io.iina.webm io.iina.mkv io.iina.mpeg4-video io.iina.quicktime io.iina.avi io.iina.flash io.iina.wmv \
+    io.iina.mpeg-video io.iina.mpeg-stream io.iina.3gpp io.iina.ogg-video io.iina.vob; do
+    /opt/homebrew/bin/duti -s com.colliderli.iina "$uti" all || true
+done

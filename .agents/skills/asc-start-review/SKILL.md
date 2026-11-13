@@ -110,6 +110,8 @@ gpd publish release --package "$PACKAGE" --track production --name "$BUILD ($VER
 
 Record the submission ID. Never retry a mutation blindly; read status first. If an existing Play review blocks commit, use `--in-progress-review-behaviour CANCEL_IN_PROGRESS_AND_SUBMIT` only with explicit approval.
 
+`gpd` network timeout defaults to 30s: AAB uploads need `gpd publish upload FILE --package "$PACKAGE" --timeout 15m`. An upload alone puts nothing on a track; the `gpd publish release` call does.
+
 ## 7. Verify
 
 ```sh

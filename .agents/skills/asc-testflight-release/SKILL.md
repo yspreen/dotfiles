@@ -98,6 +98,9 @@ Don't push unless asked.
 - Archive fails: don't export or upload. Report the decisive error. Revert build-number changes only with approval if unrelated work exists.
 - Export fails: keep archive, don't upload.
 - Upload commits but processing fails: report build ID and error; don't claim success.
+- `asc ... --wait` ends with `context deadline exceeded` after "Upload committed": the upload succeeded. Set `ASC_TIMEOUT=120s`, poll `asc builds list --app "$APP_ID" --output json` until `VALID`, then set notes with `asc builds test-notes update --build-id ID --locale en-US --whats-new "..."` (`--test-notes` on upload may not stick).
+- `scripts/ios-cloud-signing.sh` is bash: under zsh it aborts with `no matches found`. Run it via `bash -c 'source scripts/ios-cloud-signing.sh; ...'`.
+- Expo/CNG projects (generated `ios/`, build number in `app.json`): this skill's `agvtool` and `/tmp` steps don't fit. Bump `app.json`, build from a clean clone outside `/tmp` (expo-widgets breaks through the `/private/tmp` symlink), and use the project's own build skill if it has one.
 
 ## Final report
 

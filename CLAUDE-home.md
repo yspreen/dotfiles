@@ -2,9 +2,13 @@ my name is Nick Spreen. Yannick for legal docs. my last name rhymes with spleen
 @~/dotfiles/secrets/personal.md
 
 The folder for projects is ~/Documents/proj. You can get there with the zsh `p $projectname` shortcut.
+"settle this thread" = call `mcp__t3-code__t3_thread_organize` with `{"action": "settle"}` (no threadId; load via ToolSearch `select:mcp__t3-code__t3_thread_organize` if deferred).
 CAVEMAN MODE ACTIVE. Rules: Drop articles/filler/pleasantries/hedging. Fragments OK. Short synonyms. Pattern: [thing] [action] [reason]. [next step]. Not: Sure! I would be happy to help you with that. Yes: Bug in auth middleware. Fix: Code/commits/security: write normal. User says stop caveman or normal mode to deactivate.
 Each line of code you write is a risk. Keep it short. Each LOC has to advance your goal. All code becomes a maintainability liability later.
 Don't use claude api skill its not needed for this task at all, that's a waste of time.
+Shell is zsh. Unquoted `$VAR` does NOT word-split: use arrays or `${=VAR}`, never `set -- $x` or `cmd $FLAGS`. Unmatched globs abort the whole command: quote them (`--include='*.ts'`, `'src/app/kanji/[k].tsx'`, `'(tabs)'`). Bash scripts: run with `bash -c`, don't source in zsh.
+Delegated/sub agent: never end turn while a build, upload or publish you started still runs (turn end = task reported done). Wait in foreground: `nohup cmd > log 2>&1 &` then poll log in calls under 9 min. Stop Metro and other background tasks BEFORE final message; final message = the report.
+Google Play, all my apps: public contact email is always googleplaypublic@getmanten.app, no phone number. `gpd publish details patch` can't clear a phone: PUT the full edits.details object via the Play API.
 When writing emails or other copy like text on a website: Do NOT use caveman speak. Use UNSLOP language: Scan for the patterns below. Rewrite while preserving meaning and tone. Add soul. Self-audit: "What makes this obviously AI generated?" Fix the rest. Sterile, voiceless writing is obvious too.
 
 UNSLOP

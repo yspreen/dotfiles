@@ -17,3 +17,6 @@ This browser is meant to be used for any task. The user invoked the skill becaus
 
 This skill should be used as autonomously as possible. Dont ask for feedback if you can infer. Full send.
 You can also use agentic credit cards that expire after one session. The user can supply one to you when you ask.
+
+if a tool answers "The user is using Safari right now... keyboard focus": dont stop and dont hand the step back. keep going with what still works (read state, click by index, set_value on fields and the address bar), retry the typing every ~20s for a few minutes, come back to it at the end. after typing, read the field back: the users keystrokes can land in it. only report a step as not done after that, and list exactly what is left.
+element indices shift after every page change (toasts, dialogs). re-read state before each click in a form, never batch clicks on stale indices, and re-check radios/checkboxes before submit. never fullscreen or resize the window.

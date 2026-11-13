@@ -237,3 +237,7 @@ fda() {
   fd -HI "$@"
 }
 unset NO_COLOR
+
+
+# Added by Antigravity CLI installer
+export PATH="/Users/user/.local/bin:$PATH"
