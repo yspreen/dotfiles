@@ -51,5 +51,6 @@
   "theme": "light-daltonized",
   "fileCheckpointingEnabled": false,
   "voiceEnabled": true,
-  "switchModelsOnFlag": false
+  "switchModelsOnFlag": false,
+  "cleanupPeriodDays": 36500
 }

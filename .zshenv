@@ -38,7 +38,8 @@ fi
 if [[ -n ${SSH_CONNECTION:-} ]]; then
   export EDITOR="vim"
 else
-  export EDITOR="zed"
+  # wrapper, not "zed": expo start opens $EDITOR on /open-stack-frame only if it knows the name
+  export EDITOR="$HOME/dotfiles/scripts/gui-editor"
 fi
 
 export LC_MESSAGES="en_US.UTF-8"

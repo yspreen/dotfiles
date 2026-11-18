@@ -1,0 +1,4 @@
+#!/bin/sh
+# EDITOR target. Named so Expo/launch-editor cannot recognise it as a GUI editor
+# (agents mistap stack frames and Zed steals focus). Humans/git still get Zed.
+exec zed "$@"
