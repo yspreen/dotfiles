@@ -164,7 +164,7 @@ defaults write com.apple.inputsources AppleEnabledThirdPartyInputSources -array 
 killall SystemUIServer
 
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-killall SystemUIServer
+killall SystemUIServer || true
 killall -HUP cfprefsd
 
 sudo ln -sfn /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-17.jdk
@@ -184,7 +184,6 @@ exec nix-shell -p gh --run "gh $(printf "%q " "$@")"
 EOF
 echo 'nix-shell -p ncdu --run "ncdu $(printf "%q " "$@")"' >/opt/homebrew/bin/ncdu
 echo 'nix-shell -p doppler --run "doppler $(printf "%q " "$@")"' >/opt/homebrew/bin/doppler
-echo 'nix-shell -p xcodes --run "xcodes $(printf "%q " "$@")"' >/opt/homebrew/bin/xcodes
 echo 'nix-shell -p tree --run "tree $(printf "%q " "$@")"' >/opt/homebrew/bin/tree
 echo 'nix-shell -p terraform --run "terraform $(printf "%q " "$@")"' >/opt/homebrew/bin/terraform
 echo 'nix-shell -p mosh --run "mosh $(printf "%q " "$@")"' >/opt/homebrew/bin/mosh

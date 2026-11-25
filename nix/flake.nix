@@ -5,7 +5,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    mac-app-util.url = "github:hraban/mac-app-util";
 
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
 
@@ -29,7 +28,6 @@
     nix-darwin,
     nixpkgs,
     # home-manager,
-    mac-app-util,
     nix-homebrew,
     homebrew-core,
     homebrew-cask,
@@ -82,11 +80,11 @@
             (lib.splitString "\n" config.homebrew.brewfile)
         )
       );
-      masInstallCommands = lib.concatStringsSep "\n" (
+      masInstallCommands = "installed=$(mas list)\n" + lib.concatStringsSep "\n" (
         lib.mapAttrsToList
           (name: id: ''
             echo >&2 "Using ${name}"
-            mas install ${toString id}
+            grep -q "^ *${toString id} " <<<"$installed" || mas install ${toString id}
           '')
           masApps
       );
@@ -292,12 +290,11 @@
       system.activationScripts.postActivation.text = ''
         # Exclude dirs from Spotlight (System Settings > Spotlight > Privacy)
         spotlightPlist=/System/Volumes/Data/.Spotlight-V100/VolumeConfiguration.plist
-        for dir in /Users/${username}/Documents/proj; do
-          if ! /usr/libexec/PlistBuddy -c "Print :Exclusions" "$spotlightPlist" 2>/dev/null | grep -qx " *$dir"; then
-            /usr/libexec/PlistBuddy -c "Add :Exclusions array" "$spotlightPlist" 2>/dev/null || true
-            /usr/libexec/PlistBuddy -c "Add :Exclusions: string $dir" "$spotlightPlist" && killall mds || true
-          fi
-        done
+        dir=/Users/${username}/Documents/proj
+        if ! /usr/libexec/PlistBuddy -c "Print :Exclusions" "$spotlightPlist" 2>/dev/null | grep -qx " *$dir"; then
+          /usr/libexec/PlistBuddy -c "Add :Exclusions array" "$spotlightPlist" 2>/dev/null || true
+          /usr/libexec/PlistBuddy -c "Add :Exclusions: string $dir" "$spotlightPlist" && killall mds || true
+        fi
 
         sudo -u ${username} bash -c "cd /Users/${username}/dotfiles/scripts; ./post-activation.sh ${username}"
       '';
@@ -321,14 +318,14 @@
             --user=${username} \
             --set-home \
             env \
-            brew bundle --file='${brewfileWithoutMasApps}' --no-upgrade --cleanup
+            bash -euc "brew bundle install --file='${brewfileWithoutMasApps}' --no-upgrade && brew bundle cleanup --file='${brewfileWithoutMasApps}' --force"
 
           PATH="/opt/homebrew/bin:${lib.makeBinPath [ pkgs.mas ]}:$PATH" \
           sudo \
             --preserve-env=PATH \
             --user=${username} \
             --set-home \
-            env \
+            env MAS_NO_AUTO_INDEX=1 \
             bash -euc '${masInstallCommands}'
         else
           echo -e "\e[1;31merror: Homebrew is not installed, skipping...\e[0m" >&2
@@ -338,7 +335,7 @@
       homebrew = {
         enable = true;
         user = username;
-        onActivation.cleanup = "uninstall"; # applied by --cleanup in the bundle call above
+        onActivation.cleanup = "uninstall"; # applied by brew bundle cleanup above
         onActivation.autoUpdate = true;
         onActivation.upgrade = false;
         brews = [
@@ -386,10 +383,8 @@
         ];
         casks = [
           "fork"
-          "hiddenbar"
           "orbstack"
           "aerospace"
-          "hammerspoon"
           "firefox"
           "iina"
           # "google-cloud-sdk"
@@ -411,7 +406,6 @@
           "slack"
           "spotify"
           "calendr"
-          "codexbar"
           "ghostty"
           "audacity@3"
           "blackhole-2ch"
@@ -423,7 +417,6 @@
           "bambu-studio"
           "beeper"
           "capcut"
-          "chatgpt"
           "claude"
           "coconutbattery"
           "crossover"
@@ -500,25 +493,6 @@
           };
         }
 
-        mac-app-util.darwinModules.default
-
-        # # And if you also use home manager:
-        # home-manager.darwinModules.home-manager
-        # (
-        #   { pkgs, config, inputs, ... }:
-        #   {
-        #     # To enable it for all users:
-        #     home-manager.sharedModules = [
-        #       mac-app-util.homeManagerModules.default
-        #     ];
-
-        #     # Or to enable it for a single user only:
-        #     home-manager.users.foobar.imports = [
-        #       #...
-        #       mac-app-util.homeManagerModules.default
-        #     ];
-        #   }
-        # )
       ];
     };
   };
