@@ -147,7 +147,6 @@ alt-q = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh Q 
 # alt-p = 'workspace P'
 alt-r = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh R Gmail'
 # alt-s = 'workspace S'
-alt-t = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh T ChatGPT'
 # Ctrl+Space is handled by Karabiner so it passes through in Minecraft (java).
 # alt-u = 'workspace U'
 alt-v = 'exec-and-forget /Users/user/dotfiles/.config/aerospace/launch-app.sh V Spotify'
@@ -350,20 +349,12 @@ if.app-id = 'com.apple.Safari.WebApp.FC7A244C-1C78-4D1A-A28D-D4C8B18E89E7'
 run = ['move-node-to-workspace R']
 
 [[on-window-detected]]
-if.app-id = 'com.openai.chat'
-run = ['move-node-to-workspace T']
-
-[[on-window-detected]]
 if.app-id = 'com.apple.Safari.WebApp.4204FF37-08AF-44E1-B2A4-5A0EF902B64E'
 run = ['move-node-to-workspace T']
 
 [[on-window-detected]]
 if.app-id = 'org.kicad.kicad'
 run = ['layout floating']
-
-[[on-window-detected]]
-if.app-id = 'com.openai.codex'
-run = ['move-node-to-workspace B']
 
 [[on-window-detected]]
 if = 'true'

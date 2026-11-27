@@ -10,7 +10,7 @@ description: Use when asked to sync, persist, back up or check ~/dotfiles, or wh
 ## How files reach $HOME
 
 - **Stow links** (default): every repo path not matched by `.stow-local-ignore` is symlinked into `$HOME` at the same path. `~/.agents` links to the repo, so new skills land in the repo automatically (`~/.claude/skills` points at `~/.agents/skills`).
-- **Explicit links** in `post-activation.sh`: `~/CLAUDE.md`, `~/.claude/keybindings.json`, `~/.codex/{config.toml,keybindings.json,AGENTS.md,hooks.json}`.
+- **Explicit links** in `post-activation.sh`: `~/CLAUDE.md`, `~/.claude/keybindings.json`.
 - **Copies.** These apps rewrite their files, which breaks symlinks, so the repo keeps copies. `scripts/copied-files.txt` lists live path and repo path. The pre-commit hook (`scripts/pre-commit.sh`) pulls them in, and `post-activation.sh` restores any that are missing. To track a new rewritten file, add a line there. If it can hold tokens, set its repo path under `secrets/`.
 - **Claude user MCP servers** sit inside `~/.claude.json`, which is otherwise runtime state. The hook saves `.mcpServers` to `secrets/claude-mcp-servers.json`, and `post-activation.sh` merges them back.
 - **Apps** come from `homebrew.casks`, `homebrew.brews` and `masApps` in `nix/flake.nix`. Activation runs `brew bundle --cleanup`, so a brew package missing from the flake gets **uninstalled** on the next rebuild. Add packages before rebuilding.

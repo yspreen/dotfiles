@@ -262,10 +262,6 @@ which xcodebuild || xcode-select --install
 [ -d ~/Applications/Gmail.app ] || unzip -q ~/dotfiles/other/Gmail.zip -d ~/Applications
 [ -d ~/Applications/Claude.app ] || unzip -q ~/dotfiles/other/Claude.zip -d ~/Applications
 
-command -v codex >/dev/null 2>&1 || {
-  sh -c 'curl -fsSL https://chatgpt.com/codex/install.sh | CODEX_NON_INTERACTIVE=1 sh'
-} || true
-
 brew_prefix=$(/opt/homebrew/bin/brew --prefix)
 cp ~/dotfiles/cliproxyapi.conf "$brew_prefix/etc/cliproxyapi.conf"
 REPL='/Users/user/dotfiles/secrets/cliapiproxy.txt' \
@@ -291,9 +287,8 @@ cd
 [ "$(readlink CLAUDE.md)" = "dotfiles/CLAUDE-home.md" ] || ln -s dotfiles/CLAUDE-home.md CLAUDE.md
 
 # Agent homes stay real dirs (runtime state); only configs link into dotfiles.
-mkdir -p ~/.claude ~/.codex
+mkdir -p ~/.claude
 ln -sfn ~/dotfiles/.claude/keybindings.json ~/.claude/keybindings.json
-for f in config.toml keybindings.json AGENTS.md hooks.json; do ln -sfn ~/dotfiles/.codex/$f ~/.codex/$f; done
 [ -L ~/.claude/skills ] || { rm -rf ~/.claude/skills; ln -s ../.agents/skills ~/.claude/skills; }
 
 # Copied configs (scripts/copied-files.txt): restore only if the app hasn't written its own yet.

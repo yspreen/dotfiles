@@ -223,10 +223,6 @@ unalias gpd 2>/dev/null
 
 eval "$(but completions zsh)"
 
-but() {
-	codex e -c 'model_reasoning_effort="low"' '$but'
-}
-
 # ripgrep all (hidden + ignored)
 rga() {
   rg -uu "$@"

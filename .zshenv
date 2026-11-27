@@ -255,7 +255,7 @@ ns() {
     sudo darwin-rebuild switch --impure --flake ~/dotfiles/nix#spreen
 }
 
-nc() {
+nixclean() {
     sudo nix-collect-garbage -d
     nix-store --optimise
 }
@@ -446,10 +446,6 @@ kill-mcp-child() {
     kill $child2
     sleep 1
     kill -9 $child2
-}
-
-cx() {
-    codex --yolo "$@"
 }
 
 chcl() {

@@ -8,6 +8,4 @@ elif [ -x /opt/homebrew/bin/brew ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# >>> Codex installer >>>
 export PATH="/Users/user/.local/bin:$PATH"
-# <<< Codex installer <<<
